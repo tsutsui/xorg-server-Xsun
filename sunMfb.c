@@ -85,7 +85,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
 #include "sun.h"
-#include "mfb.h"
+#include "fb.h"
 
 Bool sunBW2Init (screen, pScreen, argc, argv)
     int		    screen;    	/* what screen am I going to be */

@@ -37,8 +37,7 @@ from The Open Group.
 
 #define NEED_EVENTS
 #include    "sun.h"
-#include    "cfb.h"
-#include    "mfb.h"
+#include    "fb.h"
 
 #ifdef FBIOGCURMAX  /* has hardware cursor kernel support */
 

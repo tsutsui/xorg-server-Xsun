@@ -50,9 +50,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include    "gcstruct.h"
 #include    "mi.h"
 #include    "mibstore.h"
-#include    "cfb.h"
-#include    "cfb16.h"
-#include    "cfb32.h"
+#include    "fb.h"
 
 /* maximum pixmap depth */
 #ifndef SUNMAXDEPTH

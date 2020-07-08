@@ -86,7 +86,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
 #include "sun.h"
-#include "cfb/cfb.h"
+#include "fb/fb.h"
 #include "mi/miline.h"
 
 #define GXZEROLINEBIAS	(OCTANT1 | OCTANT3 | OCTANT4 | OCTANT6)
