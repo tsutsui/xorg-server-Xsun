@@ -96,8 +96,8 @@ void sunEnqueueEvents (
     sunKbdPrivPtr       kbdPriv;
     sunPtrPrivPtr       ptrPriv;
 
-    pPointer = (DeviceIntPtr)LookupPointerDevice();
-    pKeyboard = (DeviceIntPtr)LookupKeyboardDevice();
+    pPointer = sunPointerDevice;
+    pKeyboard = sunKeyboardDevice;
     ptrPriv = (sunPtrPrivPtr) pPointer->public.devicePrivate;
     kbdPriv = (sunKbdPrivPtr) pKeyboard->public.devicePrivate;
     if (!pPointer->public.on || !pKeyboard->public.on)
@@ -170,9 +170,8 @@ void AbortDDX()
 #else
     (void) OsSignal (SIGIO, SIG_IGN);
 #endif
-    devPtr = LookupKeyboardDevice();
-    if (devPtr)
-	(void) sunChangeKbdTranslation (((sunKbdPrivPtr)(devPtr->devicePrivate))->fd, FALSE);
+    devPtr = (DevicePtr)sunKeyboardDevice;
+    (void) sunChangeKbdTranslation (((sunKbdPrivPtr)(devPtr->devicePrivate))->fd, FALSE);
 #if defined(SVR4) || defined(CSRG_BASED)
     sunNonBlockConsoleOff ();
 #else
