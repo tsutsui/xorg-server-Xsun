@@ -61,7 +61,7 @@ sunRealizeCursor(DeviceIntPtr pDev, ScreenPtr pScreen, CursorPtr pCursor)
     /* miRecolorCursor does this */
     if (pCurPriv->pCursor == pCursor)
     {
-	miPointerPosition (&x, &y);
+	miPointerGetPosition (pDev, &x, &y);
 	sunLoadCursor (pScreen, pCursor, x, y);
     }
     return TRUE;
