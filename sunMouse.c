@@ -57,6 +57,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include    "mi.h"
 
 Bool sunActiveZaphod = TRUE;
+DeviceIntPtr sunPointerDevice = NULL;
 
 static Bool sunCursorOffScreen();
 static void sunCrossScreen();

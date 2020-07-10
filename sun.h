@@ -286,6 +286,7 @@ extern Bool		noXkbExtension;
 #endif
 
 /* sunInit.c */
+extern EventList	*sunEvents;
 extern Bool		sunAutoRepeatHandlersInstalled;
 extern sunFbDataRec	sunFbData[];
 extern fbFd		sunFbs[];
@@ -298,9 +299,11 @@ extern Bool		sunNoGX;
 /* sunKbd.c */
 extern long		sunAutoRepeatInitiate;
 extern long		sunAutoRepeatDelay;
+extern DeviceIntPtr	sunKeyboardDevice;
 
 /* sunMouse.c */
 extern Bool		sunActiveZaphod;
+extern DeviceIntPtr	sunPointerDevice;
 
 /* sunFbs.c */
 extern int		sunScreenIndex;

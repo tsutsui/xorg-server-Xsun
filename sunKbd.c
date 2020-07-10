@@ -85,6 +85,8 @@ extern SunModmapRec* sunModMaps[];
 long	  	  sunAutoRepeatInitiate = 1000 * AUTOREPEAT_INITIATE;
 long	  	  sunAutoRepeatDelay = 1000 * AUTOREPEAT_DELAY;
 
+DeviceIntPtr	sunKeyboardDevice = NULL;
+
 static int		autoRepeatKeyDown = 0;
 static int		autoRepeatReady;
 static int		autoRepeatFirst;

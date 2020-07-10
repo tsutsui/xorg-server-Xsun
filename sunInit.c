@@ -162,6 +162,8 @@ extern SunModmapRec* sunType4ModMaps[];
 
 static Bool	sunDevsInited = FALSE;
 
+EventList *sunEvents = NULL;
+
 Bool sunAutoRepeatHandlersInstalled;	/* FALSE each time InitOutput called */
 Bool sunSwapLkeys = FALSE;
 Bool sunFlipPixels = FALSE;
@@ -667,17 +669,12 @@ void InitInput(argc, argv)
     int     	  argc;
     char    	  **argv;
 {
-    pointer	p, k;
 
-    p = AddInputDevice(sunMouseProc, TRUE);
-    k = AddInputDevice(sunKbdProc, TRUE);
-    if (!p || !k)
-	FatalError("failed to create input devices in InitInput");
+    sunPointerDevice = AddInputDevice(serverClient, sunMouseProc, TRUE);
+    sunKeyboardDevice = AddInputDevice(serverClient, sunKbdProc, TRUE);
+    GetEventList(&sunEvents);
 
-    RegisterPointerDevice(p);
-    RegisterKeyboardDevice(k);
-    miRegisterPointerDevice(screenInfo.screens[0], p);
-    (void) mieqInit (k, p);
+    (void)mieqInit();
 #define SET_FLOW(fd) fcntl(fd, F_SETFL, FNDELAY | FASYNC)
 #ifdef SVR4
     (void) OsSignal(SIGPOLL, SigIOHandler);
