@@ -41,8 +41,8 @@ from The Open Group.
 
 #ifdef FBIOGCURMAX  /* has hardware cursor kernel support */
 
-#define GetCursorPrivate(s) (&(GetScreenPrivate(s)->hardwareCursor))
-#define SetupCursor(s)	    sunCursorPtr pCurPriv = GetCursorPrivate(s)
+#define sunGetCursorPrivate(pScreen) \
+    (&(sunGetScreenPrivate(pScreen)->hardwareCursor))
 
 static Bool sunRealizeCursor(DeviceIntPtr, ScreenPtr, CursorPtr);
 static Bool sunUnrealizeCursor(DeviceIntPtr, ScreenPtr, CursorPtr);
@@ -55,7 +55,7 @@ static void sunQueryBestSize(int, unsigned short *, unsigned short *, ScreenPtr)
 static Bool
 sunRealizeCursor(DeviceIntPtr pDev, ScreenPtr pScreen, CursorPtr pCursor)
 {
-    SetupCursor(pScreen);
+    sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
     int	    x, y;
 
     /* miRecolorCursor does this */
@@ -117,7 +117,7 @@ sunLoadCursor (pScreen, pCursor, x, y)
     CursorPtr	pCursor;
     int		x, y;
 {
-    SetupCursor(pScreen);
+    sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
     struct fbcursor fbcursor;
     int	w, h;
     unsigned char   r[2], g[2], b[2];
@@ -228,7 +228,7 @@ sunLoadCursor (pScreen, pCursor, x, y)
 static void
 sunSetCursor(DeviceIntPtr pDev, ScreenPtr pScreen, CursorPtr pCursor, int x, int y)
 {
-    SetupCursor(pScreen);
+    sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
 
     if (pCursor)
     	sunLoadCursor (pScreen, pCursor, x, y);
@@ -264,7 +264,7 @@ sunQueryBestSize (class, pwidth, pheight, pScreen)
     unsigned short   *pwidth, *pheight;
     ScreenPtr	pScreen;
 {
-    SetupCursor (pScreen);
+    sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
 
     switch (class)
     {
@@ -292,7 +292,7 @@ Bool sunCursorInitialize (
     ScreenPtr	pScreen)
 {
 #ifdef FBIOGCURMAX
-    SetupCursor (pScreen);
+    sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
     struct fbcurpos maxsize;
 
     pCurPriv->has_cursor = FALSE;
@@ -321,7 +321,7 @@ void sunDisableCursor (
     ScreenPtr	pScreen)
 {
 #ifdef FBIOGCURMAX
-    SetupCursor (pScreen);
+    sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
     struct fbcursor fbcursor;
 
     if (pCurPriv->has_cursor)
