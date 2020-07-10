@@ -149,6 +149,11 @@ extern Bool sunCG8Init(
 
 #endif /* } */
 
+static int OpenFrameBuffer(char *, int);
+static void SigIOHandler(int);
+static char** GetDeviceList(int, char **);
+static void getKbdType(void);
+
 extern KeySymsRec sunKeySyms[];
 extern SunModmapRec *sunModMaps[];
 extern int sunMaxLayout;
@@ -462,7 +467,7 @@ static char** GetDeviceList (argc, argv)
     return deviceList;
 }
 
-static void getKbdType()
+static void getKbdType(void)
 {
 /*
  * The Sun 386i has system include files that preclude this pre SunOS 4.1
@@ -671,7 +676,6 @@ void InitInput(argc, argv)
     char    	  **argv;
 {
     pointer	p, k;
-    extern Bool mieqInit();
 
     p = AddInputDevice(sunMouseProc, TRUE);
     k = AddInputDevice(sunKbdProc, TRUE);

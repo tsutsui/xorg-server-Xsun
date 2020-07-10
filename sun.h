@@ -131,7 +131,7 @@ extern int getpagesize();
 #define XFBTYPE_LASTPLUSONE	22
 #endif
 
-extern int gettimeofday();
+#include <sys/time.h>
 
 /* 
  * Server specific headers
@@ -252,8 +252,8 @@ typedef struct {
 typedef struct {
     ColormapPtr	    installedMap;
     CloseScreenProcPtr CloseScreen;
-    void	    (*UpdateColormap)();
-    void	    (*GetColormap)();
+    void	    (*UpdateColormap)(ScreenPtr, int, int, u_char *, u_char *, u_char *);
+    void	    (*GetColormap)(ScreenPtr, int, int, u_char *, u_char *, u_char *);
     sunCursorRec    hardwareCursor;
     Bool	    hasHardwareCursor;
 } sunScreenRec, *sunScreenPtr;
@@ -265,7 +265,7 @@ typedef struct {
     unsigned char*  fb;		/* Frame buffer itself */
     int		    fd;		/* frame buffer for ioctl()s, */
     struct fbtype   info;	/* Frame buffer characteristics */
-    void	    (*EnterLeave)();/* screen switch */
+    void	    (*EnterLeave)(ScreenPtr, int);/* screen switch */
     unsigned char*  fbPriv;	/* fbattr stuff, for the real type */
 } fbFd;
 
@@ -352,10 +352,10 @@ extern Bool sunInitCommon(
     int /* scrn */,
     ScreenPtr /* pScrn */,
     off_t /* offset */,
-    Bool (* /* init1 */)(),
-    void (* /* init2 */)(),
-    Bool (* /* cr_cm */)(),
-    Bool (* /* save */)(),
+    Bool (* /* init1 */)(ScreenPtr, pointer, int, int, int, int, int, int),
+    void (* /* init2 */)(ScreenPtr),
+    Bool (* /* cr_cm */)(ScreenPtr),
+    Bool (* /* save */)(ScreenPtr, int),
     int /* fb_off */
 );
 

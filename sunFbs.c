@@ -222,10 +222,10 @@ Bool sunInitCommon (
     int		scrn,
     ScreenPtr	pScrn,
     off_t	offset,
-    Bool	(*init1)(),
-    void	(*init2)(),
-    Bool	(*cr_cm)(),
-    Bool	(*save)(),
+    Bool	(*init1)(ScreenPtr, pointer, int, int, int, int, int, int),
+    void	(*init2)(ScreenPtr),
+    Bool	(*cr_cm)(ScreenPtr),
+    Bool	(*save)(ScreenPtr, int),
     int		fb_off)
 {
     unsigned char*	fb = sunFbs[scrn].fb;
