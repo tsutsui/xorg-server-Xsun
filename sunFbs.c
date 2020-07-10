@@ -80,7 +80,7 @@ static Bool closeScreen(int, ScreenPtr pScreen);
 
 int sunScreenIndex;
 
-static unsigned long generation = 0;
+DevPrivateKeyRec sunScreenPrivateKeyRec;
 
 pointer sunMemoryMap (
     size_t	len,
@@ -134,20 +134,16 @@ Bool sunScreenAllocate (
     ScreenPtr	pScreen)
 {
     sunScreenPtr    pPrivate;
-    extern int AllocateScreenPrivateIndex();
 
-    if (generation != serverGeneration)
-    {
-	sunScreenIndex = AllocateScreenPrivateIndex();
-	if (sunScreenIndex < 0)
-	    return FALSE;
-	generation = serverGeneration;
+    if (!dixRegisterPrivateKey(&sunScreenPrivateKeyRec, PRIVATE_SCREEN, 0)) {
+	Error("dixRegisterPrivateKey failed");
+	return FALSE;
     }
     pPrivate = (sunScreenPtr) xalloc (sizeof (sunScreenRec));
     if (!pPrivate)
 	return FALSE;
 
-    pScreen->devPrivates[sunScreenIndex].ptr = (pointer) pPrivate;
+    sunSetScreenPrivate(pScreen, pPrivate);
     return TRUE;
 }
 
@@ -172,7 +168,7 @@ static Bool closeScreen (i, pScreen)
     int		i;
     ScreenPtr	pScreen;
 {
-    SetupScreen(pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     Bool    ret;
 
     (void) OsSignal (SIGIO, SIG_IGN);
@@ -187,7 +183,7 @@ static Bool closeScreen (i, pScreen)
 Bool sunScreenInit (
     ScreenPtr	pScreen)
 {
-    SetupScreen(pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     static ScreenPtr autoRepeatScreen;
 
     pPrivate->installedMap = 0;
