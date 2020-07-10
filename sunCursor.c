@@ -44,12 +44,16 @@ from The Open Group.
 #define GetCursorPrivate(s) (&(GetScreenPrivate(s)->hardwareCursor))
 #define SetupCursor(s)	    sunCursorPtr pCurPriv = GetCursorPrivate(s)
 
-static void sunLoadCursor();
+static Bool sunRealizeCursor(DeviceIntPtr, ScreenPtr, CursorPtr);
+static Bool sunUnrealizeCursor(DeviceIntPtr, ScreenPtr, CursorPtr);
+static void sunCursorRepad (ScreenPtr, CursorBitsPtr, unsigned char *, unsigned char *, DDXPointPtr, int, int);
+static void sunLoadCursor(ScreenPtr, CursorPtr, int, int);
+static void sunSetCursor(DeviceIntPtr, ScreenPtr, CursorPtr, int, int);
+static void sunMoveCursor(DeviceIntPtr, ScreenPtr, int, int);
+static void sunQueryBestSize(int, unsigned short *, unsigned short *, ScreenPtr);
 
 static Bool
-sunRealizeCursor (pScreen, pCursor)
-    ScreenPtr	pScreen;
-    CursorPtr	pCursor;
+sunRealizeCursor(DeviceIntPtr pDev, ScreenPtr pScreen, CursorPtr pCursor)
 {
     SetupCursor(pScreen);
     int	    x, y;
@@ -64,9 +68,7 @@ sunRealizeCursor (pScreen, pCursor)
 }
 
 static Bool
-sunUnrealizeCursor (pScreen, pCursor)
-    ScreenPtr	pScreen;
-    CursorPtr	pCursor;
+sunUnrealizeCursor(DeviceIntPtr pDev, ScreenPtr pScreen, CursorPtr pCursor)
 {
     return TRUE;
 }
@@ -224,10 +226,7 @@ sunLoadCursor (pScreen, pCursor, x, y)
 }
 
 static void
-sunSetCursor (pScreen, pCursor, x, y)
-    ScreenPtr	pScreen;
-    CursorPtr	pCursor;
-    int		x, y;
+sunSetCursor(DeviceIntPtr pDev, ScreenPtr pScreen, CursorPtr pCursor, int x, int y)
 {
     SetupCursor(pScreen);
 
@@ -239,9 +238,7 @@ sunSetCursor (pScreen, pCursor, x, y)
 }
 
 static void
-sunMoveCursor (pScreen, x, y)
-    ScreenPtr	pScreen;
-    int		x, y;
+sunMoveCursor(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
 {
     struct fbcurpos pos;
 
