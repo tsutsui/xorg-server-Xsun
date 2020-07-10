@@ -285,19 +285,25 @@ typedef struct {
 extern Bool		noXkbExtension;
 #endif
 
+/* sunInit.c */
 extern Bool		sunAutoRepeatHandlersInstalled;
-extern long		sunAutoRepeatInitiate;
-extern long		sunAutoRepeatDelay;
 extern sunFbDataRec	sunFbData[];
 extern fbFd		sunFbs[];
 extern Bool		sunSwapLkeys;
 extern Bool		sunFlipPixels;
-extern Bool		sunActiveZaphod;
 extern Bool		sunFbInfo;
 extern Bool		sunCG4Frob;
 extern Bool		sunNoGX;
+
+/* sunKbd.c */
+extern long		sunAutoRepeatInitiate;
+extern long		sunAutoRepeatDelay;
+
+/* sunMouse.c */
+extern Bool		sunActiveZaphod;
+
+/* sunFbs.c */
 extern int		sunScreenIndex;
-extern int*		sunProtected;
 
 extern Bool sunCursorInitialize(
     ScreenPtr /* pScreen */
