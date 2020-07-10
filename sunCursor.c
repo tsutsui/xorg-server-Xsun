@@ -279,7 +279,7 @@ sunQueryBestSize (class, pwidth, pheight, pScreen)
 	    *pheight = pScreen->height;
 	break;
     default:
-	mfbQueryBestSize (class, pwidth, pheight, pScreen);
+	fbQueryBestSize (class, pwidth, pheight, pScreen);
 	break;
     }
 }
