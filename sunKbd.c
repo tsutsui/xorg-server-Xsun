@@ -1015,14 +1015,14 @@ Bool LegalModifier(key, pDev)
 }
 
 /*ARGSUSED*/
-void sunBlockHandler(nscreen, pbdata, pptv, pReadmask)
+void sunBlockHandler(nscreen, pbdata, pTimeout, pReadmask)
     int nscreen;
     pointer pbdata;
-    struct timeval **pptv;
+    pointer pTimeout;
     pointer pReadmask;
 {
     KeybdCtrl* ctrl = &((DeviceIntPtr)LookupKeyboardDevice())->kbdfeed->ctrl;
-    static struct timeval artv = { 0, 0 };	/* autorepeat timeval */
+    struct timeval **tvp = pTimeout;
 
     if (!autoRepeatKeyDown)
 	return;
@@ -1030,11 +1030,11 @@ void sunBlockHandler(nscreen, pbdata, pptv, pReadmask)
     if (ctrl->autoRepeat != AutoRepeatModeOn)
 	return;
 
+    (*tvp)->tv_sec = 0;
     if (autoRepeatFirst == TRUE)
-	artv.tv_usec = sunAutoRepeatInitiate;
+	(*tvp)->tv_usec = sunAutoRepeatInitiate;
     else
-	artv.tv_usec = sunAutoRepeatDelay;
-    *pptv = &artv;
+	(*tvp)->tv_usec = sunAutoRepeatDelay;
 
 }
 

@@ -422,7 +422,7 @@ Bool sunCG6Init(int, ScreenPtr, int, char **);
 Bool sunCG8Init(int, ScreenPtr, int, char **);
 
 /* sunKbd.c */
-void sunBlockHandler(int, pointer, struct timeval **, pointer);
+void sunBlockHandler(int, pointer, pointer, pointer);
 void sunWakeupHandler(int, pointer, unsigned long, pointer);
 
 /* XXX */
