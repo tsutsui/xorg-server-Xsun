@@ -711,8 +711,8 @@ sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
     int width;			/* pixel width of frame buffer */
     int	bpp;			/* bits per pixel of root */
 {
-    return cfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy,
-			  width);
+    return fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy,
+			 width, bpp);
 }
 
 Bool
@@ -724,8 +724,8 @@ sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
     int width;			/* pixel width of frame buffer */
     int bpp;			/* bits per pixel of root */
 {
-    return cfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
-			       width);
+    return fbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
+			      width, bpp);
 }
 
 Bool
@@ -737,7 +737,7 @@ sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
     int width;			/* pixel width of frame buffer */
     int bpp;			/* bits per pixel of root */
 {
-    return cfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
+    return fbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp);
 }
 
 #else /* SUNMAXDEPTH != 8 */
@@ -828,19 +828,7 @@ sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 {
     int ret;
 
-    switch (bpp) {
-    case 8:
-	ret = cfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
-	break;
-    case 16:
-	ret = cfb16SetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
-	break;
-    case 32:
-	ret = cfb32SetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
-	break;
-    default:
-	return FALSE;
-    }
+    ret = fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp);
     pScreen->CreateGC = sunCfbCreateGC;
     pScreen->GetImage = sunCfbGetImage;
     pScreen->GetSpans = sunCfbGetSpans;
