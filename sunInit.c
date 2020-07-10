@@ -514,15 +514,7 @@ static void getKbdType(void)
     FatalError ("Unsupported keyboard type %d\n", sunKbdPriv.type);
 }
 
-void OsVendorPreInit(
-    void
-)
-{
-}
-
-void OsVendorInit(
-    void
-)
+void OsVendorInit(void)
 {
     static int inited;
     if (!inited) {
@@ -946,28 +938,3 @@ sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 
 #endif  /* SUNMAXDEPTH == 32 */
 #endif  /* SUNMAXDEPTH */
-
-#ifdef DPMSExtension
-/**************************************************************
- * DPMSSet(), DPMSGet(), DPMSSupported()
- *
- * stubs
- *
- ***************************************************************/
-
-void DPMSSet (level)
-    int level;
-{
-}
-
-int DPMSGet (level)
-    int* level;
-{
-    return -1;
-}
-
-Bool DPMSSupported ()
-{
-    return FALSE;
-}
-#endif
