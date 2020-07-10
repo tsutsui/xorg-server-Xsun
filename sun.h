@@ -420,6 +420,9 @@ Bool sunCG6Init(int, ScreenPtr, int, char **);
 /* sunCfb24.c */
 Bool sunCG8Init(int, ScreenPtr, int, char **);
 
+/* XXX */
+extern void mfbDoBitblt(DrawablePtr, DrawablePtr, int, RegionPtr, DDXPointPtr);
+
 /*-
  * TVTOMILLI(tv)
  *	Given a struct timeval, convert its time into milliseconds...
