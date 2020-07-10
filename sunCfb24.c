@@ -50,6 +50,10 @@ this Software without prior written authorization from The Open Group.
 #define PIXPG_24BIT_COLOR_INDEX (PIXPG_24BIT_COLOR << 25)
 #define PR_FORCE_UPDATE (1 << 24)
 
+static void CG24UpdateColormap(ScreenPtr, int, int, u_char *, u_char *, u_char *);
+static void CG24StoreColors(ColormapPtr, int, xColorItem *);
+static void CG24ScreenInit(ScreenPtr);
+
 static void CG24UpdateColormap(pScreen, index, count, rmap, gmap, bmap)
     ScreenPtr	pScreen;
     int		index, count;
@@ -73,7 +77,7 @@ static void CG24StoreColors (pmap, ndef, pdefs)
     xColorItem* pdefs;
 {
   u_char rmap[256], gmap[256], bmap[256];
-  SetupScreen (pmap->pScreen);
+  sunScreenPtr pPrivate = sunGetScreenPrivate(pmap->pScreen);
   VisualPtr pVisual = pmap->pVisual;
   int i;
 
@@ -103,7 +107,7 @@ static void CG24ScreenInit (pScreen)
     ScreenPtr pScreen;
 {
 #ifndef STATIC_COLOR
-    SetupScreen (pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
 #endif
     int i;
 
@@ -131,7 +135,7 @@ Bool sunCG8Init (screen, pScreen, argc, argv)
     int		    argc;    	/* The number of the Server's arguments. */
     char	    **argv;   	/* The arguments themselves. Don't change! */
 {
-    sunFbs[screen].EnterLeave = (void (*)())NoopDDA;
+    sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) 0,
 	cfb32ScreenInit, CG24ScreenInit,
 	cfbCreateDefColormap, sunSaveScreen, CG8_COLOR_OFFSET);

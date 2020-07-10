@@ -417,6 +417,9 @@ Bool sunCG2Init(int, ScreenPtr, int, char **);
 Bool sunCG4Init(int, ScreenPtr, int, char **);
 Bool sunCG6Init(int, ScreenPtr, int, char **);
 
+/* sunCfb24.c */
+Bool sunCG8Init(int, ScreenPtr, int, char **);
+
 /*-
  * TVTOMILLI(tv)
  *	Given a struct timeval, convert its time into milliseconds...

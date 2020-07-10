@@ -103,12 +103,6 @@ extern Bool sunBW2Init(
 #endif /* } */
 #if SUNMAXDEPTH > 8 /* { */
 #ifdef FBTYPE_MEMCOLOR /* { */
-extern Bool sunCG8Init(
-    int /* screen */,
-    ScreenPtr /* pScreen */,
-    int /* argc */,
-    char** /* argv */
-);
 #define CG8I sunCG8Init
 #else /* }{ */
 #define CG8I NULL
