@@ -76,6 +76,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "sun.h"
 #include <sys/mman.h>
 
+static Bool closeScreen(int, ScreenPtr pScreen);
+
 int sunScreenIndex;
 
 static unsigned long generation = 0;
@@ -186,10 +188,7 @@ Bool sunScreenInit (
     ScreenPtr	pScreen)
 {
     SetupScreen(pScreen);
-    extern void   sunBlockHandler();
-    extern void   sunWakeupHandler();
     static ScreenPtr autoRepeatScreen;
-    extern miPointerScreenFuncRec   sunPointerScreenFuncs;
 
     pPrivate->installedMap = 0;
     pPrivate->CloseScreen = pScreen->CloseScreen;

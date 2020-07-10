@@ -284,8 +284,6 @@ sunQueryBestSize (class, pwidth, pheight, pScreen)
     }
 }
 
-extern miPointerScreenFuncRec	sunPointerScreenFuncs;
-
 #endif
 
 Bool sunCursorInitialize (

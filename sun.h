@@ -308,6 +308,7 @@ extern DeviceIntPtr	sunKeyboardDevice;
 /* sunMouse.c */
 extern Bool		sunActiveZaphod;
 extern DeviceIntPtr	sunPointerDevice;
+extern miPointerScreenFuncRec sunPointerScreenFuncs;
 
 /* sunFbs.c */
 extern int		sunScreenIndex;
@@ -419,6 +420,10 @@ Bool sunCG6Init(int, ScreenPtr, int, char **);
 
 /* sunCfb24.c */
 Bool sunCG8Init(int, ScreenPtr, int, char **);
+
+/* sunKbd.c */
+void sunBlockHandler(int, pointer, struct timeval **, pointer);
+void sunWakeupHandler(int, pointer, unsigned long, pointer);
 
 /* XXX */
 extern void mfbDoBitblt(DrawablePtr, DrawablePtr, int, RegionPtr, DDXPointPtr);
