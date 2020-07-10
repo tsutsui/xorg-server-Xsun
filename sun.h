@@ -406,6 +406,13 @@ extern void sunKbdWait(
     void
 );
 
+/* sunCfb.c */
+Bool sunCG3Init(int, ScreenPtr, int, char **);
+Bool sunTCXInit(int, ScreenPtr, int, char **);
+Bool sunCG2Init(int, ScreenPtr, int, char **);
+Bool sunCG4Init(int, ScreenPtr, int, char **);
+Bool sunCG6Init(int, ScreenPtr, int, char **);
+
 /*-
  * TVTOMILLI(tv)
  *	Given a struct timeval, convert its time into milliseconds...

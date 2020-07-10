@@ -91,6 +91,13 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #define GXZEROLINEBIAS	(OCTANT1 | OCTANT3 | OCTANT4 | OCTANT6)
 
+static void CGUpdateColormap(ScreenPtr, int, int, u_char *, u_char *, u_char *);
+static void CGGetColormap(ScreenPtr, int, int, u_char *, u_char *, u_char *);
+static void CGStoreColors(ColormapPtr, int, xColorItem *);
+static void CGScreenInit(ScreenPtr);
+static void checkMono(int, char **);
+static void CG4Switch(ScreenPtr, int);
+
 static void CGUpdateColormap(pScreen, dex, count, rmap, gmap, bmap)
     ScreenPtr	pScreen;
     int		dex, count;
@@ -285,7 +292,7 @@ Bool sunCG3Init (screen, pScreen, argc, argv)
     char    	  **argv;   	/* The arguments themselves. Don't change! */
 {
     checkMono (argc, argv);
-    sunFbs[screen].EnterLeave = (void (*)())NoopDDA;
+    sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) CG3_MMAP_OFFSET,
 	sunCfbScreenInit, CGScreenInit,
 	cfbCreateDefColormap, sunSaveScreen, 0);
@@ -298,7 +305,7 @@ Bool sunTCXInit (screen, pScreen, argc, argv)
     char    	  **argv;   	/* The arguments themselves. Don't change! */
 {
     checkMono (argc, argv);
-    sunFbs[screen].EnterLeave = (void (*)())NoopDDA;
+    sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) 0,
 	sunCfbScreenInit, CGScreenInit,
 	cfbCreateDefColormap, sunSaveScreen, 0);
@@ -399,7 +406,7 @@ Bool sunCG2Init (screen, pScreen, argc, argv)
 	if (strcmp (argv[i], "-mono") == 0)
 	    mono = TRUE;
 
-    sunFbs[screen].EnterLeave = (void (*)())NoopDDA;
+    sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     pScreen->SaveScreen = CG2SaveScreen;
 #ifndef LOWMEMFTPT
     if (mono) {
@@ -451,7 +458,7 @@ Bool sunCG4Init (screen, pScreen, argc, argv)
 {
     checkMono (argc, argv);
     if (sunCG4Frob)
-	sunFbs[screen].EnterLeave = (void (*)())NoopDDA;
+	sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     else
 	sunFbs[screen].EnterLeave = CG4Switch;
     return sunInitCommon (screen, pScreen, (off_t) 0,
@@ -486,7 +493,7 @@ Bool sunCG6Init (screen, pScreen, argc, argv)
 	sunFbs[screen].fb = fb;
 #undef FBSIZE
     }
-    sunFbs[screen].EnterLeave = (void (*)())NoopDDA;
+    sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     if (!sunCfbSetupScreen (pScreen, 
 	    sunFbs[screen].fb + CG6_IMAGE_OFFSET,
 	    sunFbs[screen].info.fb_width, 

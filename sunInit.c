@@ -81,52 +81,22 @@ extern Bool sunBW2Init(
 #define CG8I NULL
 #define TCXI NULL
 #else /* }{ */
-extern Bool sunCG3Init(
-    int /* screen */,
-    ScreenPtr /* pScreen */,
-    int /* argc */,
-    char** /* argv */
-);
 #define CG3I sunCG3Init
 #if defined(i386) || defined(__bsdi__) /* { */
 #define CG2I NULL
 #define CG4I NULL
 #else /* }{ */
 #ifdef INCLUDE_CG2_HEADER
-extern Bool sunCG2Init(
-    int /* screen */,
-    ScreenPtr /* pScreen */,
-    int /* argc */,
-    char** /* argv */
-);
 #define CG2I sunCG2Init
 #endif /* INCLUDE_CG2_HEADER */
-extern Bool sunCG4Init(
-    int /* screen */,
-    ScreenPtr /* pScreen */,
-    int /* argc */,
-    char** /* argv */
-);
 #define CG4I sunCG4Init
 #endif /* } */
 #ifdef FBTYPE_SUNFAST_COLOR /* { */
-extern Bool sunCG6Init(
-    int /* screen */,
-    ScreenPtr /* pScreen */,
-    int /* argc */,
-    char** /* argv */
-);
 #define CG6I sunCG6Init
 #else /* }{ */
 #define CG6I NULL
 #endif /* } */
 #ifdef XFBTYPE_TCX  /* { */
-extern Bool sunTCXInit(
-    int /* screen */,
-    ScreenPtr /* pScreen */,
-    int /* argc */,
-    char** /* argv */
-);
 #define TCXI sunTCXInit
 #else /* }{ */
 #define TCXI NULL
