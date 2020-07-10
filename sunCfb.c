@@ -232,7 +232,7 @@ static void CGStoreColors(pmap, ndef, pdefs)
     if (pPrivate->installedMap != NULL && pPrivate->installedMap != pmap)
 	return;
     if ((pmap->pVisual->class | DynamicClass) == DirectColor) {
-	ndef = cfbExpandDirectColors(pmap, ndef, pdefs, expanddefs);
+	ndef = fbExpandDirectColors(pmap, ndef, pdefs, expanddefs);
 	pdefs = expanddefs;
     }
     while (ndef--) {
@@ -295,7 +295,7 @@ Bool sunCG3Init (screen, pScreen, argc, argv)
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) CG3_MMAP_OFFSET,
 	sunCfbScreenInit, CGScreenInit,
-	cfbCreateDefColormap, sunSaveScreen, 0);
+	fbCreateDefColormap, sunSaveScreen, 0);
 }
 
 Bool sunTCXInit (screen, pScreen, argc, argv)
@@ -308,7 +308,7 @@ Bool sunTCXInit (screen, pScreen, argc, argv)
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) 0,
 	sunCfbScreenInit, CGScreenInit,
-	cfbCreateDefColormap, sunSaveScreen, 0);
+	fbCreateDefColormap, sunSaveScreen, 0);
 }
 
 #if !defined(i386) /* { */
@@ -420,7 +420,7 @@ Bool sunCG2Init (screen, pScreen, argc, argv)
 #endif /* ifndef LOWMEMFTPT */
 	ret = sunInitCommon (screen, pScreen, (off_t) 0,
 			sunCfbScreenInit, CG2ScreenInit,
-			cfbCreateDefColormap, CG2SaveScreen,
+			fbCreateDefColormap, CG2SaveScreen,
 			(int) &((struct cg2memfb *) 0)->pixplane);
 	((CG2Ptr) sunFbs[screen].fb)->regs.ppmask.reg = 0xFF;
 #ifndef LOWMEMFTPT
@@ -463,7 +463,7 @@ Bool sunCG4Init (screen, pScreen, argc, argv)
 	sunFbs[screen].EnterLeave = CG4Switch;
     return sunInitCommon (screen, pScreen, (off_t) 0,
 	sunCfbScreenInit, CGScreenInit,
-	cfbCreateDefColormap, sunSaveScreen, (int) ((CG4Ptr) 0)->cpixel);
+	fbCreateDefColormap, sunSaveScreen, (int) ((CG4Ptr) 0)->cpixel);
 }
 
 #ifdef FBTYPE_SUNFAST_COLOR /* { */
@@ -524,7 +524,7 @@ Bool sunCG6Init (screen, pScreen, argc, argv)
     if (!sunScreenInit (pScreen))
 	return FALSE;
     sunSaveScreen (pScreen, SCREEN_SAVER_OFF);
-    return cfbCreateDefColormap(pScreen);
+    return fbCreateDefColormap(pScreen);
 }
 #endif /* } */
 #endif /* } */
