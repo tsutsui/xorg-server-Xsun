@@ -139,7 +139,7 @@ static void CGGetColormap(pScreen, dex, count, rmap, gmap, bmap)
 void sunInstallColormap(cmap)
     ColormapPtr	cmap;
 {
-    SetupScreen(cmap->pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(cmap->pScreen);
     register int i;
     register Entry *pent;
     register VisualPtr pVisual = cmap->pVisual;
@@ -194,7 +194,7 @@ void sunInstallColormap(cmap)
 void sunUninstallColormap(cmap)
     ColormapPtr	cmap;
 {
-    SetupScreen(cmap->pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(cmap->pScreen);
     if (cmap == pPrivate->installedMap) {
 	Colormap defMapID = cmap->pScreen->defColormap;
 
@@ -214,7 +214,7 @@ int sunListInstalledColormaps(pScreen, pCmapList)
     ScreenPtr	pScreen;
     Colormap	*pCmapList;
 {
-    SetupScreen(pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     *pCmapList = pPrivate->installedMap->mid;
     return (1);
 }
@@ -224,7 +224,7 @@ static void CGStoreColors(pmap, ndef, pdefs)
     int		ndef;
     xColorItem	*pdefs;
 {
-    SetupScreen(pmap->pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(pmap->pScreen);
     u_char	rmap[256], gmap[256], bmap[256];
     xColorItem	expanddefs[256];
     register int i;
@@ -249,7 +249,7 @@ static void CGScreenInit (pScreen)
     ScreenPtr	pScreen;
 {
 #ifndef STATIC_COLOR /* { */
-    SetupScreen (pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     pScreen->InstallColormap = sunInstallColormap;
     pScreen->UninstallColormap = sunUninstallColormap;
     pScreen->ListInstalledColormaps = sunListInstalledColormaps;
@@ -386,7 +386,7 @@ static Bool CG2SaveScreen (pScreen, on)
 static void CG2ScreenInit (pScreen)
     ScreenPtr	pScreen;
 {
-    SetupScreen (pScreen);
+    sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     CGScreenInit (pScreen);
     pPrivate->UpdateColormap = CG2UpdateColormap;
     pPrivate->GetColormap = CG2GetColormap;

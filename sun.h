@@ -258,8 +258,12 @@ typedef struct {
     Bool	    hasHardwareCursor;
 } sunScreenRec, *sunScreenPtr;
 
-#define GetScreenPrivate(s)   ((sunScreenPtr) ((s)->devPrivates[sunScreenIndex].ptr))
-#define SetupScreen(s)	sunScreenPtr	pPrivate = GetScreenPrivate(s)
+extern DevPrivateKeyRec sunScreenPrivateKeyRec;
+#define sunScreenPrivateKey (&sunScreenPrivateKeyRec)
+#define sunSetScreenPrivate(pScreen, v) \
+    dixSetPrivate(&(pScreen)->devPrivates, sunScreenPrivateKey, (v))
+#define sunGetScreenPrivate(pScreen) ((sunScreenRec *) \
+    dixLookupPrivate(&(pScreen)->devPrivates, sunScreenPrivateKey))
 
 typedef struct {
     unsigned char*  fb;		/* Frame buffer itself */
