@@ -137,7 +137,7 @@ Bool sunCG8Init (screen, pScreen, argc, argv)
 {
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) 0,
-	cfb32ScreenInit, CG24ScreenInit,
-	cfbCreateDefColormap, sunSaveScreen, CG8_COLOR_OFFSET);
+	fbScreenInit, CG24ScreenInit,
+	fbCreateDefColormap, sunSaveScreen, CG8_COLOR_OFFSET);
 }
 
