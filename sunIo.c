@@ -49,6 +49,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define NEED_EVENTS
 #include    "sun.h"
 #include    "mi.h"
+#include    "os.h"
 
 /*-
  *-----------------------------------------------------------------------
@@ -199,7 +200,6 @@ ddxProcessArgument (argc, argv, i)
     char *argv[];
     int	i;
 {
-    extern void UseMsg();
     extern int XprintOptions(int, char **, int);
 
 #ifdef XKB
