@@ -56,6 +56,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include    "sun.h"
 #include    "mi.h"
 #include    "cursor.h"
+#include    "input.h"
+#include    "inpututils.h"
 #include    "exevents.h"
 #include    "xserver-properties.h"
 
@@ -280,15 +282,16 @@ void sunMouseEnqueueEvent (
     DeviceIntPtr  device,
     Firm_event	  *fe)
 {
-    xEvent		xE;
     sunPtrPrivPtr	pPriv;	/* Private data for pointer */
     int			bmask;	/* Temporary button mask */
-    unsigned long	time;
     int			x, y;
+    int			type, buttons, flag;
+    int			i, nevents, valuators[2];
+    ValuatorMask	mask;
+
+    GetEventList(&sunEvents);
 
     pPriv = (sunPtrPrivPtr)device->public.devicePrivate;
-
-    time = xE.u.keyButtonPointer.time = TVTOMILLI(fe->time);
 
     switch (fe->id) {
     case MS_LEFT:
@@ -301,27 +304,39 @@ void sunMouseEnqueueEvent (
 	 *
 	 * Mouse buttons start at 1.
 	 */
-	xE.u.u.detail = (fe->id - MS_LEFT) + 1;
-	bmask = 1 << xE.u.u.detail;
+	buttons = (fe->id - MS_LEFT) + 1;
+	bmask = 1 << buttons;
 	if (fe->value == VKEY_UP) {
 	    if (pPriv->bmask & bmask) {
-		xE.u.u.type = ButtonRelease;
+		type = ButtonRelease;
 		pPriv->bmask &= ~bmask;
 	    } else {
 		return;
 	    }
 	} else {
 	    if ((pPriv->bmask & bmask) == 0) {
-		xE.u.u.type = ButtonPress;
+		type = ButtonPress;
 		pPriv->bmask |= bmask;
 	    } else {
 		return;
 	    }
 	}
-	mieqEnqueue (&xE);
+	flag = POINTER_RELATIVE;
+	valuator_mask_set_range(&mask, 0, 0, NULL);
+	nevents = GetPointerEvents(sunEvents, device,
+	    type, buttons, flag, &mask);
+	for (i = 0; i < nevents; i++)
+	    mieqEnqueue(device, (InternalEvent*)(sunEvents + i)->event);
 	break;
     case LOC_X_DELTA:
-	miPointerDeltaCursor (MouseAccelerate(device,fe->value),0,time);
+	valuators[0] = fe->value;
+	valuators[1] = 0;
+	valuator_mask_set_range(&mask, 0, 2, valuators);
+	flag = POINTER_RELATIVE | POINTER_ACCELERATE;
+	nevents = GetPointerEvents(sunEvents, device,
+	    MotionNotify, 0, flag, &mask);
+	for (i = 0; i < nevents; i++)
+	    mieqEnqueue(device, (InternalEvent*)(sunEvents + i)->event);
 	break;
     case LOC_Y_DELTA:
 	/*
@@ -329,15 +344,24 @@ void sunMouseEnqueueEvent (
 	 * and motion down a negative delta, so we must subtract
 	 * here instead of add...
 	 */
-	miPointerDeltaCursor (0,-MouseAccelerate(device,fe->value),time);
+	valuators[0] = 0;
+	valuators[1] = -fe->value;
+	valuator_mask_set_range(&mask, 0, 2, valuators);
+	flag = POINTER_RELATIVE | POINTER_ACCELERATE;
+	nevents = GetPointerEvents(sunEvents, device,
+	    MotionNotify, 0, flag, &mask);
+	for (i = 0; i < nevents; i++)
+	    mieqEnqueue(device, (InternalEvent*)(sunEvents + i)->event);
 	break;
     case LOC_X_ABSOLUTE:
-	miPointerPosition (&x, &y);
-	miPointerAbsoluteCursor (fe->value, y, time);
+	miPointerGetPosition(device, &x, &y);
+	x = fe->value;
+	miPointerSetPosition(device, &x, &y);
 	break;
     case LOC_Y_ABSOLUTE:
-	miPointerPosition (&x, &y);
-	miPointerAbsoluteCursor (x, fe->value, time);
+	miPointerGetPosition(device, &x, &y);
+	y = fe->value;
+	miPointerSetPosition(device, &x, &y);
 	break;
     default:
 	FatalError ("sunMouseEnqueueEvent: unrecognized id\n");
