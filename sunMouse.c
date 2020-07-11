@@ -62,13 +62,15 @@ DeviceIntPtr sunPointerDevice = NULL;
 
 static short MouseAccelerate(DeviceIntPtr, int);
 static Bool sunCursorOffScreen(ScreenPtr *, int *, int *);
-static void sunCrossScreen(ScreenPtr, Bool);
-static void sunWarpCursor(ScreenPtr, int, int);
+static void sunCrossScreen(ScreenPtr, int);
+static void sunWarpCursor(DeviceIntPtr, ScreenPtr, int, int);
 
 miPointerScreenFuncRec sunPointerScreenFuncs = {
     sunCursorOffScreen,
     sunCrossScreen,
     sunWarpCursor,
+    NULL,
+    NULL,
 };
 
 /*-
@@ -368,16 +370,14 @@ sunCursorOffScreen (pScreen, x, y)
 static void
 sunCrossScreen (pScreen, entering)
     ScreenPtr	pScreen;
-    Bool	entering;
+    int		entering;
 {
     if (sunFbs[pScreen->myNum].EnterLeave)
 	(*sunFbs[pScreen->myNum].EnterLeave) (pScreen, entering ? 0 : 1);
 }
 
 static void
-sunWarpCursor (pScreen, x, y)
-    ScreenPtr	pScreen;
-    int		x, y;
+sunWarpCursor(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
 {
 #ifndef i386
     sigset_t newsigmask;
@@ -389,13 +389,13 @@ sunWarpCursor (pScreen, x, y)
     (void) sigaddset (&newsigmask, SIGIO);
 #endif
     (void) sigprocmask (SIG_BLOCK, &newsigmask, (sigset_t *)NULL);
-    miPointerWarpCursor (pScreen, x, y);
+    miPointerWarpCursor (pDev, pScreen, x, y);
     (void) sigprocmask (SIG_UNBLOCK, &newsigmask, (sigset_t *)NULL);
 #else
     int oldmask;
 
     oldmask = sigblock (sigmask (SIGIO));
-    miPointerWarpCursor (pScreen, x, y);
+    miPointerWarpCursor (pDev, pScreen, x, y);
     sigsetmask (oldmask);
 #endif
 }
