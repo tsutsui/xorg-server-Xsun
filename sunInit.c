@@ -118,12 +118,6 @@ static void sunCfbGetSpans(DrawablePtr, int, DDXPointPtr, int *, int, char *);
 static void sunCfbGetImage(DrawablePtr, int,int, int, int, unsigned int, unsigned long, char *);
 #endif /* SUNMAXDEPTH == 32 */
 
-extern KeySymsRec sunKeySyms[];
-extern SunModmapRec *sunModMaps[];
-extern int sunMaxLayout;
-extern KeySym* sunType4KeyMaps[];
-extern SunModmapRec* sunType4ModMaps[];
-
 static Bool	sunDevsInited = FALSE;
 
 EventList *sunEvents = NULL;

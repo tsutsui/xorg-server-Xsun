@@ -80,9 +80,6 @@ static KeyCode LookupKeyCode(KeySym, XkbDescPtr, KeySymsPtr);
 static void pseudoKey(DeviceIntPtr, Bool, KeyCode);
 static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr); 
 
-extern KeySymsRec sunKeySyms[];
-extern SunModmapRec* sunModMaps[];
-
 DeviceIntPtr	sunKeyboardDevice = NULL;
 
 void sunKbdWait(void)

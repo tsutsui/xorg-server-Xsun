@@ -296,6 +296,13 @@ extern Bool		sunFbInfo;
 extern Bool		sunCG4Frob;
 extern Bool		sunNoGX;
 
+/* sunKeyMap.c */
+extern KeySymsRec	sunKeySyms[];
+extern SunModmapRec	*sunModMaps[];
+extern int		sunMaxLayout;
+extern KeySym		*sunType4KeyMaps[];
+extern SunModmapRec	*sunType4ModMaps[];
+
 /* sunKbd.c */
 extern long		sunAutoRepeatInitiate;
 extern long		sunAutoRepeatDelay;
