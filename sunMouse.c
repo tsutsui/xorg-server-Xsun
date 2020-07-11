@@ -64,7 +64,6 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Bool sunActiveZaphod = TRUE;
 DeviceIntPtr sunPointerDevice = NULL;
 
-static short MouseAccelerate(DeviceIntPtr, int);
 static Bool sunCursorOffScreen(ScreenPtr *, int *, int *);
 static void sunCrossScreen(ScreenPtr, int);
 static void sunWarpCursor(DeviceIntPtr, ScreenPtr, int, int);
@@ -227,41 +226,6 @@ Firm_event* sunMouseGetEvents (
     return evBuf;
 }
 
-
-/*-
- *-----------------------------------------------------------------------
- * MouseAccelerate --
- *	Given a delta and a mouse, return the acceleration of the delta.
- *
- * Results:
- *	The corrected delta
- *
- * Side Effects:
- *	None.
- *
- *-----------------------------------------------------------------------
- */
-static short
-MouseAccelerate (device, delta)
-    DeviceIntPtr  device;
-    int	    	  delta;
-{
-    int  sgn = sign(delta);
-    PtrCtrl *pCtrl;
-    short ret;
-
-    delta = abs(delta);
-    pCtrl = &device->ptrfeed->ctrl;
-    if (delta > pCtrl->threshold) {
-	ret = 
-	    (short) sgn * 
-		(pCtrl->threshold + ((delta - pCtrl->threshold) * pCtrl->num) /
-		    pCtrl->den);
-    } else {
-	ret = (short) sgn * delta;
-    }
-    return ret;
-}
 
 /*-
  *-----------------------------------------------------------------------
