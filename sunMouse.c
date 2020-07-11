@@ -124,7 +124,7 @@ int sunMouseProc (
 
     switch (what) {
 	case DEVICE_INIT:
-	    if (pMouse != LookupPointerDevice()) {
+	    if (pMouse != (DevicePtr)sunPointerDevice) {
 		ErrorF ("Cannot open non-system mouse");	
 		return !Success;
 	    }
