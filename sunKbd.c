@@ -49,8 +49,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #ifdef XKB
 #include <X11/extensions/XKB.h>
-#include <X11/extensions/XKBstr.h>
-#include <X11/extensions/XKBsrv.h>
+#include "xkbsrv.h"
 #endif
 
 #define SUN_LED_MASK	0x0f
@@ -433,9 +432,10 @@ static void sunKbdCtrl (
  */
 #ifdef XKB
 static void sunInitKbdNames (
-    XkbComponentNamesRec* names,
+    XkbRMLVOSet *rmlvo,
     sunKbdPrivPtr pKbd)
 {
+#if 0 /* XXX to be revisited later */
 #ifndef XKBBUFSIZE
 #define XKBBUFSIZE 64
 #endif
@@ -605,6 +605,13 @@ static void sunInitKbdNames (
 	    names->symbols = NULL; return; break;
 	}
     }
+#else
+    rmlvo->rules = "base";
+    rmlvo->model = NULL;
+    rmlvo->layout = NULL;
+    rmlvo->variant = NULL;
+    rmlvo->options = NULL;
+#endif
 }
 #endif /* XKB */
 
@@ -627,6 +634,7 @@ int sunKbdProc (
     DevicePtr pKeyboard = (DevicePtr) device;
     sunKbdPrivPtr pPriv;
     KeybdCtrl*	ctrl = &device->kbdfeed->ctrl;
+    XkbRMLVOSet rmlvo;
     extern int XkbDfltRepeatDelay, XkbDfltRepeatInterval;
 
     static CARD8 *workingModMap = NULL;
@@ -676,20 +684,18 @@ int sunKbdProc (
 	pKeyboard->devicePrivate = (pointer)&sunKbdPriv;
 	pKeyboard->on = FALSE;
 
-#ifdef XKB
-	if (noXkbExtension) {
-#endif
-	InitKeyboardDeviceStruct(pKeyboard, 
-				 workingKeySyms, workingModMap,
+	sunInitKbdNames(&rmlvo, pKeyboard->devicePrivate);
+#if 0 /* XXX needs more work for Xorg xkb */
+	InitKeyboardDeviceStruct(device, rmlvo,
 				 sunBell, sunKbdCtrl);
-#ifdef XKB
-	} else {
-	    XkbComponentNamesRec names;
-	    sunInitKbdNames (&names, &sunKbdPriv);
-	    XkbInitKeyboardDeviceStruct((DeviceIntPtr) pKeyboard, &names,
-					workingKeySyms, workingModMap,
-					sunBell, sunKbdCtrl);
-	}
+#else
+	InitKeyboardDeviceStruct(device, NULL,
+				 sunBell, sunKbdCtrl);
+	XkbApplyMappingChange(device, workingKeySyms,
+			      workingKeySyms->minKeyCode,
+			      workingKeySyms->maxKeyCode -
+			      workingKeySyms->minKeyCode + 1,
+			      workingModMap, serverClient);
 #endif
 	break;
 
