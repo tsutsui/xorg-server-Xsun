@@ -340,8 +340,10 @@ sunCursorOffScreen (pScreen, x, y)
     int		*x, *y;
 {
     int	    index, ret = FALSE;
+    DeviceIntPtr device = sunPointerDevice;	/* XXX */
 
-    if (PointerConfinedToScreen()) return TRUE;
+    if (device && PointerConfinedToScreen(device))
+	return TRUE;
     /*
      * Active Zaphod implementation:
      *    increment or decrement the current screen
