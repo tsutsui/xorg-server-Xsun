@@ -1033,9 +1033,9 @@ int sunChangeKbdTranslation(
 }
 
 /*ARGSUSED*/
-Bool LegalModifier(key, pDev)
-    unsigned int key;
-    DevicePtr	pDev;
+Bool LegalModifier(
+    unsigned int key,
+    DeviceIntPtr pDev)
 {
     return TRUE;
 }
