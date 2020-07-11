@@ -711,23 +711,7 @@ static Bool
 sunCfbCreateGC(pGC)
     GCPtr   pGC;
 {
-    if (pGC->depth == 1)
-    {
-	return mfbCreateGC (pGC);
-    }
-    else if (pGC->depth <= 8)
-    {
-	return cfbCreateGC (pGC);
-    }
-    else if (pGC->depth <= 16)
-    {
-	return cfb16CreateGC (pGC);
-    }
-    else if (pGC->depth <= 32)
-    {
-	return cfb32CreateGC (pGC);
-    }
-    return FALSE;
+    return fbCreateGC (pGC);
 }
 
 static void
@@ -739,21 +723,7 @@ sunCfbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart)
     int			nspans;		/* number of scanlines to copy */
     char		*pdstStart;	/* where to put the bits */
 {
-    switch (pDrawable->bitsPerPixel) {
-    case 1:
-	mfbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
-	break;
-    case 8:
-	cfbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
-	break;
-    case 16:
-	cfb16GetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
-	break;
-    case 32:
-	cfb32GetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
-	break;
-    }
-    return;
+    fbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
 }
 
 static void
@@ -764,21 +734,7 @@ sunCfbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine)
     unsigned long planeMask;
     char	*pdstLine;
 {
-    switch (pDrawable->bitsPerPixel)
-    {
-    case 1:
-	mfbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine);
-	break;
-    case 8:
-	cfbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine);
-	break;
-    case 16:
-	cfb16GetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine);
-	break;
-    case 32:
-	cfb32GetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine);
-	break;
-    }
+    fbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine);
 }
 
 Bool
@@ -800,16 +756,6 @@ sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 }
 
 /* Adapt cfb logic */
-#undef CFB_NEED_SCREEN_PRIVATE
-#if !defined(SINGLEDEPTH) || defined(FORDE_SEPARATE_PRIVATE)
-#define CFB_NEED_SCREEN_PRIVATE
-#endif
-
-extern BSFuncRec cfbBSFuncRec, cfb16BSFuncRec, cfb32BSFuncRec;
-extern Bool	 cfbCloseScreen(), cfb16CloseScreen(), cfb32CloseScreen();
-#ifdef CFB_NEED_SCREEN_PRIVATE
-extern int	 cfb16ScreenPrivateIndex, cfb32ScreenPrivateIndex;
-#endif
 
 Bool
 sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
@@ -820,9 +766,6 @@ sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
     int width;			/* pixel width of frame buffer */
     int bpp;
 {
-#ifdef CFB_NEED_SCREEN_PRIVATE
-    pointer	oldDevPrivate;
-#endif
     VisualPtr	visuals;
     int		nvisuals;
     DepthPtr	depths;
@@ -830,41 +773,15 @@ sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
     VisualID	defaultVisual;
     int		rootdepth = 0;
 
-    if (!cfbInitVisuals(&visuals, &depths, &nvisuals, &ndepths,
-			&rootdepth, &defaultVisual, 1 << (bpp - 1), 8))
+    if (!fbInitVisuals(&visuals, &depths, &nvisuals, &ndepths,
+		       &rootdepth, &defaultVisual, 1 << (bpp - 1), 8))
 	return FALSE;
-#ifdef CFB_NEED_SCREEN_PRIVATE
-    oldDevPrivate = pScreen->devPrivate;
-#endif
     if (! miScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width,
 			rootdepth, ndepths, depths,
 			defaultVisual, nvisuals, visuals))
 	return FALSE;
-    switch (bpp)
-    {
-    case 8:
-	pScreen->CloseScreen = cfbCloseScreen;
-	pScreen->BackingStoreFuncs = cfbBSFuncRec;
-	break;
-    case 16:
-	pScreen->CloseScreen = cfb16CloseScreen;
-	pScreen->BackingStoreFuncs = cfb16BSFuncRec;
-#ifdef CFB_NEED_SCREEN_PRIVATE
-	pScreen->devPrivates[cfb16ScreenPrivateIndex].ptr =
-	    pScreen->devPrivate;
-	pScreen->devPrivate = oldDevPrivate;
-#endif
-	break;
-    case 32:
-	pScreen->CloseScreen = cfb32CloseScreen;
-	pScreen->BackingStoreFuncs = cfb32BSFuncRec;
-#ifdef CFB_NEED_SCREEN_PRIVATE
-	pScreen->devPrivates[cfb32ScreenPrivateIndex].ptr =
-	    pScreen->devPrivate;
-	pScreen->devPrivate = oldDevPrivate;
-#endif
-	break;
-    }
+    pScreen->CloseScreen = fbCloseScreen;
+    miInitializeBackingStore(pScreen);
     return TRUE;
 }
 
