@@ -82,7 +82,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 static void SwapLKeys(KeySymsRec *);
 static void SetLights(KeybdCtrl *, int);
 static void ModLight(DeviceIntPtr, Bool, int);
-static void sunEnqueueEvent(xEvent *);
+static void sunEnqueueEvent(DeviceIntPtr, xEvent *);
 static KeyCode LookupKeyCode(KeySym, KeySymsPtr);
 static void pseudoKey(DeviceIntPtr, Bool, KeyCode);
 static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr); 
@@ -246,9 +246,9 @@ static void sunBell (
     bell (pPriv->fd, kctrl->bell_duration * 1000);
 }
 
-static void sunEnqueueEvent (xE)
-    xEvent* xE;
+static void sunEnqueueEvent(DeviceIntPtr device, xEvent *xE)
 {
+    int i, nevents;
 #ifndef i386
     sigset_t holdmask;
 
@@ -258,12 +258,16 @@ static void sunEnqueueEvent (xE)
     (void) sigaddset (&holdmask, SIGIO);
 #endif
     (void) sigprocmask (SIG_BLOCK, &holdmask, (sigset_t*)NULL);
-    mieqEnqueue (xE);
+    nevents = GetKeyboardEvents(sunEvents, device, xE->u.u.type, xE->u.u.detail);
+    for (i = 0; i < nevents; i++)
+	mieqEnqueue(device, (InternalEvent *)(sunEvents + i)->event);
     (void) sigprocmask (SIG_UNBLOCK, &holdmask, (sigset_t*)NULL);
 #else
     int oldmask = sigblock (sigmask (SIGIO));
 
-    mieqEnqueue (xE);
+    nevents = GetKeyboardEvents(sunEvents, device, xE->u.u.type, xE->u.u.detail);
+    for (i = 0; i < nevents; i++)
+	mieqEnqueue(device, (InternalEvent *)(sunEvents + i)->event);
     sigsetmask (oldmask);
 #endif
 }
@@ -858,7 +862,10 @@ void sunKbdEnqueueEvent (
     xEvent		xE;
     BYTE		keycode;
     CARD8		keyModifiers;
+    int			type;
+    int			i, nevents;
 
+    GetEventList(&sunEvents);
     keycode = (fe->id & 0x7f) + MIN_KEYCODE;
 
     keyModifiers = device->key->modifierMap[keycode];
@@ -875,8 +882,9 @@ void sunKbdEnqueueEvent (
 #ifdef XKB
     }
 #endif
+    type = ((fe->value == VKEY_UP) ? KeyRelease : KeyPress);
     xE.u.keyButtonPointer.time = TVTOMILLI(fe->time);
-    xE.u.u.type = ((fe->value == VKEY_UP) ? KeyRelease : KeyPress);
+    xE.u.u.type = type;
     xE.u.u.detail = keycode;
 #ifdef XKB
     if (noXkbExtension) {
@@ -886,14 +894,16 @@ void sunKbdEnqueueEvent (
 #ifdef XKB
     }
 #endif /* ! XKB */
-    mieqEnqueue (&xE);
+    nevents = GetKeyboardEvents(sunEvents, device, type, keycode);
+    for (i = 0; i < nevents; i++)
+	mieqEnqueue(device, (InternalEvent *)(sunEvents + i)->event);
 }
 
 static void sunEnqueueAutoRepeat(void)
 {
     int	delta;
     int	i, mask;
-    DeviceIntPtr device = (DeviceIntPtr)LookupKeyboardDevice();
+    DeviceIntPtr device = sunKeyboardDevice;
     KeybdCtrl* ctrl = &device->kbdfeed->ctrl;
     sunKbdPrivPtr   pPriv = (sunKbdPrivPtr) device->public.devicePrivate;
 
@@ -927,9 +937,9 @@ static void sunEnqueueAutoRepeat(void)
      * hold off any more inputs while we get these safely queued up
      * further SIGIO are 
      */
-    sunEnqueueEvent (&autoRepeatEvent);
+    sunEnqueueEvent (device, &autoRepeatEvent);
     autoRepeatEvent.u.u.type = KeyPress;
-    sunEnqueueEvent (&autoRepeatEvent);
+    sunEnqueueEvent (device, &autoRepeatEvent);
     if (ctrl->click) bell (pPriv->fd, 0);
 
     /* Update time of last key down */
