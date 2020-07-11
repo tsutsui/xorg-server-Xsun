@@ -592,10 +592,6 @@ void InitOutput(pScreenInfo, argc, argv)
     pScreenInfo->numPixmapFormats = NUMFORMATS;
     for (i=0; i< NUMFORMATS; i++)
         pScreenInfo->formats[i] = formats[i];
-#ifdef XKB
-    if (noXkbExtension)
-#endif
-    sunAutoRepeatHandlersInstalled = FALSE;
     if (!sunDevsInited) {
 	/* first time ever */
 	for (scr = 0; scr < MAXSCREENS; scr++)

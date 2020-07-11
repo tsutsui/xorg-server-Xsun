@@ -285,10 +285,6 @@ typedef struct {
     char*		name;	/* /usr/include/fbio names */
 } sunFbDataRec;
 
-#ifdef XKB
-extern Bool		noXkbExtension;
-#endif
-
 /* sunInit.c */
 extern EventList	*sunEvents;
 extern Bool		sunAutoRepeatHandlersInstalled;

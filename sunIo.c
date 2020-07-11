@@ -200,35 +200,6 @@ ddxProcessArgument (argc, argv, i)
 {
     extern int XprintOptions(int, char **, int);
 
-#ifdef XKB
-    int noxkb = 0, n;
-    /* 
-     * peek in argv and see if -kb because noXkbExtension won't 
-     * get set until too late to useful here.
-     */
-    for (n = 1; n < argc; n++)
-	if (strcmp (argv[n], "-kb") == 0)
-	    noxkb = 1;
-
-    if (noxkb)
-#endif
-    if (strcmp (argv[i], "-ar1") == 0) {	/* -ar1 int */
-	if (++i >= argc) UseMsg ();
-	sunAutoRepeatInitiate = 1000 * (long)atoi(argv[i]); /* cvt to usec */
-	if (sunAutoRepeatInitiate > 1000000)
-	    sunAutoRepeatInitiate =  999000;
-	return 2;
-    }
-#ifdef XKB
-    if (noxkb)
-#endif
-    if (strcmp (argv[i], "-ar2") == 0) {	/* -ar2 int */
-	if (++i >= argc) UseMsg ();
-	sunAutoRepeatDelay = 1000 * (long)atoi(argv[i]); /* cvt to usec */
-	if (sunAutoRepeatDelay > 1000000)
-	    sunAutoRepeatDelay =  999000;
-	return 2;
-    }
     if (strcmp (argv[i], "-swapLkeys") == 0) {	/* -swapLkeys */
 	sunSwapLkeys = TRUE;
 	return 1;
@@ -280,10 +251,6 @@ ddxProcessArgument (argc, argv, i)
 void
 ddxUseMsg()
 {
-#ifndef XKB
-    ErrorF("-ar1 int            set autorepeat initiate time\n");
-    ErrorF("-ar2 int            set autorepeat interval time\n");
-#endif
     ErrorF("-swapLkeys          swap keysyms on L1..L10\n");
     ErrorF("-debug              disable non-blocking console mode\n");
     ErrorF("-dev fn[:fn][:fn]   name of device[s] to open\n");

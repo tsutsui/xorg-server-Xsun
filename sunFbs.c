@@ -184,30 +184,11 @@ Bool sunScreenInit (
     ScreenPtr	pScreen)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
-    static ScreenPtr autoRepeatScreen;
 
     pPrivate->installedMap = 0;
     pPrivate->CloseScreen = pScreen->CloseScreen;
     pScreen->CloseScreen = closeScreen;
     pScreen->SaveScreen = sunSaveScreen;
-#ifdef XKB
-    if (noXkbExtension) {
-#endif
-    /*
-     *	Block/Unblock handlers
-     */
-    if (sunAutoRepeatHandlersInstalled == FALSE) {
-	autoRepeatScreen = pScreen;
-	sunAutoRepeatHandlersInstalled = TRUE;
-    }
-
-    if (pScreen == autoRepeatScreen) {
-        pScreen->BlockHandler = sunBlockHandler;
-        pScreen->WakeupHandler = sunWakeupHandler;
-    }
-#ifdef XKB
-    }
-#endif
     if (!sunCursorInitialize (pScreen))
 	miDCInitialize (pScreen, &sunPointerScreenFuncs);
     return TRUE;

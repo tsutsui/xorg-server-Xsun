@@ -47,11 +47,9 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "Sunkeysym.h"
 #include "mi.h"
 
-#ifdef XKB
 #include <X11/extensions/XKB.h>
 #include "xkbsrv.h"
 #include "xkbstr.h"
-#endif
 
 #define SUN_LED_MASK	0x0f
 #define MIN_KEYCODE	7	/* necessary to avoid the mouse buttons */
@@ -59,9 +57,6 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef KB_SUN4 
 #define KB_SUN4		4
 #endif
-
-#define AUTOREPEAT_INITIATE	400
-#define AUTOREPEAT_DELAY	50
 
 #define tvminus(tv, tv1, tv2)   /* tv = tv1 - tv2 */ \
 		if ((tv1).tv_usec < (tv2).tv_usec) { \
@@ -81,27 +76,14 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 static void SwapLKeys(KeySymsRec *);
 static void SetLights(KeybdCtrl *, int);
-static void ModLight(DeviceIntPtr, Bool, int);
-static void sunEnqueueEvent(DeviceIntPtr, xEvent *);
 static KeyCode LookupKeyCode(KeySym, XkbDescPtr, KeySymsPtr);
 static void pseudoKey(DeviceIntPtr, Bool, KeyCode);
 static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr); 
-static Bool DoSpecialKeys(DeviceIntPtr, xEvent *, Firm_event *);
-static void sunEnqueueAutoRepeat(void);
 
 extern KeySymsRec sunKeySyms[];
 extern SunModmapRec* sunModMaps[];
 
-long	  	  sunAutoRepeatInitiate = 1000 * AUTOREPEAT_INITIATE;
-long	  	  sunAutoRepeatDelay = 1000 * AUTOREPEAT_DELAY;
-
 DeviceIntPtr	sunKeyboardDevice = NULL;
-
-static int		autoRepeatKeyDown = 0;
-static int		autoRepeatReady;
-static int		autoRepeatFirst;
-static struct timeval	autoRepeatLastKeyDownTv;
-static struct timeval	autoRepeatDeltaTv;
 
 void sunKbdWait(void)
 {
@@ -181,24 +163,6 @@ static void SetLights (ctrl, fd)
 }
 
 
-static void ModLight (device, on, led)
-    DeviceIntPtr device;
-    Bool	on;
-    int		led;
-{
-    KeybdCtrl*	ctrl = &device->kbdfeed->ctrl;
-    sunKbdPrivPtr pPriv = (sunKbdPrivPtr) device->public.devicePrivate;
-
-    if(on) {
-	ctrl->leds |= led;
-	pPriv->leds |= led;
-    } else {
-	ctrl->leds &= ~led;
-	pPriv->leds &= ~led;
-    }
-    SetLights (ctrl, pPriv->fd);
-}
-
 /*-
  *-----------------------------------------------------------------------
  * sunBell --
@@ -244,32 +208,6 @@ static void sunBell (
  	return;
 
     bell (pPriv->fd, kctrl->bell_duration * 1000);
-}
-
-static void sunEnqueueEvent(DeviceIntPtr device, xEvent *xE)
-{
-    int i, nevents;
-#ifndef i386
-    sigset_t holdmask;
-
-#ifdef SVR4
-    (void) sigaddset (&holdmask, SIGPOLL);
-#else
-    (void) sigaddset (&holdmask, SIGIO);
-#endif
-    (void) sigprocmask (SIG_BLOCK, &holdmask, (sigset_t*)NULL);
-    nevents = GetKeyboardEvents(sunEvents, device, xE->u.u.type, xE->u.u.detail);
-    for (i = 0; i < nevents; i++)
-	mieqEnqueue(device, (InternalEvent *)(sunEvents + i)->event);
-    (void) sigprocmask (SIG_UNBLOCK, &holdmask, (sigset_t*)NULL);
-#else
-    int oldmask = sigblock (sigmask (SIGIO));
-
-    nevents = GetKeyboardEvents(sunEvents, device, xE->u.u.type, xE->u.u.detail);
-    for (i = 0; i < nevents; i++)
-	mieqEnqueue(device, (InternalEvent *)(sunEvents + i)->event);
-    sigsetmask (oldmask);
-#endif
 }
 
 
@@ -433,7 +371,6 @@ static void sunKbdCtrl (
  *
  *-----------------------------------------------------------------------
  */
-#ifdef XKB
 static void sunInitKbdNames (
     XkbRMLVOSet *rmlvo,
     sunKbdPrivPtr pKbd)
@@ -616,7 +553,6 @@ static void sunInitKbdNames (
     rmlvo->options = NULL;
 #endif
 }
-#endif /* XKB */
 
 /*-
  *-----------------------------------------------------------------------
@@ -638,7 +574,6 @@ int sunKbdProc (
     sunKbdPrivPtr pPriv;
     KeybdCtrl*	ctrl = &device->kbdfeed->ctrl;
     XkbRMLVOSet rmlvo;
-    extern int XkbDfltRepeatDelay, XkbDfltRepeatInterval;
 
     static CARD8 *workingModMap = NULL;
     static KeySymsRec *workingKeySyms;
@@ -672,18 +607,6 @@ int sunKbdProc (
 		sunModMaps[sunKbdPriv.type][i].modifiers;
 	}
 
-	(void) memset ((void *) defaultKeyboardControl.autoRepeats,
-			~0, sizeof defaultKeyboardControl.autoRepeats);
-
-#ifdef XKB
-	if (noXkbExtension) {
-	    sunAutoRepeatInitiate = XkbDfltRepeatDelay * 1000;
-	    sunAutoRepeatDelay = XkbDfltRepeatInterval * 1000;
-#endif
-	autoRepeatKeyDown = 0;
-#ifdef XKB
-	}
-#endif
 	pKeyboard->devicePrivate = (pointer)&sunKbdPriv;
 	pKeyboard->on = FALSE;
 
@@ -787,185 +710,24 @@ Firm_event* sunKbdGetEvents (
  *
  *-----------------------------------------------------------------------
  */
-static xEvent	autoRepeatEvent;
-static int	composeCount;
-
-static Bool DoSpecialKeys(device, xE, fe)
-    DeviceIntPtr  device;
-    xEvent*       xE;
-    Firm_event* fe;
-{
-    int	shift_index, map_index, bit;
-    XkbDescPtr xkb = device->key->xkbInfo->desc;
-    KeySymsPtr syms;
-    KeySym ksym;
-    BYTE* kptr;
-    sunKbdPrivPtr pPriv = (sunKbdPrivPtr)device->public.devicePrivate;
-    BYTE keycode = xE->u.u.detail;
-    CARD8 keyModifiers = xkb->map->modmap[keycode];
-    Bool rv = FALSE;
-
-    /* look up the present idea of the keysym */
-    shift_index = 0;
-    if (XkbStateFieldFromRec(&device->key->xkbInfo->state) & ShiftMask) 
-	shift_index ^= 1;
-    if (XkbStateFieldFromRec(&device->key->xkbInfo->state) & LockMask) 
-	shift_index ^= 1;
-    syms = XkbGetCoreMap(device);
-    if (!syms)
-	return FALSE;	/* XXX */
-    map_index = (fe->id - 1) * syms->mapWidth;
-    ksym = syms->map[shift_index + map_index];
-    if (ksym == NoSymbol)
-	ksym = syms->map[map_index];
-
-    /*
-     * Toggle functionality is hardcoded. This is achieved by always
-     * discarding KeyReleases on these keys, and converting every other
-     * KeyPress into a KeyRelease.
-     */
-    if (xE->u.u.type == KeyRelease 
-	&& (ksym == XK_Num_Lock 
-	|| ksym == XK_Scroll_Lock 
-	|| ksym == SunXK_Compose
-	|| (keyModifiers & LockMask))) {
-	rv = TRUE;
-	goto out;
-    }
-
-    kptr = &device->key->down[keycode >> 3];
-    bit = 1 << (keycode & 7);
-    if ((*kptr & bit) &&
-	(ksym == XK_Num_Lock || ksym == XK_Scroll_Lock ||
-	ksym == SunXK_Compose || (keyModifiers & LockMask)))
-	xE->u.u.type = KeyRelease;
-
-    if (pPriv->type == KB_SUN4) {
-	if (ksym == XK_Num_Lock) {
-	    ModLight (device, xE->u.u.type == KeyPress, XLED_NUM_LOCK);
-	} else if (ksym == XK_Scroll_Lock) {
-	    ModLight (device, xE->u.u.type == KeyPress, XLED_SCROLL_LOCK);
-	} else if (ksym == SunXK_Compose) {
-	    ModLight (device, xE->u.u.type == KeyPress, XLED_COMPOSE);
-	    if (xE->u.u.type == KeyPress) composeCount = 2;
-	    else composeCount = 0;
-	} else if (keyModifiers & LockMask) {
-	    ModLight (device, xE->u.u.type == KeyPress, XLED_CAPS_LOCK);
-	}
-	if (xE->u.u.type == KeyRelease) {
-	    if (composeCount > 0 && --composeCount == 0) {
-		pseudoKey(device, FALSE,
-		    LookupKeyCode(SunXK_Compose, xkb, syms));
-		ModLight (device, FALSE, XLED_COMPOSE);
-	    }
-	}
-    }
-
-    if ((xE->u.u.type == KeyPress) && (keyModifiers == 0)) {
-	/* initialize new AutoRepeater event & mark AutoRepeater on */
-	autoRepeatEvent = *xE;
-	autoRepeatFirst = TRUE;
-	autoRepeatKeyDown++;
-	autoRepeatLastKeyDownTv.tv_sec = fe->time.tv_sec;
-	autoRepeatLastKeyDownTv.tv_usec = fe->time.tv_usec;
-    }
-out:
-    xfree(syms->map);
-    xfree(syms);
-    return rv;
-}
 
 void sunKbdEnqueueEvent (
     DeviceIntPtr  device,
     Firm_event	  *fe)
 {
-    xEvent		xE;
     BYTE		keycode;
-    CARD8		keyModifiers;
     int			type;
     int			i, nevents;
 
     GetEventList(&sunEvents);
     keycode = (fe->id & 0x7f) + MIN_KEYCODE;
 
-    keyModifiers = device->key->xkbInfo->desc->map->modmap[keycode];
-#ifdef XKB
-    if (noXkbExtension) {
-#endif
-    if (autoRepeatKeyDown && (keyModifiers == 0) &&
-	((fe->value == VKEY_DOWN) || (keycode == autoRepeatEvent.u.u.detail))) {
-	/*
-	 * Kill AutoRepeater on any real non-modifier key down, or auto key up
-	 */
-	autoRepeatKeyDown = 0;
-    }
-#ifdef XKB
-    }
-#endif
     type = ((fe->value == VKEY_UP) ? KeyRelease : KeyPress);
-    xE.u.keyButtonPointer.time = TVTOMILLI(fe->time);
-    xE.u.u.type = type;
-    xE.u.u.detail = keycode;
-#ifdef XKB
-    if (noXkbExtension) {
-#endif
-    if (DoSpecialKeys(device, &xE, fe))
-	return;
-#ifdef XKB
-    }
-#endif /* ! XKB */
     nevents = GetKeyboardEvents(sunEvents, device, type, keycode);
     for (i = 0; i < nevents; i++)
 	mieqEnqueue(device, (InternalEvent *)(sunEvents + i)->event);
 }
 
-static void sunEnqueueAutoRepeat(void)
-{
-    int	delta;
-    int	i, mask;
-    DeviceIntPtr device = sunKeyboardDevice;
-    KeybdCtrl* ctrl = &device->kbdfeed->ctrl;
-    sunKbdPrivPtr   pPriv = (sunKbdPrivPtr) device->public.devicePrivate;
-
-    if (ctrl->autoRepeat != AutoRepeatModeOn) {
-	autoRepeatKeyDown = 0;
-	return;
-    }
-    i=(autoRepeatEvent.u.u.detail >> 3);
-    mask=(1 << (autoRepeatEvent.u.u.detail & 7));
-    if (!(ctrl->autoRepeats[i] & mask)) {
-	autoRepeatKeyDown = 0;
-	return;
-    }
-
-    /*
-     * Generate auto repeat event.	XXX one for now.
-     * Update time & pointer location of saved KeyPress event.
-     */
-
-    delta = TVTOMILLI(autoRepeatDeltaTv);
-    autoRepeatFirst = FALSE;
-
-    /*
-     * Fake a key up event and a key down event
-     * for the last key pressed.
-     */
-    autoRepeatEvent.u.keyButtonPointer.time += delta;
-    autoRepeatEvent.u.u.type = KeyRelease;
-
-    /*
-     * hold off any more inputs while we get these safely queued up
-     * further SIGIO are 
-     */
-    sunEnqueueEvent (device, &autoRepeatEvent);
-    autoRepeatEvent.u.u.type = KeyPress;
-    sunEnqueueEvent (device, &autoRepeatEvent);
-    if (ctrl->click) bell (pPriv->fd, 0);
-
-    /* Update time of last key down */
-    tvplus(autoRepeatLastKeyDownTv, autoRepeatLastKeyDownTv, 
-		    autoRepeatDeltaTv);
-}
 
 /*-
  *-----------------------------------------------------------------------
@@ -1061,21 +823,6 @@ void sunBlockHandler(nscreen, pbdata, pTimeout, pReadmask)
     pointer pTimeout;
     pointer pReadmask;
 {
-    KeybdCtrl* ctrl = &sunKeyboardDevice->kbdfeed->ctrl;
-    struct timeval **tvp = pTimeout;
-
-    if (!autoRepeatKeyDown)
-	return;
-
-    if (ctrl->autoRepeat != AutoRepeatModeOn)
-	return;
-
-    (*tvp)->tv_sec = 0;
-    if (autoRepeatFirst == TRUE)
-	(*tvp)->tv_usec = sunAutoRepeatInitiate;
-    else
-	(*tvp)->tv_usec = sunAutoRepeatDelay;
-
 }
 
 /*ARGSUSED*/
@@ -1085,26 +832,4 @@ void sunWakeupHandler(nscreen, pbdata, err, pReadmask)
     unsigned long err;
     pointer pReadmask;
 {
-    KeybdCtrl* ctrl = &sunKeyboardDevice->kbdfeed->ctrl;
-    struct timeval tv;
-
-    if (ctrl->autoRepeat != AutoRepeatModeOn)
-	return;
-
-    if (autoRepeatKeyDown) {
-	X_GETTIMEOFDAY(&tv);
-	tvminus(autoRepeatDeltaTv, tv, autoRepeatLastKeyDownTv);
-	if (autoRepeatDeltaTv.tv_sec > 0 ||
-			(!autoRepeatFirst && autoRepeatDeltaTv.tv_usec >
-				sunAutoRepeatDelay) ||
-			(autoRepeatDeltaTv.tv_usec >
-				sunAutoRepeatInitiate))
-		autoRepeatReady++;
-    }
-    
-    if (autoRepeatReady)
-    {
-	sunEnqueueAutoRepeat ();
-	autoRepeatReady = 0;
-    }
 }
