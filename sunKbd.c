@@ -308,11 +308,9 @@ static void pseudoKey(device, down, keycode)
 	/* fool dix into thinking this key is now "down" */
 	int i;
 	*kptr |= bit;
-	device->key->prev_state = device->key->state;
 	for (i = 0, mask = 1; modifiers; i++, mask <<= 1)
 	    if (mask & modifiers) {
 		device->key->modifierKeyCount[i]++;
-		device->key->state += mask;
 		modifiers &= ~mask;
 	    }
     } else {
@@ -320,11 +318,9 @@ static void pseudoKey(device, down, keycode)
 	if (*kptr & bit) {
 	    int i;
 	    *kptr &= ~bit;
-	    device->key->prev_state = device->key->state;
 	    for (i = 0, mask = 1; modifiers; i++, mask <<= 1)
 		if (mask & modifiers) {
 		    if (--device->key->modifierKeyCount[i] <= 0) {
-			device->key->state &= ~mask;
 			device->key->modifierKeyCount[i] = 0;
 		    }
 		    modifiers &= ~mask;
@@ -801,9 +797,9 @@ static Bool DoSpecialKeys(device, xE, fe)
 
     /* look up the present idea of the keysym */
     shift_index = 0;
-    if (device->key->state & ShiftMask) 
+    if (XkbStateFieldFromRec(&device->key->xkbInfo->state) & ShiftMask) 
 	shift_index ^= 1;
-    if (device->key->state & LockMask) 
+    if (XkbStateFieldFromRec(&device->key->xkbInfo->state) & LockMask) 
 	shift_index ^= 1;
     map_index = (fe->id - 1) * device->key->curKeySyms.mapWidth;
     ksym = device->key->curKeySyms.map[shift_index + map_index];
