@@ -102,7 +102,7 @@ Bool sunBW2Init (screen, pScreen, argc, argv)
 	pScreen->blackPixel = 1;
     }
     return sunInitCommon (screen, pScreen, (off_t) 0,
-	mfbScreenInit, NULL,
-	mfbCreateDefColormap, sunSaveScreen, 0);
+	fbScreenInit, NULL,
+	fbCreateDefColormap, sunSaveScreen, 0);
 }
 
