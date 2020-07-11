@@ -303,7 +303,7 @@ static void pseudoKey(device, down, keycode)
 
     kptr = &device->key->down[keycode >> 3];
     bit = 1 << (keycode & 7);
-    modifiers = device->key->modifierMap[keycode];
+    modifiers = device->key->xkbInfo->desc->map->modmap[keycode];
     if (down) {
 	/* fool dix into thinking this key is now "down" */
 	int i;
@@ -797,7 +797,7 @@ static Bool DoSpecialKeys(device, xE, fe)
     BYTE* kptr;
     sunKbdPrivPtr pPriv = (sunKbdPrivPtr)device->public.devicePrivate;
     BYTE keycode = xE->u.u.detail;
-    CARD8 keyModifiers = device->key->modifierMap[keycode];
+    CARD8 keyModifiers = device->key->xkbInfo->desc->map->modmap[keycode];
 
     /* look up the present idea of the keysym */
     shift_index = 0;
@@ -874,7 +874,7 @@ void sunKbdEnqueueEvent (
     GetEventList(&sunEvents);
     keycode = (fe->id & 0x7f) + MIN_KEYCODE;
 
-    keyModifiers = device->key->modifierMap[keycode];
+    keyModifiers = device->key->xkbInfo->desc->map->modmap[keycode];
 #ifdef XKB
     if (noXkbExtension) {
 #endif
