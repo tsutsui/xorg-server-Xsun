@@ -316,19 +316,11 @@ extern miPointerScreenFuncRec sunPointerScreenFuncs;
 /* sunFbs.c */
 extern int		sunScreenIndex;
 
-extern Bool sunCursorInitialize(
-    ScreenPtr /* pScreen */
-);
+/* sunCursor.c */
+extern Bool sunCursorInitialize(ScreenPtr);
+extern void sunDisableCursor(ScreenPtr);
 
-extern void sunDisableCursor(
-    ScreenPtr /* pScreen */
-);
-
-extern int sunChangeKbdTranslation(
-    int /* fd */,
-    Bool /* makeTranslated */
-);
-
+/* sunInit.c */
 extern void sunNonBlockConsoleOff(
 #if defined(SVR4) || defined(CSRG_BASED)
     void
@@ -337,82 +329,37 @@ extern void sunNonBlockConsoleOff(
 #endif
 );
 
-extern void sunEnqueueEvents(
-    void
-);
+/* sunIo.c */
+extern void sunEnqueueEvents(void);
 
-extern int sunGXInit(
-    ScreenPtr /* pScreen */,
-    fbFd* /* fb */
-);
+/* sunGX.c */
+extern int sunGXInit(ScreenPtr, fbFd *);
 
-extern Bool sunSaveScreen(
-    ScreenPtr /* pScreen */,
-    int /* on */
-);
-
-extern Bool sunScreenInit(
-    ScreenPtr /* pScreen */
-);
-
-extern pointer sunMemoryMap(
-    size_t /* len */,
-    off_t /* off */,
-    int /* fd */
-);
-
-extern Bool sunScreenAllocate(
-    ScreenPtr /* pScreen */
-);
-
-extern Bool sunInitCommon(
-    int /* scrn */,
-    ScreenPtr /* pScrn */,
-    off_t /* offset */,
+/* sunFbs.c */
+extern Bool sunSaveScreen(ScreenPtr, int);
+extern Bool sunScreenInit(ScreenPtr);
+extern pointer sunMemoryMap(size_t, off_t, int);
+extern Bool sunScreenAllocate(ScreenPtr);
+extern Bool sunInitCommon(int, ScreenPtr, off_t,
     Bool (* /* init1 */)(ScreenPtr, pointer, int, int, int, int, int, int),
     void (* /* init2 */)(ScreenPtr),
     Bool (* /* cr_cm */)(ScreenPtr),
     Bool (* /* save */)(ScreenPtr, int),
-    int /* fb_off */
-);
+    int);
 
-extern Firm_event* sunKbdGetEvents(
-    int /* fd */,
-    Bool /* on */,
-    int* /* pNumEvents */,
-    Bool* /* pAgain */
-);
+/* sunKbd.c */
+extern int sunChangeKbdTranslation(int, Bool);
+extern Firm_event* sunKbdGetEvents(int, Bool, int *, Bool *);
+extern void sunKbdEnqueueEvent(DeviceIntPtr, Firm_event *);
+extern int sunKbdProc(DeviceIntPtr, int);
+extern void sunKbdWait(void);
+void sunBlockHandler(int, pointer, pointer, pointer);
+void sunWakeupHandler(int, pointer, unsigned long, pointer);
 
-extern Firm_event* sunMouseGetEvents(
-    int /* fd */,
-    Bool /* on */,
-    int* /* pNumEvents */,
-    Bool* /* pAgain */
-);
-
-extern void sunKbdEnqueueEvent(
-    DeviceIntPtr /* device */,
-    Firm_event* /* fe */
-);
-
-extern void sunMouseEnqueueEvent(
-    DeviceIntPtr /* device */,
-    Firm_event* /* fe */
-);
-
-extern int sunKbdProc(
-    DeviceIntPtr /* pKeyboard */,
-    int /* what */
-);
-
-extern int sunMouseProc(
-    DeviceIntPtr /* pMouse */,
-    int /* what */
-);
-
-extern void sunKbdWait(
-    void
-);
+/* sunMouse.c */
+extern Firm_event* sunMouseGetEvents(int, Bool, int *, Bool *);
+extern void sunMouseEnqueueEvent(DeviceIntPtr, Firm_event *);
+extern int sunMouseProc(DeviceIntPtr, int);
 
 /* sunCfb.c */
 Bool sunCG3Init(int, ScreenPtr, int, char **);
@@ -423,10 +370,6 @@ Bool sunCG6Init(int, ScreenPtr, int, char **);
 
 /* sunCfb24.c */
 Bool sunCG8Init(int, ScreenPtr, int, char **);
-
-/* sunKbd.c */
-void sunBlockHandler(int, pointer, pointer, pointer);
-void sunWakeupHandler(int, pointer, unsigned long, pointer);
 
 /* sunMfb.c */
 Bool sunBW2Init(int, ScreenPtr, int, char **);
