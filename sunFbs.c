@@ -172,7 +172,9 @@ static Bool closeScreen (i, pScreen)
     Bool    ret;
 
     (void) OsSignal (SIGIO, SIG_IGN);
+#if 0	/* XXX GX is disabled for now */
     sunDisableCursor (pScreen);
+#endif
     pScreen->CloseScreen = pPrivate->CloseScreen;
     ret = (*pScreen->CloseScreen) (i, pScreen);
     (void) (*pScreen->SaveScreen) (pScreen, SCREEN_SAVER_OFF);
@@ -189,7 +191,9 @@ Bool sunScreenInit (
     pPrivate->CloseScreen = pScreen->CloseScreen;
     pScreen->CloseScreen = closeScreen;
     pScreen->SaveScreen = sunSaveScreen;
+#if 0	/* XXX GX is disabled for now */
     if (!sunCursorInitialize (pScreen))
+#endif
 	miDCInitialize (pScreen, &sunPointerScreenFuncs);
     return TRUE;
 }

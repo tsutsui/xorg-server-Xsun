@@ -181,7 +181,9 @@ void AbortDDX()
     {
 	pScreen = screenInfo.screens[i];
 	(*pScreen->SaveScreen) (pScreen, SCREEN_SAVER_OFF);
+#if 0	/* XXX GX is disabled for now */
 	sunDisableCursor (pScreen);
+#endif
     }
 }
 
