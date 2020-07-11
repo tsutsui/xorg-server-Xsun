@@ -198,7 +198,6 @@ ddxProcessArgument (argc, argv, i)
     char *argv[];
     int	i;
 {
-    extern int XprintOptions(int, char **, int);
 
     if (strcmp (argv[i], "-swapLkeys") == 0) {	/* -swapLkeys */
 	sunSwapLkeys = TRUE;
@@ -241,9 +240,6 @@ ddxProcessArgument (argc, argv, i)
     if (strcmp (argv[i], "-noGX") == 0) {
 	sunNoGX = TRUE;
 	return 1;
-    }
-    if (strcmp(argv[i], "-XpFile") == 0) {
-	return XprintOptions(argc, argv, i) - i;
     }
     return 0;
 }
