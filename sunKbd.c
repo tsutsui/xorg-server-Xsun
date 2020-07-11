@@ -634,7 +634,7 @@ int sunKbdProc (
 
     switch (what) {
     case DEVICE_INIT:
-	if (pKeyboard != LookupKeyboardDevice()) {
+	if (pKeyboard != (DevicePtr)sunKeyboardDevice) {
 	    ErrorF ("Cannot open non-system keyboard\n");
 	    return (!Success);
 	}
@@ -1041,7 +1041,7 @@ void sunBlockHandler(nscreen, pbdata, pTimeout, pReadmask)
     pointer pTimeout;
     pointer pReadmask;
 {
-    KeybdCtrl* ctrl = &((DeviceIntPtr)LookupKeyboardDevice())->kbdfeed->ctrl;
+    KeybdCtrl* ctrl = &sunKeyboardDevice->kbdfeed->ctrl;
     struct timeval **tvp = pTimeout;
 
     if (!autoRepeatKeyDown)
@@ -1065,7 +1065,7 @@ void sunWakeupHandler(nscreen, pbdata, err, pReadmask)
     unsigned long err;
     pointer pReadmask;
 {
-    KeybdCtrl* ctrl = &((DeviceIntPtr)LookupKeyboardDevice())->kbdfeed->ctrl;
+    KeybdCtrl* ctrl = &sunKeyboardDevice->kbdfeed->ctrl;
     struct timeval tv;
 
     if (ctrl->autoRepeat != AutoRepeatModeOn)
