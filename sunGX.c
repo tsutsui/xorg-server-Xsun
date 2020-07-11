@@ -179,6 +179,18 @@ in this Software without prior written authorization from The Open Group.
 			GX_ROP_00_1(O) |\
 			GX_ROP_00_0(GX_ROP_NOOP))
 
+static void sunGXDoBitblt(DrawablePtr, DrawablePtr, int, RegionPtr, DDXPointPtr, unsigned long);
+static RegionPtr sunGXCopyArea(DrawablePtr, DrawablePtr, GC *, int, int, int, int, int, int);
+static void sunGXCopyPlane1to8(DrawablePtr, DrawablePtr, int, RegionPtr, DDXPointPtr, unsigned long, unsigned long);
+static RegionPtr sunGXCopyPlane(DrawablePtr, DrawablePtr, GCPtr, int, int, int, int, int, int, unsigned long);
+static void sunGXFillRectAll(DrawablePtr, GCPtr, int, BoxPtr);
+static void sunGXPolyFillRect(DrawablePtr, GCPtr, int, xRectangle *);
+static void sunGXFillSpans(DrawablePtr, GCPtr, int, DDXPointPtr, int *, int);
+static void sunGXFillEllipse(DrawablePtr, sunGXPtr, xArc *);
+static void sunGXFillArcSlice(DrawablePtr, GCPtr, sunGXPtr, xArc *);
+static void sunGXPolyFillArc(DrawablePtr, GCPtr, int, xArc *);
+static void sunGXFillPoly1Rect(DrawablePtr, GCPtr, int, int, int, DDXPointPtr);
+
 static Uint gx_blit_rop_table[16]={
     ROP_BLIT(GX_ROP_CLEAR,  GX_ROP_CLEAR),	/* GXclear */
     ROP_BLIT(GX_ROP_CLEAR,  GX_ROP_NOOP),	/* GXand */
@@ -406,7 +418,7 @@ sunGXDoBitblt(pSrc, pDst, alu, prgnDst, pptSrc, planemask)
     GXWait(gx,r);
 }
 
-RegionPtr
+static RegionPtr
 sunGXCopyArea(pSrcDrawable, pDstDrawable,
             pGC, srcx, srcy, width, height, dstx, dsty)
     register DrawablePtr pSrcDrawable;
@@ -541,7 +553,7 @@ sunGXCopyPlane1to8 (pSrcDrawable, pDstDrawable, rop, prgnDst, pptSrc, planemask,
     gx->mode = GX_BLIT_SRC | GX_MODE_COLOR8;
 }
 
-RegionPtr sunGXCopyPlane(pSrcDrawable, pDstDrawable,
+static RegionPtr sunGXCopyPlane(pSrcDrawable, pDstDrawable,
 	    pGC, srcx, srcy, width, height, dstx, dsty, bitPlane)
     DrawablePtr 	pSrcDrawable;
     DrawablePtr		pDstDrawable;
@@ -618,7 +630,7 @@ RegionPtr sunGXCopyPlane(pSrcDrawable, pDstDrawable,
     return ret;
 }
 
-void
+static void
 sunGXFillRectAll (pDrawable, pGC, nBox, pBox)
     DrawablePtr	    pDrawable;
     GCPtr	    pGC;
@@ -645,7 +657,7 @@ sunGXFillRectAll (pDrawable, pGC, nBox, pBox)
 
 #define NUM_STACK_RECTS	1024
 
-void
+static void
 sunGXPolyFillRect(pDrawable, pGC, nrectFill, prectInit)
     DrawablePtr pDrawable;
     register GCPtr pGC;
@@ -792,7 +804,7 @@ sunGXPolyFillRect(pDrawable, pGC, nrectFill, prectInit)
     	DEALLOCATE_LOCAL(pboxClippedBase);
 }
 
-void
+static void
 sunGXFillSpans (pDrawable, pGC, n, ppt, pwidth, fSorted)
     DrawablePtr pDrawable;
     GCPtr	pGC;
@@ -1050,7 +1062,7 @@ sunGXFillArcSlice (pDraw, pGC, gx, arc)
 #define UNSET_CIRCLE
 #endif
 
-void
+static void
 sunGXPolyFillArc (pDraw, pGC, narcs, parcs)
     DrawablePtr	pDraw;
     GCPtr	pGC;
@@ -1165,7 +1177,7 @@ sunGXPolyFillArc (pDraw, pGC, narcs, parcs)
 	GXResetClip (gx, pDraw->pScreen);
 }
 
-void
+static void
 sunGXFillPoly1Rect (pDrawable, pGC, shape, mode, count, ptsIn)
     DrawablePtr	pDrawable;
     GCPtr	pGC;
