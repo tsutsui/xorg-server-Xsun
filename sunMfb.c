@@ -93,7 +93,7 @@ Bool sunBW2Init (screen, pScreen, argc, argv)
     int		    argc;    	/* The number of the Server's arguments. */
     char	    **argv;   	/* The arguments themselves. Don't change! */
 {
-    sunFbs[screen].EnterLeave = (void (*)())NoopDDA;
+    sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     if (sunFlipPixels) {
 	pScreen->whitePixel = 1;
 	pScreen->blackPixel = 0;

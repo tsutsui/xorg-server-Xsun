@@ -425,6 +425,9 @@ Bool sunCG8Init(int, ScreenPtr, int, char **);
 void sunBlockHandler(int, pointer, pointer, pointer);
 void sunWakeupHandler(int, pointer, unsigned long, pointer);
 
+/* sunMfb.c */
+Bool sunBW2Init(int, ScreenPtr, int, char **);
+
 /* XXX */
 extern void mfbDoBitblt(DrawablePtr, DrawablePtr, int, RegionPtr, DDXPointPtr);
 

@@ -60,12 +60,6 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifdef i386 /* { */
 #define BW2I NULL
 #else /* }{ */
-extern Bool sunBW2Init(
-    int /* screen */,
-    ScreenPtr /* pScreen */,
-    int /* argc */,
-    char** /* argv */
-);
 #define BW2I sunBW2Init
 #endif /* } */
 
