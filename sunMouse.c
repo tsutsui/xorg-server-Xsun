@@ -56,6 +56,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include    "sun.h"
 #include    "mi.h"
 #include    "cursor.h"
+#include    "exevents.h"
+#include    "xserver-properties.h"
 
 Bool sunActiveZaphod = TRUE;
 DeviceIntPtr sunPointerDevice = NULL;
@@ -123,6 +125,8 @@ int sunMouseProc (
     int	    	  format;
     static int	  oformat;
     BYTE    	  map[4];
+    Atom btn_labels[3] = {0};
+    Atom axes_labels[2] = { 0, 0 };
 
     switch (what) {
 	case DEVICE_INIT:
@@ -137,9 +141,15 @@ int sunMouseProc (
 	    map[1] = 1;
 	    map[2] = 2;
 	    map[3] = 3;
-	    InitPointerDeviceStruct(
-		pMouse, map, 3, miPointerGetMotionEvents,
- 		sunMouseCtrl, miPointerGetMotionBufferSize());
+	    btn_labels[0] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_LEFT);
+	    btn_labels[1] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_MIDDLE);
+	    btn_labels[2] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_RIGHT);
+	    axes_labels[0] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_X);
+	    axes_labels[1] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_Y);
+
+	    InitPointerDeviceStruct(pMouse, map, 3, btn_labels,
+		sunMouseCtrl, GetMotionHistorySize(),
+		2, axes_labels);
 	    break;
 
 	case DEVICE_ON:
