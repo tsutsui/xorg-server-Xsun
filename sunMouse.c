@@ -55,13 +55,15 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define NEED_EVENTS
 #include    "sun.h"
 #include    "mi.h"
+#include    "cursor.h"
 
 Bool sunActiveZaphod = TRUE;
 DeviceIntPtr sunPointerDevice = NULL;
 
-static Bool sunCursorOffScreen();
-static void sunCrossScreen();
-static void sunWarpCursor();
+static short MouseAccelerate(DeviceIntPtr, int);
+static Bool sunCursorOffScreen(ScreenPtr *, int *, int *);
+static void sunCrossScreen(ScreenPtr, Bool);
+static void sunWarpCursor(ScreenPtr, int, int);
 
 miPointerScreenFuncRec sunPointerScreenFuncs = {
     sunCursorOffScreen,
@@ -338,7 +340,6 @@ sunCursorOffScreen (pScreen, x, y)
     int		*x, *y;
 {
     int	    index, ret = FALSE;
-    extern Bool PointerConfinedToScreen();
 
     if (PointerConfinedToScreen()) return TRUE;
     /*
