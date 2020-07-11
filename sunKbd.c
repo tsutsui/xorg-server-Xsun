@@ -79,6 +79,16 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 		    (tv).tv_sec += 1; \
 		}
 
+static void SwapLKeys(KeySymsRec *);
+static void SetLights(KeybdCtrl *, int);
+static void ModLight(DeviceIntPtr, Bool, int);
+static void sunEnqueueEvent(xEvent *);
+static KeyCode LookupKeyCode(KeySym, KeySymsPtr);
+static void pseudoKey(DeviceIntPtr, Bool, KeyCode);
+static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr); 
+static Bool DoSpecialKeys(DeviceIntPtr, xEvent *, Firm_event *);
+static void sunEnqueueAutoRepeat(void);
+
 extern KeySymsRec sunKeySyms[];
 extern SunModmapRec* sunModMaps[];
 
@@ -93,7 +103,7 @@ static int		autoRepeatFirst;
 static struct timeval	autoRepeatLastKeyDownTv;
 static struct timeval	autoRepeatDeltaTv;
 
-void sunKbdWait()
+void sunKbdWait(void)
 {
     static struct timeval lastChngKbdTransTv;
     struct timeval tv;
@@ -879,7 +889,7 @@ void sunKbdEnqueueEvent (
     mieqEnqueue (&xE);
 }
 
-void sunEnqueueAutoRepeat ()
+static void sunEnqueueAutoRepeat(void)
 {
     int	delta;
     int	i, mask;
