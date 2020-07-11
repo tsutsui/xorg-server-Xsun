@@ -503,10 +503,12 @@ Bool sunCG6Init (screen, pScreen, argc, argv)
 	    sunFbs[screen].info.fb_depth))
 	return FALSE;
 #ifndef LOWMEMFTPT
+#if 0 /* XXX no GX support for now */
     if (sunNoGX == FALSE) {
 	if (!sunGXInit (pScreen, &sunFbs[screen]))
 	    return FALSE;
     }
+#endif
 #endif /* ifndef LOWMEMFTPT */
     if (!sunCfbFinishScreenInit(pScreen,
 	    sunFbs[screen].fb + CG6_IMAGE_OFFSET,
