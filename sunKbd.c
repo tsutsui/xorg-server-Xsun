@@ -50,6 +50,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifdef XKB
 #include <X11/extensions/XKB.h>
 #include "xkbsrv.h"
+#include "xkbstr.h"
 #endif
 
 #define SUN_LED_MASK	0x0f
@@ -82,7 +83,7 @@ static void SwapLKeys(KeySymsRec *);
 static void SetLights(KeybdCtrl *, int);
 static void ModLight(DeviceIntPtr, Bool, int);
 static void sunEnqueueEvent(DeviceIntPtr, xEvent *);
-static KeyCode LookupKeyCode(KeySym, KeySymsPtr);
+static KeyCode LookupKeyCode(KeySym, XkbDescPtr, KeySymsPtr);
 static void pseudoKey(DeviceIntPtr, Bool, KeyCode);
 static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr); 
 static Bool DoSpecialKeys(DeviceIntPtr, xEvent *, Firm_event *);
@@ -277,16 +278,17 @@ static void sunEnqueueEvent(DeviceIntPtr device, xEvent *xE)
 #define XLED_SCROLL_LOCK 0x2
 #define XLED_CAPS_LOCK   0x8
 
-static KeyCode LookupKeyCode (keysym, keysymsrec)
-    KeySym keysym;
-    KeySymsPtr keysymsrec;
+static KeyCode LookupKeyCode(
+    KeySym keysym,
+    XkbDescPtr xkb,
+    KeySymsPtr syms)
 {
     KeyCode i;
     int ii, index = 0;
 
-    for (i = keysymsrec->minKeyCode; i < keysymsrec->maxKeyCode; i++)
-	for (ii = 0; ii < keysymsrec->mapWidth; ii++)
-	    if (keysymsrec->map[index++] == keysym)
+    for (i = xkb->min_key_code; i < xkb->max_key_code; i++)
+	for (ii = 0; ii < syms->mapWidth; ii++)
+	    if (syms->map[index++] == keysym)
 		return i;
     return 0;
 }
@@ -334,45 +336,50 @@ static void DoLEDs(device, ctrl, pPriv)
     KeybdCtrl* ctrl;
     sunKbdPrivPtr pPriv; 
 {
-#ifdef XKB
-    if (noXkbExtension) {
-#endif
+    XkbDescPtr xkb;
+    KeySymsPtr syms;
+
+    xkb = device->key->xkbInfo->desc;
+    syms = XkbGetCoreMap(device);
+    if (!syms)
+	return;	/* XXX */
+
     if ((ctrl->leds & XLED_CAPS_LOCK) && !(pPriv->leds & XLED_CAPS_LOCK))
 	    pseudoKey(device, TRUE,
-		LookupKeyCode(XK_Caps_Lock, &device->key->curKeySyms));
+		LookupKeyCode(XK_Caps_Lock, xkb, syms));
 
     if (!(ctrl->leds & XLED_CAPS_LOCK) && (pPriv->leds & XLED_CAPS_LOCK))
 	    pseudoKey(device, FALSE,
-		LookupKeyCode(XK_Caps_Lock, &device->key->curKeySyms));
+		LookupKeyCode(XK_Caps_Lock, xkb, syms));
 
     if ((ctrl->leds & XLED_NUM_LOCK) && !(pPriv->leds & XLED_NUM_LOCK))
 	    pseudoKey(device, TRUE,
-		LookupKeyCode(XK_Num_Lock, &device->key->curKeySyms));
+		LookupKeyCode(XK_Num_Lock, xkb, syms));
 
     if (!(ctrl->leds & XLED_NUM_LOCK) && (pPriv->leds & XLED_NUM_LOCK))
 	    pseudoKey(device, FALSE,
-		LookupKeyCode(XK_Num_Lock, &device->key->curKeySyms));
+		LookupKeyCode(XK_Num_Lock, xkb, syms));
 
     if ((ctrl->leds & XLED_SCROLL_LOCK) && !(pPriv->leds & XLED_SCROLL_LOCK))
 	    pseudoKey(device, TRUE,
-		LookupKeyCode(XK_Scroll_Lock, &device->key->curKeySyms));
+		LookupKeyCode(XK_Scroll_Lock, xkb, syms));
 
     if (!(ctrl->leds & XLED_SCROLL_LOCK) && (pPriv->leds & XLED_SCROLL_LOCK))
 	    pseudoKey(device, FALSE,
-		LookupKeyCode(XK_Scroll_Lock, &device->key->curKeySyms));
+		LookupKeyCode(XK_Scroll_Lock, xkb, syms));
 
     if ((ctrl->leds & XLED_COMPOSE) && !(pPriv->leds & XLED_COMPOSE))
 	    pseudoKey(device, TRUE,
-		LookupKeyCode(SunXK_Compose, &device->key->curKeySyms));
+		LookupKeyCode(SunXK_Compose, xkb, syms));
 
     if (!(ctrl->leds & XLED_COMPOSE) && (pPriv->leds & XLED_COMPOSE))
 	    pseudoKey(device, FALSE,
-		LookupKeyCode(SunXK_Compose, &device->key->curKeySyms));
-#ifdef XKB
-    }
-#endif
+		LookupKeyCode(SunXK_Compose, xkb, syms));
+
     pPriv->leds = ctrl->leds & 0x0f;
     SetLights (ctrl, pPriv->fd);
+    xfree(syms->map);
+    xfree(syms);
 }
 
 /*-
@@ -789,11 +796,14 @@ static Bool DoSpecialKeys(device, xE, fe)
     Firm_event* fe;
 {
     int	shift_index, map_index, bit;
+    XkbDescPtr xkb = device->key->xkbInfo->desc;
+    KeySymsPtr syms;
     KeySym ksym;
     BYTE* kptr;
     sunKbdPrivPtr pPriv = (sunKbdPrivPtr)device->public.devicePrivate;
     BYTE keycode = xE->u.u.detail;
-    CARD8 keyModifiers = device->key->xkbInfo->desc->map->modmap[keycode];
+    CARD8 keyModifiers = xkb->map->modmap[keycode];
+    Bool rv = FALSE;
 
     /* look up the present idea of the keysym */
     shift_index = 0;
@@ -801,10 +811,13 @@ static Bool DoSpecialKeys(device, xE, fe)
 	shift_index ^= 1;
     if (XkbStateFieldFromRec(&device->key->xkbInfo->state) & LockMask) 
 	shift_index ^= 1;
-    map_index = (fe->id - 1) * device->key->curKeySyms.mapWidth;
-    ksym = device->key->curKeySyms.map[shift_index + map_index];
+    syms = XkbGetCoreMap(device);
+    if (!syms)
+	return FALSE;	/* XXX */
+    map_index = (fe->id - 1) * syms->mapWidth;
+    ksym = syms->map[shift_index + map_index];
     if (ksym == NoSymbol)
-	ksym = device->key->curKeySyms.map[map_index];
+	ksym = syms->map[map_index];
 
     /*
      * Toggle functionality is hardcoded. This is achieved by always
@@ -815,8 +828,10 @@ static Bool DoSpecialKeys(device, xE, fe)
 	&& (ksym == XK_Num_Lock 
 	|| ksym == XK_Scroll_Lock 
 	|| ksym == SunXK_Compose
-	|| (keyModifiers & LockMask))) 
-	return TRUE;
+	|| (keyModifiers & LockMask))) {
+	rv = TRUE;
+	goto out;
+    }
 
     kptr = &device->key->down[keycode >> 3];
     bit = 1 << (keycode & 7);
@@ -840,7 +855,7 @@ static Bool DoSpecialKeys(device, xE, fe)
 	if (xE->u.u.type == KeyRelease) {
 	    if (composeCount > 0 && --composeCount == 0) {
 		pseudoKey(device, FALSE,
-		    LookupKeyCode(SunXK_Compose, &device->key->curKeySyms));
+		    LookupKeyCode(SunXK_Compose, xkb, syms));
 		ModLight (device, FALSE, XLED_COMPOSE);
 	    }
 	}
@@ -854,7 +869,10 @@ static Bool DoSpecialKeys(device, xE, fe)
 	autoRepeatLastKeyDownTv.tv_sec = fe->time.tv_sec;
 	autoRepeatLastKeyDownTv.tv_usec = fe->time.tv_usec;
     }
-    return FALSE;
+out:
+    xfree(syms->map);
+    xfree(syms);
+    return rv;
 }
 
 void sunKbdEnqueueEvent (
