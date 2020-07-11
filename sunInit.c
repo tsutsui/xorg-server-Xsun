@@ -112,6 +112,12 @@ static void SigIOHandler(int);
 static char** GetDeviceList(int, char **);
 static void getKbdType(void);
 
+#if SUNMAXDEPTH == 32
+static Bool sunCfbCreateGC(GCPtr);
+static void sunCfbGetSpans(DrawablePtr, int, DDXPointPtr, int *, int, char *);
+static void sunCfbGetImage(DrawablePtr, int,int, int, int, unsigned int, unsigned long, char *);
+#endif /* SUNMAXDEPTH == 32 */
+
 extern KeySymsRec sunKeySyms[];
 extern SunModmapRec *sunModMaps[];
 extern int sunMaxLayout;
