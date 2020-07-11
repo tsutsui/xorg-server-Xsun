@@ -207,6 +207,19 @@ static void sunBell (
     bell (pPriv->fd, kctrl->bell_duration * 1000);
 }
 
+void
+DDXRingBell(int volume, int pitch, int duration)
+{
+    DeviceIntPtr pKeyboard;
+    sunKbdPrivPtr pPriv;
+
+    pKeyboard = sunKeyboardDevice;
+    if (pKeyboard != NULL) {
+	pPriv = (sunKbdPrivPtr)pKeyboard->public.devicePrivate;
+	bell(pPriv->fd, duration * 1000);
+    }
+}
+
 
 #define XLED_NUM_LOCK    0x1
 #define XLED_COMPOSE     0x4

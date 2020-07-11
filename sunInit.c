@@ -653,6 +653,15 @@ void InitInput(argc, argv)
     }
 }
 
+void
+CloseInput(void)
+{
+}
+
+void
+OsVendorFatalError(void)
+{
+}
 
 #if SUNMAXDEPTH == 8
 
