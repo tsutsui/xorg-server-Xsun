@@ -29,6 +29,7 @@ from The Open Group.
 
 /* $XFree86: xc/programs/Xserver/hw/sun/sunMultiDepth.c,v 1.6 2001/12/14 19:59:43 dawes Exp $ */
 
+#include "sun.h"
 #include "X.h"
 #include "Xmd.h"
 #include "servermd.h"
