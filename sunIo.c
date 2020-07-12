@@ -67,7 +67,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *-----------------------------------------------------------------------
  */
 void
-ProcessInputEvents ()
+ProcessInputEvents(void)
 {
     mieqProcessInputEvents ();
 }
@@ -79,9 +79,8 @@ ProcessInputEvents ()
  *	enqueue them using the mi event queue
  */
 
-void sunEnqueueEvents (
-    void
-)
+void
+sunEnqueueEvents(void)
 {
     Firm_event	*ptrEvents,    	/* Current pointer event */
 		*kbdEvents;    	/* Current keyboard event */
@@ -159,7 +158,8 @@ void sunEnqueueEvents (
 /*
  * DDX - specific abort routine.  Called by AbortServer().
  */
-void AbortDDX()
+void
+AbortDDX(void)
 {
     int		i;
     ScreenPtr	pScreen;
@@ -189,16 +189,13 @@ void AbortDDX()
 
 /* Called by GiveUp(). */
 void
-ddxGiveUp()
+ddxGiveUp(void)
 {
     AbortDDX ();
 }
 
 int
-ddxProcessArgument (argc, argv, i)
-    int	argc;
-    char *argv[];
-    int	i;
+ddxProcessArgument(int argc, char *argv[], int i)
 {
 
     if (strcmp (argv[i], "-swapLkeys") == 0) {	/* -swapLkeys */
@@ -247,7 +244,7 @@ ddxProcessArgument (argc, argv, i)
 }
 
 void
-ddxUseMsg()
+ddxUseMsg(void)
 {
     ErrorF("-swapLkeys          swap keysyms on L1..L10\n");
     ErrorF("-debug              disable non-blocking console mode\n");

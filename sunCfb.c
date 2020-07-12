@@ -98,10 +98,8 @@ static void CGScreenInit(ScreenPtr);
 static void checkMono(int, char **);
 static void CG4Switch(ScreenPtr, int);
 
-static void CGUpdateColormap(pScreen, dex, count, rmap, gmap, bmap)
-    ScreenPtr	pScreen;
-    int		dex, count;
-    u_char	*rmap, *gmap, *bmap;
+static void
+CGUpdateColormap(ScreenPtr pScreen, int dex, int count, u_char *rmap, u_char *gmap, u_char *bmap)
 {
     struct fbcmap sunCmap;
 
@@ -117,10 +115,8 @@ static void CGUpdateColormap(pScreen, dex, count, rmap, gmap, bmap)
     }
 }
 
-static void CGGetColormap(pScreen, dex, count, rmap, gmap, bmap)
-    ScreenPtr	pScreen;
-    int		dex, count;
-    u_char	*rmap, *gmap, *bmap;
+static void
+CGGetColormap(ScreenPtr pScreen, int dex, int count, u_char *rmap, u_char *gmap, u_char *bmap)
 {
     struct fbcmap sunCmap;
 
@@ -136,8 +132,8 @@ static void CGGetColormap(pScreen, dex, count, rmap, gmap, bmap)
     }
 }
 
-void sunInstallColormap(cmap)
-    ColormapPtr	cmap;
+void
+sunInstallColormap(ColormapPtr cmap)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(cmap->pScreen);
     register int i;
@@ -191,8 +187,8 @@ void sunInstallColormap(cmap)
     WalkTree(cmap->pScreen, TellGainedMap, (pointer) &(cmap->mid));
 }
 
-void sunUninstallColormap(cmap)
-    ColormapPtr	cmap;
+void
+sunUninstallColormap(ColormapPtr cmap)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(cmap->pScreen);
     if (cmap == pPrivate->installedMap) {
@@ -210,19 +206,16 @@ void sunUninstallColormap(cmap)
     }
 }
 
-int sunListInstalledColormaps(pScreen, pCmapList)
-    ScreenPtr	pScreen;
-    Colormap	*pCmapList;
+int
+sunListInstalledColormaps(ScreenPtr pScreen, Colormap *pCmapList)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     *pCmapList = pPrivate->installedMap->mid;
     return (1);
 }
 
-static void CGStoreColors(pmap, ndef, pdefs)
-    ColormapPtr	pmap;
-    int		ndef;
-    xColorItem	*pdefs;
+static void
+CGStoreColors(ColormapPtr pmap, int ndef, xColorItem *pdefs)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(pmap->pScreen);
     u_char	rmap[256], gmap[256], bmap[256];
@@ -245,8 +238,8 @@ static void CGStoreColors(pmap, ndef, pdefs)
     }
 }
 
-static void CGScreenInit (pScreen)
-    ScreenPtr	pScreen;
+static void
+CGScreenInit(ScreenPtr pScreen)
 {
 #ifndef STATIC_COLOR /* { */
     sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
@@ -264,9 +257,8 @@ static void CGScreenInit (pScreen)
 #endif /* } */
 }
 
-static void checkMono (argc, argv)
-    int argc;
-    char** argv;
+static void
+checkMono(int argc, char** argv)
 {
     int i;
 
@@ -285,11 +277,13 @@ static void checkMono (argc, argv)
 
 #define CG3_MMAP_OFFSET 0x04000000
 
-Bool sunCG3Init (screen, pScreen, argc, argv)
-    int	    	  screen;    	/* what screen am I going to be */
-    ScreenPtr	  pScreen;  	/* The Screen to initialize */
-    int	    	  argc;	    	/* The number of the Server's arguments. */
-    char    	  **argv;   	/* The arguments themselves. Don't change! */
+Bool
+sunCG3Init(
+    int	    	  screen,    	/* what screen am I going to be */
+    ScreenPtr	  pScreen,  	/* The Screen to initialize */
+    int	    	  argc,	    	/* The number of the Server's arguments. */
+    char    	  **argv   	/* The arguments themselves. Don't change! */
+)
 {
     checkMono (argc, argv);
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
@@ -298,11 +292,13 @@ Bool sunCG3Init (screen, pScreen, argc, argv)
 	fbCreateDefColormap, sunSaveScreen, 0);
 }
 
-Bool sunTCXInit (screen, pScreen, argc, argv)
-    int	    	  screen;    	/* what screen am I going to be */
-    ScreenPtr	  pScreen;  	/* The Screen to initialize */
-    int	    	  argc;	    	/* The number of the Server's arguments. */
-    char    	  **argv;   	/* The arguments themselves. Don't change! */
+Bool
+sunTCXInit(
+    int	    	  screen,    	/* what screen am I going to be */
+    ScreenPtr	  pScreen,  	/* The Screen to initialize */
+    int	    	  argc,	    	/* The number of the Server's arguments. */
+    char    	  **argv   	/* The arguments themselves. Don't change! */
+)
 {
     checkMono (argc, argv);
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
@@ -337,10 +333,8 @@ typedef struct {
     struct cg2fb 	regs;
 } *CG2Ptr;
 
-static void CG2UpdateColormap(pScreen, index, count, rmap, gmap,bmap)
-    ScreenPtr	pScreen;
-    int		  index, count;
-    u_char	  *rmap, *gmap, *bmap;
+static void
+CG2UpdateColormap(ScreenPtr pScreen, int index, int count, u_char *rmap, u_char *gmap, u_char *bmap)
 {
     CG2Ptr	fb = (CG2Ptr) sunFbs[pScreen->myNum].fb;
     volatile struct cg2statusreg *regp = &fb->regs.status.reg;
@@ -355,10 +349,8 @@ static void CG2UpdateColormap(pScreen, index, count, rmap, gmap,bmap)
     regp->update_cmap = 1;
 }
 
-static void CG2GetColormap(pScreen, index, count, rmap, gmap,bmap)
-    ScreenPtr	pScreen;
-    int		  index, count;
-    u_char	  *rmap, *gmap, *bmap;
+static void
+CG2GetColormap(ScreenPtr pScreen, int index, int count, u_char *rmap, u_char *gmap, u_char *bmap)
 {
     CG2Ptr	fb = (CG2Ptr) sunFbs[pScreen->myNum].fb;
 
@@ -371,9 +363,8 @@ static void CG2GetColormap(pScreen, index, count, rmap, gmap,bmap)
     }
 }
 
-static Bool CG2SaveScreen (pScreen, on)
-    ScreenPtr	  pScreen;
-    int    	  on;
+static Bool
+CG2SaveScreen(ScreenPtr pScreen, int on)
 {
     CG2Ptr	fb = (CG2Ptr) sunFbs[pScreen->myNum].fb;
     volatile struct cg2statusreg *regp = &fb->regs.status.reg;
@@ -383,8 +374,8 @@ static Bool CG2SaveScreen (pScreen, on)
     return TRUE;
 }
 
-static void CG2ScreenInit (pScreen)
-    ScreenPtr	pScreen;
+static void
+CG2ScreenInit(ScreenPtr pScreen)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     CGScreenInit (pScreen);
@@ -392,11 +383,13 @@ static void CG2ScreenInit (pScreen)
     pPrivate->GetColormap = CG2GetColormap;
 }
 
-Bool sunCG2Init (screen, pScreen, argc, argv)
-    int		screen;    	/* what screen am I going to be */
-    ScreenPtr	pScreen;  	/* The Screen to initialize */
-    int		argc;	    	/* The number of the Server's arguments. */
-    char**	argv;   	/* The arguments themselves. Don't change! */
+Bool
+sunCG2Init(
+    int		screen,    	/* what screen am I going to be */
+    ScreenPtr	pScreen,  	/* The Screen to initialize */
+    int		argc,	    	/* The number of the Server's arguments. */
+    char**	argv	   	/* The arguments themselves. Don't change! */
+)
 {
     int		i;
     Bool	ret;
@@ -441,20 +434,21 @@ typedef struct {
     u_char cpixel[CG4_HEIGHT][CG4_WIDTH];	/* byte-per-pixel memory */
 } *CG4Ptr;
 
-static void CG4Switch (pScreen, select)
-    ScreenPtr	pScreen;
-    int		select;
+static void
+CG4Switch(ScreenPtr pScreen, int select)
 {
     CG4Ptr	fb = (CG4Ptr) sunFbs[pScreen->myNum].fb;
 
     (void) memset ((char *)fb->epixel, select ? ~0 : 0, CG4_MELEN);
 }
 
-Bool sunCG4Init (screen, pScreen, argc, argv)
-    int		screen;    	/* what screen am I going to be */
-    ScreenPtr	pScreen;  	/* The Screen to initialize */
-    int		argc;	    	/* The number of the Server's arguments. */
-    char**	argv;   	/* The arguments themselves. Don't change! */
+Bool
+sunCG4Init(
+    int		screen,    	/* what screen am I going to be */
+    ScreenPtr	pScreen,  	/* The Screen to initialize */
+    int		argc,	    	/* The number of the Server's arguments. */
+    char**	argv    	/* The arguments themselves. Don't change! */
+)
 {
     checkMono (argc, argv);
     if (sunCG4Frob)
@@ -471,11 +465,13 @@ Bool sunCG4Init (screen, pScreen, argc, argv)
 #define CG6_MMAP_OFFSET 0x70000000
 #define CG6_IMAGE_OFFSET 0x16000
 
-Bool sunCG6Init (screen, pScreen, argc, argv)
-    int		screen;    	/* The index of pScreen in the ScreenInfo */
-    ScreenPtr	pScreen;  	/* The Screen to initialize */
-    int		argc;	    	/* The number of the Server's arguments. */
-    char**	argv;   	/* The arguments themselves. Don't change! */
+Bool
+sunCG6Init(
+    int		screen,    	/* The index of pScreen in the ScreenInfo */
+    ScreenPtr	pScreen,  	/* The Screen to initialize */
+    int		argc,	    	/* The number of the Server's arguments. */
+    char**	argv	   	/* The arguments themselves. Don't change! */
+)
 {
     pointer	fb;
 

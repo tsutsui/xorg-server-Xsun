@@ -82,7 +82,8 @@ static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr);
 
 DeviceIntPtr	sunKeyboardDevice = NULL;
 
-void sunKbdWait(void)
+void
+sunKbdWait(void)
 {
     static struct timeval lastChngKbdTransTv;
     struct timeval tv;
@@ -107,8 +108,8 @@ void sunKbdWait(void)
     lastChngKbdTransTv = tv;
 }
 
-static void SwapLKeys(keysyms)
-    KeySymsRec* keysyms;
+static
+void SwapLKeys(KeySymsRec* keysyms)
 {
     unsigned int i;
     KeySym k;
@@ -131,9 +132,8 @@ static void SwapLKeys(keysyms)
 	}
 }
 
-static void SetLights (ctrl, fd)
-    KeybdCtrl*	ctrl;
-    int fd;
+static void
+SetLights(KeybdCtrl* ctrl, int fd)
 {
 #ifdef KIOCSLED
     static unsigned char led_tab[16] = {
@@ -175,9 +175,8 @@ static void SetLights (ctrl, fd)
  *-----------------------------------------------------------------------
  */
 
-static void bell (
-    int fd,
-    int duration)
+static void
+bell(int fd, int duration)
 {
     int		    kbdCmd;   	    /* Command to give keyboard */
 
@@ -192,11 +191,8 @@ static void bell (
 	Error ("Failed to deactivate bell");
 }
 
-static void sunBell (
-    int		    percent,
-    DeviceIntPtr    device,
-    pointer	    ctrl,
-    int		    unused)
+static void
+sunBell(int percent, DeviceIntPtr device, pointer ctrl, int unused)
 {
     KeybdCtrl*      kctrl = (KeybdCtrl*) ctrl;
     sunKbdPrivPtr   pPriv = (sunKbdPrivPtr) device->public.devicePrivate;
@@ -226,10 +222,8 @@ DDXRingBell(int volume, int pitch, int duration)
 #define XLED_SCROLL_LOCK 0x2
 #define XLED_CAPS_LOCK   0x8
 
-static KeyCode LookupKeyCode(
-    KeySym keysym,
-    XkbDescPtr xkb,
-    KeySymsPtr syms)
+static KeyCode
+LookupKeyCode(KeySym keysym, XkbDescPtr xkb, KeySymsPtr syms)
 {
     KeyCode i;
     int ii, index = 0;
@@ -241,10 +235,8 @@ static KeyCode LookupKeyCode(
     return 0;
 }
 
-static void pseudoKey(device, down, keycode)
-    DeviceIntPtr device;
-    Bool down;
-    KeyCode keycode;
+static void
+pseudoKey(DeviceIntPtr device, Bool down, KeyCode keycode)
 {
     int bit;
     CARD8 modifiers;
@@ -279,10 +271,12 @@ static void pseudoKey(device, down, keycode)
     }
 }
 
-static void DoLEDs(device, ctrl, pPriv)
-    DeviceIntPtr    device;	    /* Keyboard to alter */
-    KeybdCtrl* ctrl;
-    sunKbdPrivPtr pPriv; 
+static void
+DoLEDs(
+    DeviceIntPtr    device,	    /* Keyboard to alter */
+    KeybdCtrl* ctrl,
+    sunKbdPrivPtr pPriv 
+)
 {
     XkbDescPtr xkb;
     KeySymsPtr syms;
@@ -344,9 +338,8 @@ static void DoLEDs(device, ctrl, pPriv)
  *-----------------------------------------------------------------------
  */
 
-static void sunKbdCtrl (
-    DeviceIntPtr    device,
-    KeybdCtrl*	    ctrl)
+static void
+sunKbdCtrl(DeviceIntPtr device, KeybdCtrl* ctrl)
 {
     sunKbdPrivPtr pPriv = (sunKbdPrivPtr) device->public.devicePrivate;
 
@@ -381,9 +374,8 @@ static void sunKbdCtrl (
  *
  *-----------------------------------------------------------------------
  */
-static void sunInitKbdNames (
-    XkbRMLVOSet *rmlvo,
-    sunKbdPrivPtr pKbd)
+static void
+sunInitKbdNames(XkbRMLVOSet *rmlvo, sunKbdPrivPtr pKbd)
 {
 #if 0 /* XXX to be revisited later */
 #ifndef XKBBUFSIZE
@@ -575,9 +567,8 @@ static void sunInitKbdNames (
  *-----------------------------------------------------------------------
  */
 
-int sunKbdProc (
-    DeviceIntPtr  device,
-    int	    	  what)
+int
+sunKbdProc(DeviceIntPtr device, int what)
 {
     int i;
     DevicePtr pKeyboard = (DevicePtr) device;
@@ -685,11 +676,8 @@ int sunKbdProc (
  *-----------------------------------------------------------------------
  */
 
-Firm_event* sunKbdGetEvents (
-    int		fd,
-    Bool	on,
-    int*	pNumEvents,
-    Bool*	pAgain)
+Firm_event *
+sunKbdGetEvents(int fd, Bool on, int *pNumEvents, Bool *pAgain)
 {
     int	    	  nBytes;	    /* number of bytes of events available. */
     static Firm_event	evBuf[MAXEVENTS];   /* Buffer for Firm_events */
@@ -721,9 +709,8 @@ Firm_event* sunKbdGetEvents (
  *-----------------------------------------------------------------------
  */
 
-void sunKbdEnqueueEvent (
-    DeviceIntPtr  device,
-    Firm_event	  *fe)
+void
+sunKbdEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
 {
     BYTE		keycode;
     int			type;
@@ -753,10 +740,8 @@ void sunKbdEnqueueEvent (
  *
  *-----------------------------------------------------------------------
  */
-int sunChangeKbdTranslation(
-    int fd,
-    Bool makeTranslated)
-
+int
+sunChangeKbdTranslation(int fd, Bool makeTranslated)
 {   
     int 	tmp;
 #ifndef i386 /* { */
@@ -819,27 +804,20 @@ int sunChangeKbdTranslation(
 }
 
 /*ARGSUSED*/
-Bool LegalModifier(
-    unsigned int key,
-    DeviceIntPtr pDev)
+Bool
+LegalModifier(unsigned int key, DeviceIntPtr pDev)
 {
     return TRUE;
 }
 
 /*ARGSUSED*/
-void sunBlockHandler(nscreen, pbdata, pTimeout, pReadmask)
-    int nscreen;
-    pointer pbdata;
-    pointer pTimeout;
-    pointer pReadmask;
+void
+sunBlockHandler(int nscreen, pointer pbdata, pointer pTimeout, pointer pReadmask)
 {
 }
 
 /*ARGSUSED*/
-void sunWakeupHandler(nscreen, pbdata, err, pReadmask)
-    int nscreen;
-    pointer pbdata;
-    unsigned long err;
-    pointer pReadmask;
+void
+sunWakeupHandler(int nscreen, pointer pbdata, unsigned long err, pointer pReadmask)
 {
 }

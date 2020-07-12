@@ -92,10 +92,8 @@ miPointerScreenFuncRec sunPointerScreenFuncs = {
  *-----------------------------------------------------------------------
  */
 /*ARGSUSED*/
-static 
-void sunMouseCtrl (
-    DeviceIntPtr    device,
-    PtrCtrl*	    ctrl)
+static void
+sunMouseCtrl(DeviceIntPtr device, PtrCtrl *ctrl)
 {
 }
 
@@ -118,9 +116,8 @@ void sunMouseCtrl (
  *
  *-----------------------------------------------------------------------
  */
-int sunMouseProc (
-    DeviceIntPtr  device,
-    int	    	  what)
+int
+sunMouseProc(DeviceIntPtr device, int what)
 {
     DevicePtr	  pMouse = (DevicePtr) device;
     int	    	  format;
@@ -197,11 +194,8 @@ int sunMouseProc (
  *-----------------------------------------------------------------------
  */
 
-Firm_event* sunMouseGetEvents (
-    int		fd,
-    Bool	on,
-    int*	pNumEvents,
-    Bool*	pAgain)
+Firm_event *
+sunMouseGetEvents(int fd, Bool on, int *pNumEvents, Bool *pAgain)
 {
     int	    	  nBytes;	    /* number of bytes of events available. */
     static Firm_event	evBuf[MAXEVENTS];   /* Buffer for Firm_events */
@@ -242,9 +236,8 @@ Firm_event* sunMouseGetEvents (
  *-----------------------------------------------------------------------
  */
 
-void sunMouseEnqueueEvent (
-    DeviceIntPtr  device,
-    Firm_event	  *fe)
+void
+sunMouseEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
 {
     sunPtrPrivPtr	pPriv;	/* Private data for pointer */
     int			bmask;	/* Temporary button mask */
@@ -335,9 +328,7 @@ void sunMouseEnqueueEvent (
 
 /*ARGSUSED*/
 static Bool
-sunCursorOffScreen (pScreen, x, y)
-    ScreenPtr	*pScreen;
-    int		*x, *y;
+sunCursorOffScreen(ScreenPtr *pScreen, int *x, int *y)
 {
     int	    index, ret = FALSE;
     DeviceIntPtr device = sunPointerDevice;	/* XXX */
@@ -368,9 +359,7 @@ sunCursorOffScreen (pScreen, x, y)
 }
 
 static void
-sunCrossScreen (pScreen, entering)
-    ScreenPtr	pScreen;
-    int		entering;
+sunCrossScreen(ScreenPtr pScreen, int entering)
 {
     if (sunFbs[pScreen->myNum].EnterLeave)
 	(*sunFbs[pScreen->myNum].EnterLeave) (pScreen, entering ? 0 : 1);

@@ -46,8 +46,7 @@ from The Open Group.
 #ifndef SINGLEDEPTH
 
 static Bool
-sunCfbCreateGC(pGC)
-    GCPtr   pGC;
+sunCfbCreateGC(GCPtr pGC)
 {
     if (pGC->depth == 1)
     {
@@ -69,13 +68,14 @@ sunCfbCreateGC(pGC)
 }
 
 static void
-sunCfbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart)
-    DrawablePtr		pDrawable;	/* drawable from which to get bits */
-    int			wMax;		/* largest value of all *pwidths */
-    register DDXPointPtr ppt;		/* points to start copying from */
-    int			*pwidth;	/* list of number of bits to copy */
-    int			nspans;		/* number of scanlines to copy */
-    char		*pdstStart;	/* where to put the bits */
+sunCfbGetSpans(
+    DrawablePtr		pDrawable,	/* drawable from which to get bits */
+    int			wMax,		/* largest value of all *pwidths */
+    DDXPointPtr 	ppt,		/* points to start copying from */
+    int			*pwidth,	/* list of number of bits to copy */
+    int			nspans,		/* number of scanlines to copy */
+    char		*pdstStart	/* where to put the bits */
+)
 {
     switch (pDrawable->bitsPerPixel) {
     case 1:
@@ -95,12 +95,7 @@ sunCfbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart)
 }
 
 static void
-sunCfbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine)
-    DrawablePtr pDrawable;
-    int		sx, sy, w, h;
-    unsigned int format;
-    unsigned long planeMask;
-    char	*pdstLine;
+sunCfbGetImage(DrawablePtr pDrawable, int sx, int sy, int w, int h, unsigned int format, unsigned long planeMask, char *pdstLine)
 {
     switch (pDrawable->bitsPerPixel)
     {
@@ -120,13 +115,16 @@ sunCfbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine)
 }
 
 Bool
-sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int	bpp;			/* bits per pixel of root */
+sunCfbSetupScreen(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int	bpp			/* bits per pixel of root */
+)
 {
     extern int		cfbWindowPrivateIndex;
     extern int		cfbGCPrivateIndex;
@@ -161,13 +159,16 @@ extern int  cfb16ScreenPrivateIndex, cfb32ScreenPrivateIndex;
 extern Bool cfbCloseScreen(), cfb16CloseScreen(), cfb32CloseScreen();
 
 Bool
-sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;
+sunCfbFinishScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp
+)
 {
     int		i;
     pointer	oldDevPrivate;
@@ -212,13 +213,16 @@ sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 
 
 Bool
-sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;
+sunCfbScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp
+)
 {
     if (!sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy,
 			   width, bpp))
@@ -233,13 +237,16 @@ sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 /* stuff for 8-bit only server */
 
 Bool
-sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int	bpp;			/* bits per pixel of root */
+sunCfbSetupScreen(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int	bpp			/* bits per pixel of root */
+)
 {
     sunRegisterPixmapFormat( /* depth */ 1, /* bits per pixel */ 1);
     sunRegisterPixmapFormat( /* depth */ 8,  /* bits per pixel */ 8);
@@ -248,26 +255,32 @@ sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 }
 
 Bool
-sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;
+sunCfbFinishScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp
+)
 {
     return cfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
 			       width);
 }
 
 Bool
-sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;
+sunCfbScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp
+)
 {
     sunRegisterPixmapFormat( /* depth */ 1, /* bits per pixel */ 1);
     sunRegisterPixmapFormat( /* depth */ 8,  /* bits per pixel */ 8);

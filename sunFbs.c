@@ -82,10 +82,8 @@ int sunScreenIndex;
 
 DevPrivateKeyRec sunScreenPrivateKeyRec;
 
-pointer sunMemoryMap (
-    size_t	len,
-    off_t	off,
-    int		fd)
+pointer
+sunMemoryMap(size_t len, off_t off, int fd)
 {
     int		pagemask, mapsize;
     caddr_t	addr;
@@ -130,8 +128,8 @@ pointer sunMemoryMap (
     return mapaddr;
 }
 
-Bool sunScreenAllocate (
-    ScreenPtr	pScreen)
+Bool
+sunScreenAllocate(ScreenPtr pScreen)
 {
     sunScreenPtr    pPrivate;
 
@@ -147,9 +145,8 @@ Bool sunScreenAllocate (
     return TRUE;
 }
 
-Bool sunSaveScreen (
-    ScreenPtr	pScreen,
-    int		on)
+Bool
+sunSaveScreen(ScreenPtr pScreen, int on)
 {
     int		state;
 
@@ -164,9 +161,8 @@ Bool sunSaveScreen (
     return( TRUE );
 }
 
-static Bool closeScreen (i, pScreen)
-    int		i;
-    ScreenPtr	pScreen;
+static Bool
+closeScreen(int i, ScreenPtr pScreen)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     Bool    ret;
@@ -182,8 +178,8 @@ static Bool closeScreen (i, pScreen)
     return ret;
 }
 
-Bool sunScreenInit (
-    ScreenPtr	pScreen)
+Bool
+sunScreenInit(ScreenPtr pScreen)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
 
@@ -198,7 +194,8 @@ Bool sunScreenInit (
     return TRUE;
 }
 
-Bool sunInitCommon (
+Bool
+sunInitCommon(
     int		scrn,
     ScreenPtr	pScrn,
     off_t	offset,
@@ -206,7 +203,8 @@ Bool sunInitCommon (
     void	(*init2)(ScreenPtr),
     Bool	(*cr_cm)(ScreenPtr),
     Bool	(*save)(ScreenPtr, int),
-    int		fb_off)
+    int		fb_off
+)
 {
     unsigned char*	fb = sunFbs[scrn].fb;
 

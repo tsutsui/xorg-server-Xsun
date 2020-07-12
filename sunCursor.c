@@ -74,12 +74,7 @@ sunUnrealizeCursor(DeviceIntPtr pDev, ScreenPtr pScreen, CursorPtr pCursor)
 }
 
 static void
-sunCursorRepad (pScreen, bits, src_bits, dst_bits, ptSrc, w, h)
-    ScreenPtr	    pScreen;
-    CursorBitsPtr   bits;
-    unsigned char   *src_bits, *dst_bits;
-    DDXPointPtr	    ptSrc;
-    int		    w, h;
+sunCursorRepad(ScreenPtr pScreen, CursorBitsPtr bits, unsigned char *src_bits, unsigned char *dst_bits, DDXPointPtr ptSrc, int w, int h)
 {
     PixmapPtr	src, dst;
     BoxRec	box;
@@ -112,10 +107,7 @@ sunCursorRepad (pScreen, bits, src_bits, dst_bits, ptSrc, w, h)
 }
 
 static void
-sunLoadCursor (pScreen, pCursor, x, y)
-    ScreenPtr	pScreen;
-    CursorPtr	pCursor;
-    int		x, y;
+sunLoadCursor(ScreenPtr pScreen, CursorPtr pCursor, int x, int y)
 {
     sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
     struct fbcursor fbcursor;
@@ -259,10 +251,7 @@ miPointerSpriteFuncRec sunPointerSpriteFuncs = {
 };
 
 static void
-sunQueryBestSize (class, pwidth, pheight, pScreen)
-    int	class;
-    unsigned short   *pwidth, *pheight;
-    ScreenPtr	pScreen;
+sunQueryBestSize(int class, unsigned short *pwidth, unsigned short *pheight, ScreenPtr pScreen)
 {
     sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
 
@@ -286,8 +275,8 @@ sunQueryBestSize (class, pwidth, pheight, pScreen)
 
 #endif
 
-Bool sunCursorInitialize (
-    ScreenPtr	pScreen)
+Bool
+sunCursorInitialize(ScreenPtr pScreen)
 {
 #ifdef FBIOGCURMAX
     sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);
@@ -315,8 +304,8 @@ Bool sunCursorInitialize (
 #endif
 }
 
-void sunDisableCursor (
-    ScreenPtr	pScreen)
+void
+sunDisableCursor (ScreenPtr pScreen)
 {
 #ifdef FBIOGCURMAX
     sunCursorPtr pCurPriv = sunGetCursorPrivate(pScreen);

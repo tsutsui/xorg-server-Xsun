@@ -260,9 +260,11 @@ static PixmapFormatRec	formats[] = {
  * Results:
  *	The fd of the framebuffer.
  */
-static int OpenFrameBuffer(device, screen)
-    char		*device;	/* e.g. "/dev/cgtwo0" */
-    int			screen;    	/* what screen am I going to be */
+static int
+OpenFrameBuffer(
+    char		*device,	/* e.g. "/dev/cgtwo0" */
+    int			screen    	/* what screen am I going to be */
+)
 {
     int			ret = TRUE;
     struct fbgattr	*fbattr;
@@ -346,8 +348,8 @@ static int OpenFrameBuffer(device, screen)
  *-----------------------------------------------------------------------
  */
 /*ARGSUSED*/
-static void SigIOHandler(sig)
-    int		sig;
+static void
+SigIOHandler(int sig)
 {
     int olderrno = errno;
     sunEnqueueEvents ();
@@ -368,7 +370,8 @@ static void SigIOHandler(sig)
  *
  *-----------------------------------------------------------------------
  */
-void sunNonBlockConsoleOff(
+void
+sunNonBlockConsoleOff(
 #if defined(SVR4) || defined(CSRG_BASED)
     void
 #else
@@ -383,9 +386,8 @@ void sunNonBlockConsoleOff(
 	(void) fcntl(2, F_SETFL, i & ~FNDELAY);
 }
 
-static char** GetDeviceList (argc, argv)
-    int		argc;
-    char	**argv;
+static char**
+GetDeviceList(int argc, char **argv)
 {
     int		i;
     char	*envList = NULL;
@@ -427,7 +429,8 @@ static char** GetDeviceList (argc, argv)
     return deviceList;
 }
 
-static void getKbdType(void)
+static void
+getKbdType(void)
 {
 /*
  * The Sun 386i has system include files that preclude this pre SunOS 4.1
@@ -474,7 +477,8 @@ static void getKbdType(void)
     FatalError ("Unsupported keyboard type %d\n", sunKbdPriv.type);
 }
 
-void OsVendorInit(void)
+void
+OsVendorInit(void)
 {
     static int inited;
     if (!inited) {
@@ -514,7 +518,8 @@ void OsVendorInit(void)
 }
 
 #ifdef DDXOSFATALERROR
-void OsVendorFatalError(void)
+void
+OsVendorFatalError(void)
 {
 }
 #endif
@@ -534,10 +539,8 @@ void OsVendorFatalError(void)
  *-----------------------------------------------------------------------
  */
 
-void InitOutput(pScreenInfo, argc, argv)
-    ScreenInfo 	  *pScreenInfo;
-    int     	  argc;
-    char    	  **argv;
+void
+InitOutput(ScreenInfo *pScreenInfo, int argc, char **argv)
 {
     int     	i, scr;
     int		nonBlockConsole = 0;
@@ -618,9 +621,8 @@ void InitOutput(pScreenInfo, argc, argv)
  *
  *-----------------------------------------------------------------------
  */
-void InitInput(argc, argv)
-    int     	  argc;
-    char    	  **argv;
+void
+InitInput(int argc, char **argv)
 {
 
     sunPointerDevice = AddInputDevice(serverClient, sunMouseProc, TRUE);
@@ -665,39 +667,48 @@ OsVendorFatalError(void)
 #if SUNMAXDEPTH == 8
 
 Bool
-sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int	bpp;			/* bits per pixel of root */
+sunCfbSetupScreen(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int	bpp			/* bits per pixel of root */
+)
 {
     return fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy,
 			 width, bpp);
 }
 
 Bool
-sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;			/* bits per pixel of root */
+sunCfbFinishScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp			/* bits per pixel of root */
+)
 {
     return fbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
 			      width, bpp);
 }
 
 Bool
-sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;			/* bits per pixel of root */
+sunCfbScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp			/* bits per pixel of root */
+)
 {
     return fbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp);
 }
@@ -706,43 +717,41 @@ sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 #if SUNMAXDEPTH == 32
 
 static Bool
-sunCfbCreateGC(pGC)
-    GCPtr   pGC;
+sunCfbCreateGC(GCPtr pGC)
 {
     return fbCreateGC (pGC);
 }
 
 static void
-sunCfbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart)
-    DrawablePtr		pDrawable;	/* drawable from which to get bits */
-    int			wMax;		/* largest value of all *pwidths */
-    register DDXPointPtr ppt;		/* points to start copying from */
-    int			*pwidth;	/* list of number of bits to copy */
-    int			nspans;		/* number of scanlines to copy */
-    char		*pdstStart;	/* where to put the bits */
+sunCfbGetSpans(
+    DrawablePtr		pDrawable,	/* drawable from which to get bits */
+    int			wMax,		/* largest value of all *pwidths */
+    DDXPointPtr		ppt,		/* points to start copying from */
+    int			*pwidth,	/* list of number of bits to copy */
+    int			nspans,		/* number of scanlines to copy */
+    char		*pdstStart	/* where to put the bits */
+)
 {
     fbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
 }
 
 static void
-sunCfbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine)
-    DrawablePtr pDrawable;
-    int		sx, sy, w, h;
-    unsigned int format;
-    unsigned long planeMask;
-    char	*pdstLine;
+sunCfbGetImage(DrawablePtr pDrawable, int sx, int sy, int w, int h, unsigned int format, unsigned long planeMask, char *pdstLine)
 {
     fbGetImage(pDrawable, sx, sy, w, h, format, planeMask, pdstLine);
 }
 
 Bool
-sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int	bpp;			/* bits per pixel of root */
+sunCfbSetupScreen(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int	bpp			/* bits per pixel of root */
+)
 {
     int ret;
 
@@ -756,13 +765,16 @@ sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 /* Adapt cfb logic */
 
 Bool
-sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;
+sunCfbFinishScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp
+)
 {
     VisualPtr	visuals;
     int		nvisuals;
@@ -785,13 +797,16 @@ sunCfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
 
 
 Bool
-sunCfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp)
-    register ScreenPtr pScreen;
-    pointer pbits;		/* pointer to screen bitmap */
-    int xsize, ysize;		/* in pixels */
-    int dpix, dpiy;		/* dots per inch */
-    int width;			/* pixel width of frame buffer */
-    int bpp;
+sunCfbScreenInit(
+    ScreenPtr pScreen,
+    pointer pbits,		/* pointer to screen bitmap */
+    int xsize,			/* in pixels */
+    int ysize,			/* in pixels */
+    int dpix,			/* dots per inch */
+    int dpiy,			/* dots per inch */
+    int width,			/* pixel width of frame buffer */
+    int bpp
+)
 {
     if (!sunCfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy,
 			   width, bpp))

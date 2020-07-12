@@ -87,11 +87,14 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "sun.h"
 #include "fb.h"
 
-Bool sunBW2Init (screen, pScreen, argc, argv)
-    int		    screen;    	/* what screen am I going to be */
-    ScreenPtr	    pScreen;  	/* The Screen to initialize */
-    int		    argc;    	/* The number of the Server's arguments. */
-    char	    **argv;   	/* The arguments themselves. Don't change! */
+Bool
+sunBW2Init
+(
+    int		    screen,    	/* what screen am I going to be */
+    ScreenPtr	    pScreen,  	/* The Screen to initialize */
+    int		    argc,    	/* The number of the Server's arguments. */
+    char	    **argv   	/* The arguments themselves. Don't change! */
+)
 {
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     if (sunFlipPixels) {
