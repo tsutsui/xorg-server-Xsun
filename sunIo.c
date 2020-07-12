@@ -256,5 +256,4 @@ ddxUseMsg(void)
     ErrorF("-cg4frob            don't use the mono plane of the cgfour\n");
     ErrorF("-noGX               treat the GX as a dumb frame buffer\n");
 #endif
-    ErrorF("-XpFile             specifies an alternate `Xprinters' file (Xprt only)\n");
 }
