@@ -43,6 +43,7 @@ from The Open Group.
 #include "dix.h"
 #include "gcstruct.h"
 #include "mibstore.h"
+#include "fb.h"
 
 #ifndef SINGLEDEPTH
 
@@ -127,8 +128,6 @@ sunCfbSetupScreen(
     int	bpp			/* bits per pixel of root */
 )
 {
-    extern int		cfbWindowPrivateIndex;
-    extern int		cfbGCPrivateIndex;
     int ret;
 
     sunRegisterPixmapFormat( /* depth */ 1,  /* bits per pixel */ 1);
@@ -136,28 +135,12 @@ sunCfbSetupScreen(
     sunRegisterPixmapFormat( /* depth */ 12,  /* bits per pixel */ 16);
     sunRegisterPixmapFormat( /* depth */ 24,  /* bits per pixel */ 32);
 
-    switch (bpp) {
-    case 8:
-	ret = cfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
-	break;
-    case 16:
-	ret = cfb16SetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
-	break;
-    case 32:
-	ret = cfb32SetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
-	break;
-    default:
-	return FALSE;
-    }
+    ret = fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp);
     pScreen->CreateGC = sunCfbCreateGC;
     pScreen->GetImage = sunCfbGetImage;
     pScreen->GetSpans = sunCfbGetSpans;
     return ret;
 }
-
-extern BSFuncRec	cfbBSFuncRec, cfb16BSFuncRec, cfb32BSFuncRec;
-extern int  cfb16ScreenPrivateIndex, cfb32ScreenPrivateIndex;
-extern Bool cfbCloseScreen(), cfb16CloseScreen(), cfb32CloseScreen();
 
 Bool
 sunCfbFinishScreenInit(
@@ -172,7 +155,6 @@ sunCfbFinishScreenInit(
 )
 {
     int		i;
-    pointer	oldDevPrivate;
     VisualPtr	visuals;
     int		nvisuals;
     DepthPtr	depths;
@@ -180,35 +162,15 @@ sunCfbFinishScreenInit(
     VisualID	defaultVisual;
     int		rootdepth;
 
-    if (!cfbInitVisuals(&visuals, &depths, &nvisuals, &ndepths,
+    if (!fbInitVisuals(&visuals, &depths, &nvisuals, &ndepths,
 			&rootdepth, &defaultVisual, 1 << (bpp - 1), 8))
 	return FALSE;
-    oldDevPrivate = pScreen->devPrivate;
     if (! miScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width,
 			rootdepth, ndepths, depths,
 			defaultVisual, nvisuals, visuals))
 	return FALSE;
-    switch (bpp)
-    {
-    case 8:
-	pScreen->CloseScreen = cfbCloseScreen;
-	pScreen->BackingStoreFuncs = cfbBSFuncRec;
-	break;
-    case 16:
-	pScreen->CloseScreen = cfb16CloseScreen;
-	pScreen->devPrivates[cfb16ScreenPrivateIndex].ptr =
-	    pScreen->devPrivate;
-	pScreen->devPrivate = oldDevPrivate;
-	pScreen->BackingStoreFuncs = cfb16BSFuncRec;
-	break;
-    case 32:
-	pScreen->CloseScreen = cfb32CloseScreen;
-	pScreen->devPrivates[cfb32ScreenPrivateIndex].ptr =
-	    pScreen->devPrivate;
-	pScreen->devPrivate = oldDevPrivate;
-	pScreen->BackingStoreFuncs = cfb32BSFuncRec;
-	break;
-    }
+    pScreen->CloseScreen = fbCloseScreen;
+    miInitializeBackingStore(pScreen);
     return TRUE;
 }
 
@@ -251,8 +213,7 @@ sunCfbSetupScreen(
 {
     sunRegisterPixmapFormat( /* depth */ 1, /* bits per pixel */ 1);
     sunRegisterPixmapFormat( /* depth */ 8,  /* bits per pixel */ 8);
-    return cfbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy,
-			  width);
+    return fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp);
 }
 
 Bool
@@ -267,8 +228,8 @@ sunCfbFinishScreenInit(
     int bpp
 )
 {
-    return cfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
-			       width);
+    return fbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
+			      width, bpp);
 }
 
 Bool
@@ -285,7 +246,7 @@ sunCfbScreenInit(
 {
     sunRegisterPixmapFormat( /* depth */ 1, /* bits per pixel */ 1);
     sunRegisterPixmapFormat( /* depth */ 8,  /* bits per pixel */ 8);
-    return cfbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width);
+    return fbScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp);
 }
 
 #endif /* SINGLEDEPTH */
