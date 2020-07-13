@@ -171,7 +171,8 @@ AbortDDX(void)
     (void) OsSignal (SIGIO, SIG_IGN);
 #endif
     devPtr = (DevicePtr)sunKeyboardDevice;
-    (void) sunChangeKbdTranslation (((sunKbdPrivPtr)(devPtr->devicePrivate))->fd, FALSE);
+    if (devPtr)
+	(void) sunChangeKbdTranslation (((sunKbdPrivPtr)(devPtr->devicePrivate))->fd, FALSE);
 #if defined(SVR4) || defined(CSRG_BASED)
     sunNonBlockConsoleOff ();
 #else
