@@ -96,7 +96,11 @@ sunBW2Init
     char	    **argv   	/* The arguments themselves. Don't change! */
 )
 {
+    Bool rv;
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
+    rv = sunInitCommon (screen, pScreen, (off_t) 0,
+	fbScreenInit, NULL,
+	fbCreateDefColormap, sunSaveScreen, 0);
     if (sunFlipPixels) {
 	pScreen->whitePixel = 1;
 	pScreen->blackPixel = 0;
@@ -104,8 +108,7 @@ sunBW2Init
 	pScreen->whitePixel = 0;
 	pScreen->blackPixel = 1;
     }
-    return sunInitCommon (screen, pScreen, (off_t) 0,
-	fbScreenInit, NULL,
-	fbCreateDefColormap, sunSaveScreen, 0);
+
+    return rv;
 }
 
