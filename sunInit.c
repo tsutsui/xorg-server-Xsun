@@ -292,7 +292,7 @@ OpenFrameBuffer(
 	    xfree (fbattr);
 	    fbattr = NULL;
 	    if (ioctl(sunFbs[screen].fd, FBIOGTYPE, &sunFbs[screen].info) == -1) {
-		Error("unable to get frame buffer attributes");
+		ErrorF("unable to get frame buffer attributes");
 		(void) close(sunFbs[screen].fd);
 		sunFbs[screen].fd = -1;
 		return FALSE; 
@@ -458,7 +458,7 @@ getKbdType(void)
 	    key.kio_tablemask = 0;
 	    key.kio_station = 118;
 	    if (ioctl(sunKbdPriv.fd, KIOCGKEY, &key) == -1) {
-		Error( "ioctl KIOCGKEY" );
+		ErrorF( "ioctl KIOCGKEY" );
 		FatalError("Can't KIOCGKEY on fd %d\n", sunKbdPriv.fd);
 	    }
 	    if (key.kio_entry != HOLE)
@@ -574,7 +574,7 @@ InitOutput(ScreenInfo *pScreenInfo, int argc, char **argv)
 	if (i >= 0)
 	    i = fcntl(2, F_SETFL, i | FNDELAY);
 	if (i < 0) {
-	    Error("fcntl");
+	    ErrorF("fcntl");
 	    ErrorF("InitOutput: can't put stderr in non-block mode\n");
 	}
     }

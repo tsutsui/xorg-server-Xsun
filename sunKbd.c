@@ -155,7 +155,7 @@ SetLights(KeybdCtrl* ctrl, int fd)
 	LED_CAPS_LOCK | LED_COMPOSE | LED_SCROLL_LOCK | LED_NUM_LOCK
     };
     if (ioctl (fd, KIOCSLED, (caddr_t)&led_tab[ctrl->leds & 0x0f]) == -1)
-	Error("Failed to set keyboard lights");
+	ErrorF("Failed to set keyboard lights");
 #endif
 }
 
@@ -182,13 +182,13 @@ bell(int fd, int duration)
 
     kbdCmd = KBD_CMD_BELL;
     if (ioctl (fd, KIOCCMD, &kbdCmd) == -1) {
- 	Error("Failed to activate bell");
+ 	ErrorF("Failed to activate bell");
 	return;
     }
     if (duration) usleep (duration);
     kbdCmd = KBD_CMD_NOBELL;
     if (ioctl (fd, KIOCCMD, &kbdCmd) == -1)
-	Error ("Failed to deactivate bell");
+	ErrorF("Failed to deactivate bell");
 }
 
 static void
@@ -351,7 +351,7 @@ sunKbdCtrl(DeviceIntPtr device, KeybdCtrl* ctrl)
 	pPriv->click = ctrl->click;
 	kbdClickCmd = pPriv->click ? KBD_CMD_CLICK : KBD_CMD_NOCLICK;
     	if (ioctl (pPriv->fd, KIOCCMD, &kbdClickCmd) == -1)
- 	    Error("Failed to set keyclick");
+ 	    ErrorF("Failed to set keyclick");
     }
     if ((pPriv->type == KB_SUN4) && (pPriv->leds != (ctrl->leds & 0x0f)))
 	DoLEDs(device, ctrl, pPriv);
@@ -687,7 +687,7 @@ sunKbdGetEvents(int fd, Bool on, int *pNumEvents, Bool *pAgain)
 	    *pNumEvents = 0;
 	    *pAgain = FALSE;
 	} else {
-	    Error ("Reading keyboard");
+	    ErrorF("Reading keyboard");
 	    FatalError ("Could not read the keyboard");
 	}
     } else {
@@ -767,12 +767,12 @@ sunChangeKbdTranslation(int fd, Bool makeTranslated)
          */
 	tmp = 1;
 	if (ioctl (fd, KIOCSDIRECT, &tmp) == -1) {
-	    Error ("Setting keyboard direct mode");
+	    ErrorF("Setting keyboard direct mode");
 	    return -1;
 	}
 	tmp = TR_UNTRANS_EVENT;
 	if (ioctl (fd, KIOCTRANS, &tmp) == -1) {
-	    Error ("Setting keyboard translation");
+	    ErrorF("Setting keyboard translation");
 	    ErrorF ("sunChangeKbdTranslation: kbdFd=%d\n", fd);
 	    return -1;
 	}

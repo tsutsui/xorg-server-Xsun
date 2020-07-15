@@ -152,12 +152,12 @@ sunMouseProc(DeviceIntPtr device, int what)
 
 	case DEVICE_ON:
 	    if (ioctl (sunPtrPriv.fd, VUIDGFORMAT, &oformat) == -1) {
-		Error ("sunMouseProc ioctl VUIDGFORMAT");
+		ErrorF("sunMouseProc ioctl VUIDGFORMAT");
 		return !Success;
 	    }
 	    format = VUID_FIRM_EVENT;
 	    if (ioctl (sunPtrPriv.fd, VUIDSFORMAT, &format) == -1) {
-		Error ("sunMouseProc ioctl VUIDSFORMAT");
+		ErrorF("sunMouseProc ioctl VUIDSFORMAT");
 		return !Success;
 	    }
 	    sunPtrPriv.bmask = 0;
@@ -168,7 +168,7 @@ sunMouseProc(DeviceIntPtr device, int what)
 	case DEVICE_CLOSE:
 	    pMouse->on = FALSE;
 	    if (ioctl (sunPtrPriv.fd, VUIDSFORMAT, &oformat) == -1)
-		Error ("sunMouseProc ioctl VUIDSFORMAT");
+		ErrorF("sunMouseProc ioctl VUIDSFORMAT");
 	    break;
 
 	case DEVICE_OFF:
@@ -205,7 +205,7 @@ sunMouseGetEvents(int fd, Bool on, int *pNumEvents, Bool *pAgain)
 	    *pNumEvents = 0;
 	    *pAgain = FALSE;
 	} else {
-	    Error ("sunMouseGetEvents read");
+	    ErrorF("sunMouseGetEvents read");
 	    FatalError ("Could not read from mouse");
 	}
     } else {
