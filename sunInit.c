@@ -64,6 +64,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #endif /* } */
 
 #ifdef LOWMEMFTPT
+#undef  BW2I
 #define BW2I NULL
 #endif /* ifdef LOWMEMFTPT */
 
