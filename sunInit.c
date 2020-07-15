@@ -49,7 +49,6 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include    "sun.h"
 #include    "gcstruct.h"
 #include    "mi.h"
-#include    "mibstore.h"
 #include    "fb.h"
 
 /* maximum pixmap depth */
@@ -792,7 +791,6 @@ sunCfbFinishScreenInit(
 			defaultVisual, nvisuals, visuals))
 	return FALSE;
     pScreen->CloseScreen = fbCloseScreen;
-    miInitializeBackingStore(pScreen);
     return TRUE;
 }
 

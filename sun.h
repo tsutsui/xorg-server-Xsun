@@ -161,7 +161,6 @@ extern int getpagesize();
 #define PSZ 8
 #endif
 
-#include "mi/mibstore.h"
 #include "mi/mipointer.h"
 
 extern int monitorResolution;

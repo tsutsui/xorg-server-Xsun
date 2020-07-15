@@ -42,7 +42,6 @@ from The Open Group.
 #include "mistruct.h"
 #include "dix.h"
 #include "gcstruct.h"
-#include "mibstore.h"
 #include "fb.h"
 
 #ifndef SINGLEDEPTH
@@ -170,7 +169,6 @@ sunCfbFinishScreenInit(
 			defaultVisual, nvisuals, visuals))
 	return FALSE;
     pScreen->CloseScreen = fbCloseScreen;
-    miInitializeBackingStore(pScreen);
     return TRUE;
 }
 

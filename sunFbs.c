@@ -225,7 +225,6 @@ sunInitCommon(
 	    sunFbs[scrn].info.fb_width,
 	    sunFbs[scrn].info.fb_depth))
 	    return FALSE;
-    miInitializeBackingStore(pScrn);
     /* sunCGScreenInit() if cfb... */
     if (init2)
 	(*init2)(pScrn);

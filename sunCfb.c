@@ -517,7 +517,6 @@ sunCG6Init(
     if (sunNoGX == FALSE) {
 	miSetZeroLineBias(pScreen, GXZEROLINEBIAS);
     }
-    miInitializeBackingStore(pScreen);
     CGScreenInit (pScreen);
     if (!sunScreenInit (pScreen))
 	return FALSE;
