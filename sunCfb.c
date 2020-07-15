@@ -406,8 +406,8 @@ sunCG2Init(
 	pScreen->whitePixel = 0;
 	pScreen->blackPixel = 1;
 	ret = sunInitCommon (screen, pScreen, (off_t) 0,
-			mfbScreenInit, NULL,
-			mfbCreateDefColormap, CG2SaveScreen, 0);
+			fbScreenInit, NULL,
+			fbCreateDefColormap, CG2SaveScreen, 0);
 	((CG2Ptr) sunFbs[screen].fb)->regs.ppmask.reg = 1;
     } else {
 #endif /* ifndef LOWMEMFTPT */
