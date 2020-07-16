@@ -405,6 +405,7 @@ sunCG2Init(
     if (mono) {
 	pScreen->whitePixel = 0;
 	pScreen->blackPixel = 1;
+	sunFbs[screen].info.fb_depth = 1;
 	ret = sunInitCommon (screen, pScreen, (off_t) 0,
 			fbScreenInit, NULL,
 			fbCreateDefColormap, CG2SaveScreen, 0);
