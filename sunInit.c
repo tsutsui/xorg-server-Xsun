@@ -624,9 +624,14 @@ InitOutput(ScreenInfo *pScreenInfo, int argc, char **argv)
 void
 InitInput(int argc, char **argv)
 {
+    int rc;
 
-    sunPointerDevice = AddInputDevice(serverClient, sunMouseProc, TRUE);
-    sunKeyboardDevice = AddInputDevice(serverClient, sunKbdProc, TRUE);
+    rc = AllocDevicePair(serverClient, "sun",
+			 &sunPointerDevice, &sunKeyboardDevice,
+			 sunMouseProc, sunKbdProc, FALSE);
+    if (rc != Success)
+	FatalError("Failed to init sun default input devices.\n");
+
     GetEventList(&sunEvents);
 
     (void)mieqInit();
