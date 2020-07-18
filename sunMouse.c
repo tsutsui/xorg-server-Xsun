@@ -243,10 +243,8 @@ sunMouseEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
     int			bmask;	/* Temporary button mask */
     int			x, y;
     int			type, buttons, flag;
-    int			i, nevents, valuators[2];
+    int			valuators[2];
     ValuatorMask	mask;
-
-    GetEventList(&sunEvents);
 
     pPriv = (sunPtrPrivPtr)device->public.devicePrivate;
 
@@ -280,20 +278,14 @@ sunMouseEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
 	}
 	flag = POINTER_RELATIVE;
 	valuator_mask_set_range(&mask, 0, 0, NULL);
-	nevents = GetPointerEvents(sunEvents, device,
-	    type, buttons, flag, &mask);
-	for (i = 0; i < nevents; i++)
-	    mieqEnqueue(device, (InternalEvent*)(sunEvents + i)->event);
+	QueuePointerEvents(device, type, buttons, flag, &mask);
 	break;
     case LOC_X_DELTA:
 	valuators[0] = fe->value;
 	valuators[1] = 0;
 	valuator_mask_set_range(&mask, 0, 2, valuators);
 	flag = POINTER_RELATIVE | POINTER_ACCELERATE;
-	nevents = GetPointerEvents(sunEvents, device,
-	    MotionNotify, 0, flag, &mask);
-	for (i = 0; i < nevents; i++)
-	    mieqEnqueue(device, (InternalEvent*)(sunEvents + i)->event);
+	QueuePointerEvents(device, MotionNotify, 0, flag, &mask);
 	break;
     case LOC_Y_DELTA:
 	/*
@@ -305,10 +297,7 @@ sunMouseEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
 	valuators[1] = -fe->value;
 	valuator_mask_set_range(&mask, 0, 2, valuators);
 	flag = POINTER_RELATIVE | POINTER_ACCELERATE;
-	nevents = GetPointerEvents(sunEvents, device,
-	    MotionNotify, 0, flag, &mask);
-	for (i = 0; i < nevents; i++)
-	    mieqEnqueue(device, (InternalEvent*)(sunEvents + i)->event);
+	QueuePointerEvents(device, MotionNotify, 0, flag, &mask);
 	break;
     case LOC_X_ABSOLUTE:
 	miPointerGetPosition(device, &x, &y);

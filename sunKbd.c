@@ -714,15 +714,10 @@ sunKbdEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
 {
     BYTE		keycode;
     int			type;
-    int			i, nevents;
 
-    GetEventList(&sunEvents);
     keycode = (fe->id & 0x7f) + MIN_KEYCODE;
-
     type = ((fe->value == VKEY_UP) ? KeyRelease : KeyPress);
-    nevents = GetKeyboardEvents(sunEvents, device, type, keycode);
-    for (i = 0; i < nevents; i++)
-	mieqEnqueue(device, (InternalEvent *)(sunEvents + i)->event);
+    QueueKeyboardEvents(device, type, keycode);
 }
 
 

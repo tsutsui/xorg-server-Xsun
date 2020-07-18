@@ -120,8 +120,6 @@ static void sunCfbGetImage(DrawablePtr, int,int, int, int, unsigned int, unsigne
 
 static Bool	sunDevsInited = FALSE;
 
-EventList *sunEvents = NULL;
-
 Bool sunAutoRepeatHandlersInstalled;	/* FALSE each time InitOutput called */
 Bool sunSwapLkeys = FALSE;
 Bool sunFlipPixels = FALSE;
@@ -629,8 +627,6 @@ InitInput(int argc, char **argv)
 			 sunMouseProc, sunKbdProc, FALSE);
     if (rc != Success)
 	FatalError("Failed to init sun default input devices.\n");
-
-    GetEventList(&sunEvents);
 
     (void)mieqInit();
 #define SET_FLOW(fd) fcntl(fd, F_SETFL, FNDELAY | FASYNC)
