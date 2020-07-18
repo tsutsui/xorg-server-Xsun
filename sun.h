@@ -273,7 +273,6 @@ typedef struct {
 } fbFd;
 
 typedef Bool (*sunFbInitProc)(
-    int /* screen */,
     ScreenPtr /* pScreen */,
     int /* argc */,
     char** /* argv */
@@ -360,17 +359,17 @@ extern void sunMouseEnqueueEvent(DeviceIntPtr, Firm_event *);
 extern int sunMouseProc(DeviceIntPtr, int);
 
 /* sunCfb.c */
-Bool sunCG3Init(int, ScreenPtr, int, char **);
-Bool sunTCXInit(int, ScreenPtr, int, char **);
-Bool sunCG2Init(int, ScreenPtr, int, char **);
-Bool sunCG4Init(int, ScreenPtr, int, char **);
-Bool sunCG6Init(int, ScreenPtr, int, char **);
+Bool sunCG3Init(ScreenPtr, int, char **);
+Bool sunTCXInit(ScreenPtr, int, char **);
+Bool sunCG2Init(ScreenPtr, int, char **);
+Bool sunCG4Init(ScreenPtr, int, char **);
+Bool sunCG6Init(ScreenPtr, int, char **);
 
 /* sunCfb24.c */
-Bool sunCG8Init(int, ScreenPtr, int, char **);
+Bool sunCG8Init(ScreenPtr, int, char **);
 
 /* sunMfb.c */
-Bool sunBW2Init(int, ScreenPtr, int, char **);
+Bool sunBW2Init(ScreenPtr, int, char **);
 
 /* XXX */
 extern void mfbDoBitblt(DrawablePtr, DrawablePtr, int, RegionPtr, DDXPointPtr);

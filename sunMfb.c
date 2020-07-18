@@ -90,12 +90,13 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Bool
 sunBW2Init
 (
-    int		    screen,    	/* what screen am I going to be */
     ScreenPtr	    pScreen,  	/* The Screen to initialize */
     int		    argc,    	/* The number of the Server's arguments. */
     char	    **argv   	/* The arguments themselves. Don't change! */
 )
 {
+    int	screen = pScreen->myNum;
+
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     if (sunFlipPixels) {
 	pScreen->whitePixel = 1;

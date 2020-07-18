@@ -279,12 +279,13 @@ checkMono(int argc, char** argv)
 
 Bool
 sunCG3Init(
-    int	    	  screen,    	/* what screen am I going to be */
     ScreenPtr	  pScreen,  	/* The Screen to initialize */
     int	    	  argc,	    	/* The number of the Server's arguments. */
     char    	  **argv   	/* The arguments themselves. Don't change! */
 )
 {
+    int	screen = pScreen->myNum;
+
     checkMono (argc, argv);
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) CG3_MMAP_OFFSET,
@@ -294,12 +295,13 @@ sunCG3Init(
 
 Bool
 sunTCXInit(
-    int	    	  screen,    	/* what screen am I going to be */
     ScreenPtr	  pScreen,  	/* The Screen to initialize */
     int	    	  argc,	    	/* The number of the Server's arguments. */
     char    	  **argv   	/* The arguments themselves. Don't change! */
 )
 {
+    int	screen = pScreen->myNum;
+
     checkMono (argc, argv);
     sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
     return sunInitCommon (screen, pScreen, (off_t) 0,
@@ -385,12 +387,12 @@ CG2ScreenInit(ScreenPtr pScreen)
 
 Bool
 sunCG2Init(
-    int		screen,    	/* what screen am I going to be */
     ScreenPtr	pScreen,  	/* The Screen to initialize */
     int		argc,	    	/* The number of the Server's arguments. */
     char**	argv	   	/* The arguments themselves. Don't change! */
 )
 {
+    int 	screen = pScreen->myNum;
     int		i;
     Bool	ret;
     Bool	mono = FALSE;
@@ -445,12 +447,13 @@ CG4Switch(ScreenPtr pScreen, int select)
 
 Bool
 sunCG4Init(
-    int		screen,    	/* what screen am I going to be */
     ScreenPtr	pScreen,  	/* The Screen to initialize */
     int		argc,	    	/* The number of the Server's arguments. */
     char**	argv    	/* The arguments themselves. Don't change! */
 )
 {
+    int screen = pScreen->myNum;
+
     checkMono (argc, argv);
     if (sunCG4Frob)
 	sunFbs[screen].EnterLeave = (void (*)(ScreenPtr, int))NoopDDA;
@@ -468,13 +471,13 @@ sunCG4Init(
 
 Bool
 sunCG6Init(
-    int		screen,    	/* The index of pScreen in the ScreenInfo */
     ScreenPtr	pScreen,  	/* The Screen to initialize */
     int		argc,	    	/* The number of the Server's arguments. */
     char**	argv	   	/* The arguments themselves. Don't change! */
 )
 {
     void *fb;
+    int screen = pScreen->myNum;
 
     checkMono (argc, argv);
     if (!sunScreenAllocate (pScreen))
