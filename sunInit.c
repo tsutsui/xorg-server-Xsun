@@ -50,6 +50,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include    "gcstruct.h"
 #include    "mi.h"
 #include    "fb.h"
+#include    "extinit.h"
 
 /* maximum pixmap depth */
 #ifndef SUNMAXDEPTH
@@ -519,6 +520,13 @@ void
 OsVendorFatalError(const char *f, va_list arg)
 {
 }
+
+#ifdef GLXEXT
+void
+GlxExtensionInit(void)
+{
+}
+#endif
 
 /*-
  *-----------------------------------------------------------------------
