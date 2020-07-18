@@ -247,6 +247,7 @@ sunMouseEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
     sunPtrPrivPtr	pPriv;	/* Private data for pointer */
     int			bmask;	/* Temporary button mask */
     int			x, y;
+    double		tmpx, tmpy;
     int			type, buttons, flag;
     int			valuators[2];
     ValuatorMask	mask;
@@ -306,13 +307,15 @@ sunMouseEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
 	break;
     case LOC_X_ABSOLUTE:
 	miPointerGetPosition(device, &x, &y);
-	x = fe->value;
-	miPointerSetPosition(device, &x, &y);
+	tmpx = fe->value;
+	tmpy = y;
+	miPointerSetPosition(device, Absolute, &tmpx, &tmpy, NULL, NULL);
 	break;
     case LOC_Y_ABSOLUTE:
 	miPointerGetPosition(device, &x, &y);
-	y = fe->value;
-	miPointerSetPosition(device, &x, &y);
+	tmpx = x;
+	tmpy = fe->value;
+	miPointerSetPosition(device, Absolute, &tmpx, &tmpy, NULL, NULL);
 	break;
     default:
 	FatalError ("sunMouseEnqueueEvent: unrecognized id\n");
