@@ -147,7 +147,7 @@ sunInstallColormap(ColormapPtr cmap)
 	return;
     if (pPrivate->installedMap)
 	WalkTree(pPrivate->installedMap->pScreen, TellLostMap,
-		 (pointer) &(pPrivate->installedMap->mid));
+		 (void *) &(pPrivate->installedMap->mid));
     if ((pVisual->class | DynamicClass) == DirectColor) {
 	if (pVisual->ColormapEntries < 256) {
 	    rMask = pVisual->redMask;
@@ -184,7 +184,7 @@ sunInstallColormap(ColormapPtr cmap)
     }
     pPrivate->installedMap = cmap;
     (*pPrivate->UpdateColormap) (cmap->pScreen, 0, 256, rmap, gmap, bmap);
-    WalkTree(cmap->pScreen, TellGainedMap, (pointer) &(cmap->mid));
+    WalkTree(cmap->pScreen, TellGainedMap, (void *) &(cmap->mid));
 }
 
 void
@@ -474,7 +474,7 @@ sunCG6Init(
     char**	argv	   	/* The arguments themselves. Don't change! */
 )
 {
-    pointer	fb;
+    void *fb;
 
     checkMono (argc, argv);
     if (!sunScreenAllocate (pScreen))

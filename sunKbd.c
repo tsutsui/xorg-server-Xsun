@@ -192,7 +192,7 @@ bell(int fd, int duration)
 }
 
 static void
-sunBell(int percent, DeviceIntPtr device, pointer ctrl, int unused)
+sunBell(int percent, DeviceIntPtr device, void *ctrl, int unused)
 {
     KeybdCtrl*      kctrl = (KeybdCtrl*) ctrl;
     sunKbdPrivPtr   pPriv = (sunKbdPrivPtr) device->public.devicePrivate;
@@ -608,7 +608,7 @@ sunKbdProc(DeviceIntPtr device, int what)
 		sunModMaps[sunKbdPriv.type][i].modifiers;
 	}
 
-	pKeyboard->devicePrivate = (pointer)&sunKbdPriv;
+	pKeyboard->devicePrivate = (void *)&sunKbdPriv;
 	pKeyboard->on = FALSE;
 
 	sunInitKbdNames(&rmlvo, pKeyboard->devicePrivate);
@@ -812,12 +812,12 @@ LegalModifier(unsigned int key, DeviceIntPtr pDev)
 
 /*ARGSUSED*/
 void
-sunBlockHandler(int nscreen, pointer pbdata, pointer pTimeout, pointer pReadmask)
+sunBlockHandler(int nscreen, void *pbdata, void *pTimeout, void *pReadmask)
 {
 }
 
 /*ARGSUSED*/
 void
-sunWakeupHandler(int nscreen, pointer pbdata, unsigned long err, pointer pReadmask)
+sunWakeupHandler(int nscreen, void *pbdata, unsigned long err, void *pReadmask)
 {
 }

@@ -82,12 +82,12 @@ int sunScreenIndex;
 
 DevPrivateKeyRec sunScreenPrivateKeyRec;
 
-pointer
+void *
 sunMemoryMap(size_t len, off_t off, int fd)
 {
     int		pagemask, mapsize;
     caddr_t	addr;
-    pointer	mapaddr;
+    void	*mapaddr;
 
 #ifdef SVR4
     pagemask = sysconf(_SC_PAGESIZE) - 1;
@@ -111,19 +111,19 @@ sunMemoryMap(size_t len, off_t off, int fd)
      * interloper, e.g. another server, can't get this frame buffer,
      * and if another server already has it, this one won't.
      */
-    if ((int)(mapaddr = (pointer) mmap (addr,
+    if ((int)(mapaddr = (void *) mmap (addr,
 		mapsize,
 		PROT_READ | PROT_WRITE, MAP_PRIVATE,
 		fd, off)) == -1)
 #endif
-	mapaddr = (pointer) mmap (addr,
+	mapaddr = mmap (addr,
 		    mapsize,
 		    PROT_READ | PROT_WRITE, MAP_SHARED,
 		    fd, off);
-    if (mapaddr == (pointer) -1) {
+    if (mapaddr == (void *) -1) {
 	ErrorF("mapping frame buffer memory");
 	(void) close (fd);
-	mapaddr = (pointer) NULL;
+	mapaddr = NULL;
     }
     return mapaddr;
 }
@@ -174,7 +174,7 @@ closeScreen(int i, ScreenPtr pScreen)
     pScreen->CloseScreen = pPrivate->CloseScreen;
     ret = (*pScreen->CloseScreen) (i, pScreen);
     (void) (*pScreen->SaveScreen) (pScreen, SCREEN_SAVER_OFF);
-    xfree ((pointer) pPrivate);
+    xfree (pPrivate);
     return ret;
 }
 
@@ -199,7 +199,7 @@ sunInitCommon(
     int		scrn,
     ScreenPtr	pScrn,
     off_t	offset,
-    Bool	(*init1)(ScreenPtr, pointer, int, int, int, int, int, int),
+    Bool	(*init1)(ScreenPtr, void *, int, int, int, int, int, int),
     void	(*init2)(ScreenPtr),
     Bool	(*cr_cm)(ScreenPtr),
     Bool	(*save)(ScreenPtr, int),

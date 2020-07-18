@@ -309,7 +309,7 @@ OpenFrameBuffer(
 		}
 		sunFbs[screen].info = fbattr->fbtype;
 	    }
-	    sunFbs[screen].fbPriv = (pointer) fbattr;
+	    sunFbs[screen].fbPriv = (void *) fbattr;
 	    if (fbattr && !sunFbData[fbattr->fbtype.fb_type].init) {
 		int _i;
 		ret = FALSE;
@@ -667,7 +667,7 @@ CloseInput(void)
 Bool
 sunCfbSetupScreen(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -683,7 +683,7 @@ sunCfbSetupScreen(
 Bool
 sunCfbFinishScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -699,7 +699,7 @@ sunCfbFinishScreenInit(
 Bool
 sunCfbScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -742,7 +742,7 @@ sunCfbGetImage(DrawablePtr pDrawable, int sx, int sy, int w, int h, unsigned int
 Bool
 sunCfbSetupScreen(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -765,7 +765,7 @@ sunCfbSetupScreen(
 Bool
 sunCfbFinishScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -796,7 +796,7 @@ sunCfbFinishScreenInit(
 Bool
 sunCfbScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */

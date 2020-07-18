@@ -337,10 +337,10 @@ extern int sunGXInit(ScreenPtr, fbFd *);
 /* sunFbs.c */
 extern Bool sunSaveScreen(ScreenPtr, int);
 extern Bool sunScreenInit(ScreenPtr);
-extern pointer sunMemoryMap(size_t, off_t, int);
+extern void *sunMemoryMap(size_t, off_t, int);
 extern Bool sunScreenAllocate(ScreenPtr);
 extern Bool sunInitCommon(int, ScreenPtr, off_t,
-    Bool (* /* init1 */)(ScreenPtr, pointer, int, int, int, int, int, int),
+    Bool (* /* init1 */)(ScreenPtr, void *, int, int, int, int, int, int),
     void (* /* init2 */)(ScreenPtr),
     Bool (* /* cr_cm */)(ScreenPtr),
     Bool (* /* save */)(ScreenPtr, int),
@@ -352,8 +352,8 @@ extern Firm_event* sunKbdGetEvents(int, Bool, int *, Bool *);
 extern void sunKbdEnqueueEvent(DeviceIntPtr, Firm_event *);
 extern int sunKbdProc(DeviceIntPtr, int);
 extern void sunKbdWait(void);
-void sunBlockHandler(int, pointer, pointer, pointer);
-void sunWakeupHandler(int, pointer, unsigned long, pointer);
+void sunBlockHandler(int, void *, void *, void *);
+void sunWakeupHandler(int, void *, unsigned long, void *);
 
 /* sunMouse.c */
 extern Firm_event* sunMouseGetEvents(int, Bool, int *, Bool *);
@@ -384,7 +384,7 @@ extern void mfbDoBitblt(DrawablePtr, DrawablePtr, int, RegionPtr, DDXPointPtr);
 
 extern Bool sunCfbSetupScreen(
     ScreenPtr /* pScreen */,
-    pointer /* pbits */,	/* pointer to screen bitmap */
+    void * /* pbits */,		/* pointer to screen bitmap */
     int /* xsize */,		/* in pixels */
     int /* ysize */,
     int /* dpix */,		/* dots per inch */
@@ -395,7 +395,7 @@ extern Bool sunCfbSetupScreen(
 
 extern Bool sunCfbFinishScreenInit(
     ScreenPtr /* pScreen */,
-    pointer /* pbits */,	/* pointer to screen bitmap */
+    void * /* pbits */,		/* pointer to screen bitmap */
     int /* xsize */,		/* in pixels */
     int /* ysize */,
     int /* dpix */,		/* dots per inch */
@@ -406,7 +406,7 @@ extern Bool sunCfbFinishScreenInit(
 
 extern Bool sunCfbScreenInit(
     ScreenPtr /* pScreen */,
-    pointer /* pbits */,	/* pointer to screen bitmap */
+    void * /* pbits */,		/* pointer to screen bitmap */
     int /* xsize */,		/* in pixels */
     int /* ysize */,
     int /* dpix */,		/* dots per inch */

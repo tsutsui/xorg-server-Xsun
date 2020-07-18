@@ -118,7 +118,7 @@ sunCfbGetImage(DrawablePtr pDrawable, int sx, int sy, int w, int h, unsigned int
 Bool
 sunCfbSetupScreen(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -144,7 +144,7 @@ sunCfbSetupScreen(
 Bool
 sunCfbFinishScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -176,7 +176,7 @@ sunCfbFinishScreenInit(
 Bool
 sunCfbScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -200,7 +200,7 @@ sunCfbScreenInit(
 Bool
 sunCfbSetupScreen(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -217,7 +217,7 @@ sunCfbSetupScreen(
 Bool
 sunCfbFinishScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */
@@ -233,7 +233,7 @@ sunCfbFinishScreenInit(
 Bool
 sunCfbScreenInit(
     ScreenPtr pScreen,
-    pointer pbits,		/* pointer to screen bitmap */
+    void *pbits,		/* pointer to screen bitmap */
     int xsize,			/* in pixels */
     int ysize,			/* in pixels */
     int dpix,			/* dots per inch */

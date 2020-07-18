@@ -134,7 +134,7 @@ sunMouseProc(DeviceIntPtr device, int what)
 	    }
 	    if (sunPtrPriv.fd == -1)
 		return !Success;
-	    pMouse->devicePrivate = (pointer) &sunPtrPriv;
+	    pMouse->devicePrivate = (void *) &sunPtrPriv;
 	    pMouse->on = FALSE;
 	    map[1] = 1;
 	    map[2] = 2;

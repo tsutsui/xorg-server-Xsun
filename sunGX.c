@@ -1477,7 +1477,7 @@ sunGXPolyGlyphBlt(
     int		    y,
     unsigned int    nglyph,
     CharInfoPtr	    *ppci,		/* array of character info */
-    pointer         pglyphBase
+    void            *pglyphBase
 )
 {
     sunGXPtr	    gx = sunGXGetScreenPrivate (pDrawable->pScreen);
@@ -1560,7 +1560,7 @@ sunGXTEGlyphBlt(
     int 	y,
     unsigned int nglyph,
     CharInfoPtr *ppci,		/* array of character info */
-    pointer pglyphBase		/* start of array of glyphs */
+    void	*pglyphBase	/* start of array of glyphs */
 )
 {
     sunGXPtr	    gx = sunGXGetScreenPrivate (pDrawable->pScreen);
@@ -1683,7 +1683,7 @@ sunGXPolyTEGlyphBlt(
     int 	y,
     unsigned int nglyph,
     CharInfoPtr *ppci,		/* array of character info */
-    pointer pglyphBase		/* start of array of glyphs */
+    void	*pglyphBase	/* start of array of glyphs */
 )
 {
     sunGXTEGlyphBlt (pDrawable, pGC, x, y, nglyph, ppci, (char *) 1);
@@ -2815,7 +2815,7 @@ sunGXInit(ScreenPtr pScreen, fbFd *fb)
     gx->clipminy = 0;
     gx->clipmaxx = fb->info.fb_width - 1;
     gx->clipmaxy = fb->info.fb_height - 1;
-    pScreen->devPrivates[sunGXScreenPrivateIndex].ptr = (pointer) gx;
+    pScreen->devPrivates[sunGXScreenPrivateIndex].ptr = (void *) gx;
     /*
      * Replace various screen functions
      */
