@@ -74,6 +74,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 		    (tv).tv_sec += 1; \
 		}
 
+static void sunKbdHandlerNotify(int, int, void *);
 static void SwapLKeys(KeySymsRec *);
 static void SetLights(KeybdCtrl *, int);
 static KeyCode LookupKeyCode(KeySym, XkbDescPtr, KeySymsPtr);
@@ -81,6 +82,11 @@ static void pseudoKey(DeviceIntPtr, Bool, KeyCode);
 static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr); 
 
 DeviceIntPtr	sunKeyboardDevice = NULL;
+
+static void
+sunKbdHandlerNotify(int fd __unused, int ready __unused, void *data __unused)
+{
+}
 
 void
 sunKbdWait(void)
@@ -634,7 +640,7 @@ sunKbdProc(DeviceIntPtr device, int what)
 	 */
 	if (sunChangeKbdTranslation(pPriv->fd,TRUE) == -1)
 	    FatalError("Can't set keyboard translation\n");
-	AddEnabledDevice(pPriv->fd);
+	SetNotifyFd(pPriv->fd, sunKbdHandlerNotify, X_NOTIFY_READ, NULL);
 	pKeyboard->on = TRUE;
 	break;
 
@@ -652,7 +658,7 @@ sunKbdProc(DeviceIntPtr device, int what)
 	 */
 	if (sunChangeKbdTranslation(pPriv->fd,FALSE) == -1)
 	    FatalError("Can't reset keyboard translation\n");
-	RemoveEnabledDevice(pPriv->fd);
+	RemoveNotifyFd(pPriv->fd);
 	pKeyboard->on = FALSE;
 	break;
     default:

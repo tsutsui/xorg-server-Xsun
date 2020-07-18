@@ -64,6 +64,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Bool sunActiveZaphod = TRUE;
 DeviceIntPtr sunPointerDevice = NULL;
 
+static void sunMouseHandlerNotify(int, int, void *);
 static Bool sunCursorOffScreen(ScreenPtr *, int *, int *);
 static void sunCrossScreen(ScreenPtr, int);
 static void sunWarpCursor(DeviceIntPtr, ScreenPtr, int, int);
@@ -75,6 +76,11 @@ miPointerScreenFuncRec sunPointerScreenFuncs = {
     NULL,
     NULL,
 };
+
+static void
+sunMouseHandlerNotify(int fd __unused, int ready __unused, void *data __unused)
+{
+}
 
 /*-
  *-----------------------------------------------------------------------
@@ -161,7 +167,8 @@ sunMouseProc(DeviceIntPtr device, int what)
 		return !Success;
 	    }
 	    sunPtrPriv.bmask = 0;
-	    AddEnabledDevice (sunPtrPriv.fd);
+	    SetNotifyFd(sunPtrPriv.fd, sunMouseHandlerNotify,
+		X_NOTIFY_READ, NULL);
 	    pMouse->on = TRUE;
 	    break;
 
@@ -173,7 +180,7 @@ sunMouseProc(DeviceIntPtr device, int what)
 
 	case DEVICE_OFF:
 	    pMouse->on = FALSE;
-	    RemoveEnabledDevice (sunPtrPriv.fd);
+	    RemoveNotifyFd(sunPtrPriv.fd);
 	    break;
     }
     return Success;
