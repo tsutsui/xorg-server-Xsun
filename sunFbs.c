@@ -76,7 +76,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "sun.h"
 #include <sys/mman.h>
 
-static Bool closeScreen(int, ScreenPtr pScreen);
+static Bool closeScreen(ScreenPtr pScreen);
 
 int sunScreenIndex;
 
@@ -162,7 +162,7 @@ sunSaveScreen(ScreenPtr pScreen, int on)
 }
 
 static Bool
-closeScreen(int i, ScreenPtr pScreen)
+closeScreen(ScreenPtr pScreen)
 {
     sunScreenPtr pPrivate = sunGetScreenPrivate(pScreen);
     Bool    ret;
@@ -172,7 +172,7 @@ closeScreen(int i, ScreenPtr pScreen)
     sunDisableCursor (pScreen);
 #endif
     pScreen->CloseScreen = pPrivate->CloseScreen;
-    ret = (*pScreen->CloseScreen) (i, pScreen);
+    ret = (*pScreen->CloseScreen) (pScreen);
     (void) (*pScreen->SaveScreen) (pScreen, SCREEN_SAVER_OFF);
     free (pPrivate);
     return ret;
