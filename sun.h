@@ -209,10 +209,10 @@ extern int monitorResolution;
 #endif
 
 /*
- * MAXEVENTS is the maximum number of events the mouse and keyboard functions
- * will read on a given call to their GetEvents vectors.
+ * SUN_MAXEVENTS is the maximum number of events the mouse and keyboard
+ * functions will read on a given call to their GetEvents vectors.
  */
-#define MAXEVENTS 	32
+#define SUN_MAXEVENTS 	32
 
 /*
  * Data private to any sun keyboard.

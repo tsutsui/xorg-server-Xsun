@@ -198,7 +198,7 @@ Firm_event *
 sunMouseGetEvents(int fd, Bool on, int *pNumEvents, Bool *pAgain)
 {
     int	    	  nBytes;	    /* number of bytes of events available. */
-    static Firm_event	evBuf[MAXEVENTS];   /* Buffer for Firm_events */
+    static Firm_event	evBuf[SUN_MAXEVENTS];   /* Buffer for Firm_events */
 
     if ((nBytes = read (fd, (char *)evBuf, sizeof(evBuf))) == -1) {
 	if (errno == EWOULDBLOCK) {
