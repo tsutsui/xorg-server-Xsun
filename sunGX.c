@@ -1837,7 +1837,7 @@ sunGXCheckFill(GCPtr pGC, DrawablePtr pDrawable)
     {
 	if (gxPriv->stipple)
 	{
-	    xfree (gxPriv->stipple);
+	    free (gxPriv->stipple);
 	    gxPriv->stipple = 0;
 	}
 	return TRUE;
@@ -1846,7 +1846,7 @@ sunGXCheckFill(GCPtr pGC, DrawablePtr pDrawable)
     {
 	if (!tmpStipple)
 	{
-	    tmpStipple = (sunGXStipplePtr) xalloc (sizeof *tmpStipple);
+	    tmpStipple = malloc (sizeof *tmpStipple);
 	    if (!tmpStipple)
 		return FALSE;
 	}
@@ -2562,7 +2562,7 @@ sunGXChangeWindowAttributes(WindowPtr pWin, Mask mask)
 	    if (!stipple)
 	    {
 		if (!tmpStipple)
-		    tmpStipple = (sunGXStipplePtr) xalloc (sizeof *tmpStipple);
+		    tmpStipple = malloc (sizeof *tmpStipple);
 		stipple = tmpStipple;
 	    }
  	    if (stipple && sunGXCheckTile (pWin->background.pixmap, stipple))

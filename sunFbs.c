@@ -137,7 +137,7 @@ sunScreenAllocate(ScreenPtr pScreen)
 	ErrorF("dixRegisterPrivateKey failed");
 	return FALSE;
     }
-    pPrivate = (sunScreenPtr) xalloc (sizeof (sunScreenRec));
+    pPrivate = malloc (sizeof (sunScreenRec));
     if (!pPrivate)
 	return FALSE;
 
@@ -174,7 +174,7 @@ closeScreen(int i, ScreenPtr pScreen)
     pScreen->CloseScreen = pPrivate->CloseScreen;
     ret = (*pScreen->CloseScreen) (i, pScreen);
     (void) (*pScreen->SaveScreen) (pScreen, SCREEN_SAVER_OFF);
-    xfree (pPrivate);
+    free (pPrivate);
     return ret;
 }
 

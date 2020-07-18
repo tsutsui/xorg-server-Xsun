@@ -278,7 +278,7 @@ OpenFrameBuffer(
     if ((sunFbs[screen].fd = open(device, O_RDWR, 0)) == -1)
 	ret = FALSE;
     else {
-	fbattr = (struct fbgattr *) xalloc (sizeof (struct fbgattr));
+	fbattr = malloc (sizeof (struct fbgattr));
 	if (ioctl(sunFbs[screen].fd, FBIOGATTR, fbattr) == -1) {
 	    /*
 		This is probably a bwtwo; the $64,000 question is: 
@@ -289,7 +289,7 @@ OpenFrameBuffer(
 		a cgfour, then things get tricky because there's no way 
 		to tell if the bwtwo is really being emulated by the cgfour.
 	    */
-	    xfree (fbattr);
+	    free (fbattr);
 	    fbattr = NULL;
 	    if (ioctl(sunFbs[screen].fd, FBIOGTYPE, &sunFbs[screen].info) == -1) {
 		ErrorF("unable to get frame buffer attributes");
@@ -406,7 +406,7 @@ GetDeviceList(int argc, char **argv)
 	char	*_tmpa;
 	char	*_tmpb;
 	int	_i1;
-	deviceList = (char **) xalloc ((MAXSCREENS + 1) * sizeof (char *));
+	deviceList = malloc ((MAXSCREENS + 1) * sizeof (char *));
 	_tmpa = (cmdList) ? cmdList : envList;
 	for (_i1 = 0; _i1 < MAXSCREENS; _i1++) {
 	    _tmpb = strtok (_tmpa, ":");
@@ -421,7 +421,7 @@ GetDeviceList(int argc, char **argv)
     if (!deviceList) {
 	/* no environment and no cmdline, so default */
 	deviceList = 
-	    (char **) xalloc ((FALLBACK_LIST_LEN + 1) * sizeof (char *));
+	    malloc ((FALLBACK_LIST_LEN + 1) * sizeof (char *));
 	for (i = 0; i < FALLBACK_LIST_LEN; i++)
 	    deviceList[i] = fallbackList[i];
 	deviceList[FALLBACK_LIST_LEN] = NULL;
@@ -595,7 +595,7 @@ InitOutput(ScreenInfo *pScreenInfo, int argc, char **argv)
 	    if (OpenFrameBuffer (devList[i], scr))
 		scr++;
 	sunDevsInited = TRUE;
-	xfree (devList);
+	free (devList);
     }
     for (scr = 0; scr < MAXSCREENS; scr++)
 	if (sunFbs[scr].fd != -1)

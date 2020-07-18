@@ -320,8 +320,8 @@ DoLEDs(
 
     pPriv->leds = ctrl->leds & 0x0f;
     SetLights (ctrl, pPriv->fd);
-    xfree(syms->map);
-    xfree(syms);
+    free(syms->map);
+    free(syms);
 }
 
 /*-
@@ -601,7 +601,7 @@ sunKbdProc(DeviceIntPtr device, int what)
 	}
 
 	if (!workingModMap) {
-	    workingModMap=(CARD8 *)xalloc(MAP_LENGTH);
+	    workingModMap = malloc(MAP_LENGTH);
 	    (void) memset(workingModMap, 0, MAP_LENGTH);
 	    for(i=0; sunModMaps[sunKbdPriv.type][i].key != 0; i++)
 		workingModMap[sunModMaps[sunKbdPriv.type][i].key + MIN_KEYCODE] = 
