@@ -517,12 +517,10 @@ OsVendorInit(void)
     }
 }
 
-#ifdef DDXOSFATALERROR
 void
 OsVendorFatalError(void)
 {
 }
-#endif
 
 /*-
  *-----------------------------------------------------------------------
@@ -661,11 +659,6 @@ InitInput(int argc, char **argv)
 
 void
 CloseInput(void)
-{
-}
-
-void
-OsVendorFatalError(void)
 {
 }
 
