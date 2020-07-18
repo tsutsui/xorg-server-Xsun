@@ -159,7 +159,7 @@ sunEnqueueEvents(void)
  * DDX - specific abort routine.  Called by AbortServer().
  */
 void
-AbortDDX(void)
+AbortDDX(enum ExitCode error)
 {
     int		i;
     ScreenPtr	pScreen;
@@ -190,9 +190,9 @@ AbortDDX(void)
 
 /* Called by GiveUp(). */
 void
-ddxGiveUp(void)
+ddxGiveUp(enum ExitCode error)
 {
-    AbortDDX ();
+    AbortDDX(error);
 }
 
 int
