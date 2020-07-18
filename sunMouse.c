@@ -73,8 +73,6 @@ miPointerScreenFuncRec sunPointerScreenFuncs = {
     sunCursorOffScreen,
     sunCrossScreen,
     sunWarpCursor,
-    NULL,
-    NULL,
 };
 
 static void
