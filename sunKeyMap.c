@@ -425,11 +425,11 @@ static SunModmapRec US3Modmap[] = {
 
 KeySymsRec sunKeySyms[] = {
     /*	map	    minKeyCode	maxKC	width */
-    { (KeySym *)NULL,	0,	0,	0 },
-    { (KeySym *)NULL,	0,	0,	0 },
+    { NULL,		0,	0,	0 },
+    { NULL,		0,	0,	0 },
     { US2Keymap,	1,	0x7a,	2 },
     { US3Keymap,	1,	0x7a,	2 },
-    { (KeySym *)NULL,	1,	0x7d,	4 }
+    { NULL,		1,	0x7d,	4 }
 };
 
 SunModmapRec *sunModMaps[] = {

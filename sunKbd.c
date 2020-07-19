@@ -797,7 +797,7 @@ sunChangeKbdTranslation(int fd, Bool makeTranslated)
 	}
     }
 #ifndef i386 /* { */
-    (void) sigprocmask(SIG_SETMASK, &old_mask, (sigset_t *)NULL);
+    (void) sigprocmask(SIG_SETMASK, &old_mask, NULL);
 #else /* }{ */
     sigsetmask (old_mask);
 #endif /* } */

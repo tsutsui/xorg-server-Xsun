@@ -2252,7 +2252,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
 	if (!new_pix && pGC->pRotatedPixmap)
 	{
 	    cfbDestroyPixmap(pGC->pRotatedPixmap);
-	    pGC->pRotatedPixmap = (PixmapPtr) NULL;
+	    pGC->pRotatedPixmap = NULL;
 	}
     }
 

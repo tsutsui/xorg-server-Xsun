@@ -374,9 +374,9 @@ sunWarpCursor(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
 #else
     (void) sigaddset (&newsigmask, SIGIO);
 #endif
-    (void) sigprocmask (SIG_BLOCK, &newsigmask, (sigset_t *)NULL);
+    (void) sigprocmask (SIG_BLOCK, &newsigmask, NULL);
     miPointerWarpCursor (pDev, pScreen, x, y);
-    (void) sigprocmask (SIG_UNBLOCK, &newsigmask, (sigset_t *)NULL);
+    (void) sigprocmask (SIG_UNBLOCK, &newsigmask, NULL);
 #else
     int oldmask;
 

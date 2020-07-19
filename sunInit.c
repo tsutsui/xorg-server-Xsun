@@ -391,7 +391,7 @@ GetDeviceList(int argc, char **argv)
     int		i;
     char	*envList = NULL;
     char	*cmdList = NULL;
-    char	**deviceList = (char **)NULL; 
+    char	**deviceList = NULL; 
 
     for (i = 1; i < argc; i++)
 	if (strcmp (argv[i], "-dev") == 0 && i+1 < argc) {
