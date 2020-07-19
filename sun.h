@@ -281,7 +281,7 @@ typedef Bool (*sunFbInitProc)(
 
 typedef struct {
     sunFbInitProc	init;	/* init procedure for this fb */
-    char*		name;	/* /usr/include/fbio names */
+    const char		*name;	/* /usr/include/fbio names */
 } sunFbDataRec;
 
 /* sunInit.c */
@@ -297,10 +297,10 @@ extern Bool		sunNoGX;
 
 /* sunKeyMap.c */
 extern KeySymsRec	sunKeySyms[];
-extern SunModmapRec	*sunModMaps[];
-extern int		sunMaxLayout;
+extern const SunModmapRec *sunModMaps[];
+extern const int	sunMaxLayout;
 extern KeySym		*sunType4KeyMaps[];
-extern SunModmapRec	*sunType4ModMaps[];
+extern const SunModmapRec *sunType4ModMaps[];
 
 /* sunKbd.c */
 extern long		sunAutoRepeatInitiate;
