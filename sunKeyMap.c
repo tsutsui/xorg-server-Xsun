@@ -258,7 +258,7 @@ static KeySym US2Keymap[] = {
 	NoSymbol,	NoSymbol,		/* 0x7f */
 };
 
-static SunModmapRec US2Modmap[] = {
+static const SunModmapRec US2Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{  76,	ControlMask },
@@ -406,7 +406,7 @@ static KeySym US3Keymap[] = {
 	NoSymbol,	NoSymbol,		/* 0x7f */
 };
 
-static SunModmapRec US3Modmap[] = {
+static const SunModmapRec US3Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{  76,	ControlMask },
@@ -432,7 +432,7 @@ KeySymsRec sunKeySyms[] = {
     { NULL,		1,	0x7d,	4 }
 };
 
-SunModmapRec *sunModMaps[] = {
+const SunModmapRec *sunModMaps[] = {
     NULL,
     NULL,
     US2Modmap,
@@ -440,7 +440,7 @@ SunModmapRec *sunModMaps[] = {
     NULL
 };
 
-static SunModmapRec Generic5Modmap[] = {
+static const SunModmapRec Generic5Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{ 119,	LockMask },
@@ -455,7 +455,7 @@ static SunModmapRec Generic5Modmap[] = {
 
 #if defined(DEN4) || defined(SWEDFIN4) || defined(SWFR4) || defined(SWGE4)
 
-static SunModmapRec DenSwedFinSw4Modmap[] = {
+static const SunModmapRec DenSwedFinSw4Modmap[] = {
         {  99,	ShiftMask },
         { 110,	ShiftMask },
         {  76,	LockMask },
@@ -472,7 +472,7 @@ static SunModmapRec DenSwedFinSw4Modmap[] = {
 
 #if defined(FRBE4) || defined(NETH4)
 
-static SunModmapRec FrBeNeth4Modmap[] = {
+static const SunModmapRec FrBeNeth4Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{  13,	LockMask },
@@ -489,7 +489,7 @@ static SunModmapRec FrBeNeth4Modmap[] = {
 
 #if defined(ITALY4) || defined(NORW4) || defined(PORT4) || defined(SPAINLATAM4)
 
-static SunModmapRec ItNorPortSp4Modmap[] = {
+static const SunModmapRec ItNorPortSp4Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{  76,	LockMask },
@@ -634,7 +634,7 @@ static KeySym Canada4Keymap[] = {
 	XK_KP_Add,	NoSymbol,	NoSymbol,	NoSymbol,	/*125*/
 };
 
-static SunModmapRec Canada4Modmap[] = {
+static const SunModmapRec Canada4Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{  76,	LockMask },
@@ -1484,7 +1484,7 @@ static KeySym Germany4Keymap[] = {
 	XK_KP_Add,	NoSymbol,	NoSymbol,	NoSymbol,	/*125*/
 };
 
-static SunModmapRec Germany4Modmap[] = {
+static const SunModmapRec Germany4Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{  76,	LockMask },
@@ -2335,7 +2335,7 @@ static KeySym Korea4Keymap[] = {
 	XK_KP_Add,	NoSymbol,	NoSymbol,	NoSymbol,	/*125*/
 };
 
-static SunModmapRec Korea4Modmap[] = {
+static const SunModmapRec Korea4Modmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{ 119,	LockMask },
@@ -5146,7 +5146,7 @@ static KeySym US101AKeymap[] = {
 	XK_KP_Add,	NoSymbol,	NoSymbol,	NoSymbol,	/*125*/
 };
 
-static SunModmapRec US101AModmap[] = {
+static const SunModmapRec US101AModmap[] = {
 	{  99,	ShiftMask },
 	{ 110,	ShiftMask },
 	{ 119,	LockMask },
@@ -5693,9 +5693,9 @@ KeySym *sunType4KeyMaps[] = {
 	CanadaFr5Keymap,	/* 97 */
 };
 
-int sunMaxLayout = sizeof(sunType4KeyMaps) / sizeof(sunType4KeyMaps[0]);
+const int sunMaxLayout = sizeof(sunType4KeyMaps) / sizeof(sunType4KeyMaps[0]);
 
-SunModmapRec *sunType4ModMaps[] = {
+const SunModmapRec *sunType4ModMaps[] = {
 	US4Modmap,		/* 0 */
 	US4Modmap,		/* 1 */
 	FranceBelg4Modmap,	/* 2 */
