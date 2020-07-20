@@ -44,7 +44,7 @@ this Software without prior written authorization from The Open Group.
 
 #define PSZ 32
 #include "sun.h"
-#include "fb/fb.h"
+#include "fb.h"
 
 #define PIXPG_24BIT_COLOR 5
 #define PIXPG_24BIT_COLOR_INDEX (PIXPG_24BIT_COLOR << 25)

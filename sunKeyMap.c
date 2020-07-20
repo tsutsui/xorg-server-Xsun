@@ -31,8 +31,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include	"sun.h"
 #define		XK_KATAKANA
-#include	"keysym.h"
-#include	"Sunkeysym.h"
+#include	<X11/keysym.h>
+#include	<X11/Sunkeysym.h>
 
 /* 
   By default all keyboards are hardcoded on the theory that people
