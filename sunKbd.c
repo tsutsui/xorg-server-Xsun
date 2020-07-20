@@ -43,8 +43,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #define NEED_EVENTS
 #include "sun.h"
-#include "keysym.h"
-#include "Sunkeysym.h"
+#include <X11/keysym.h>
+#include <X11/Sunkeysym.h>
 #include "mi.h"
 
 #include <X11/extensions/XKB.h>

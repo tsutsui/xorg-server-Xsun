@@ -30,17 +30,10 @@ from The Open Group.
 /* $XFree86: xc/programs/Xserver/hw/sun/sunMultiDepth.c,v 1.6 2001/12/14 19:59:43 dawes Exp $ */
 
 #include "sun.h"
-#include "X.h"
-#include "Xmd.h"
-#include "servermd.h"
-#include "scrnintstr.h"
+#include <X11/Xmd.h>
 #include "pixmapstr.h"
-#include "resource.h"
-#include "colormap.h"
-#include "colormapst.h"
 #include "mi.h"
 #include "mistruct.h"
-#include "dix.h"
 #include "gcstruct.h"
 #include "fb.h"
 
