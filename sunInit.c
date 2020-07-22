@@ -28,11 +28,11 @@ fee is hereby granted, provided that the above copyright no-
 tice  appear  in all copies and that both that copyright no-
 tice and this permission notice appear in  supporting  docu-
 mentation,  and  that the names of Sun or The Open Group
-not be used in advertising or publicity pertaining to 
-distribution  of  the software  without specific prior 
-written permission. Sun and The Open Group make no 
-representations about the suitability of this software for 
-any purpose. It is provided "as is" without any express or 
+not be used in advertising or publicity pertaining to
+distribution  of  the software  without specific prior
+written permission. Sun and The Open Group make no
+representations about the suitability of this software for
+any purpose. It is provided "as is" without any express or
 implied warranty.
 
 SUN DISCLAIMS ALL WARRANTIES WITH REGARD TO  THIS  SOFTWARE,
@@ -143,13 +143,13 @@ sunPtrPrivRec sunPtrPriv = {
 };
 
 /*
- * The name member in the following table corresponds to the 
+ * The name member in the following table corresponds to the
  * FBTYPE_* macros defined in /usr/include/sun/fbio.h file
  */
 sunFbDataRec sunFbData[XFBTYPE_LASTPLUSONE] = {
   { NULL, "SUN1BW        (bw1)" },
   { NULL, "SUN1COLOR     (cg1)" },
-  { BW2I, "SUN2BW        (bw2)" },	
+  { BW2I, "SUN2BW        (bw2)" },
 #ifdef INCLUDE_CG2_HEADER
   { CG2I, "SUN2COLOR     (cg2)" },
 #else
@@ -162,7 +162,7 @@ sunFbDataRec sunFbData[XFBTYPE_LASTPLUSONE] = {
   { CG4I, "SUN4COLOR     (cg4)" },
   { NULL, "NOTSUN1" },
   { NULL, "NOTSUN2" },
-  { NULL, "NOTSUN3" }	
+  { NULL, "NOTSUN3" }
 #ifndef i386 /* { */
  ,{ CG6I, "SUNFAST_COLOR (cg6/gx)" },
   { NULL, "SUNROP_COLOR  (cg9)" },
@@ -281,12 +281,12 @@ OpenFrameBuffer(
 	fbattr = (struct fbgattr *) xalloc (sizeof (struct fbgattr));
 	if (ioctl(sunFbs[screen].fd, FBIOGATTR, fbattr) == -1) {
 	    /*
-		This is probably a bwtwo; the $64,000 question is: 
-		is it the mono plane of a cgfour, or is it really a 
-		real bwtwo?  If there is only a cgfour in the box or 
-		only a bwtwo in the box, then it isn't a problem.  If 
-		it's a 3/60, which has a bwtwo on the mother board *and* 
-		a cgfour, then things get tricky because there's no way 
+		This is probably a bwtwo; the $64,000 question is:
+		is it the mono plane of a cgfour, or is it really a
+		real bwtwo?  If there is only a cgfour in the box or
+		only a bwtwo in the box, then it isn't a problem.  If
+		it's a 3/60, which has a bwtwo on the mother board *and*
+		a cgfour, then things get tricky because there's no way
 		to tell if the bwtwo is really being emulated by the cgfour.
 	    */
 	    xfree (fbattr);
@@ -295,7 +295,7 @@ OpenFrameBuffer(
 		Error("unable to get frame buffer attributes");
 		(void) close(sunFbs[screen].fd);
 		sunFbs[screen].fd = -1;
-		return FALSE; 
+		return FALSE;
 	    }
 	}
 	if (ret) {
@@ -324,8 +324,8 @@ OpenFrameBuffer(
 		    }
 		}
 	    }
-	    if (sunFbInfo) 
-		ErrorF ("%s is really a %s\n", device, 
+	    if (sunFbInfo)
+		ErrorF ("%s is really a %s\n", device,
 		    sunFbData[fbattr ? fbattr->fbtype.fb_type : sunFbs[screen].info.fb_type].name);
 	}
     }
@@ -392,7 +392,7 @@ GetDeviceList(int argc, char **argv)
     int		i;
     char	*envList = NULL;
     char	*cmdList = NULL;
-    char	**deviceList = (char **)NULL; 
+    char	**deviceList = (char **)NULL;
 
     for (i = 1; i < argc; i++)
 	if (strcmp (argv[i], "-dev") == 0 && i+1 < argc) {
@@ -420,7 +420,7 @@ GetDeviceList(int argc, char **argv)
     }
     if (!deviceList) {
 	/* no environment and no cmdline, so default */
-	deviceList = 
+	deviceList =
 	    (char **) xalloc ((FALLBACK_LIST_LEN + 1) * sizeof (char *));
 	for (i = 0; i < FALLBACK_LIST_LEN; i++)
 	    deviceList[i] = fallbackList[i];
@@ -469,7 +469,7 @@ getKbdType(void)
 	case KB_SUN2:
 	case KB_SUN3:
 	case KB_SUN4: return;
-	default: 
+	default:
 	    sunChangeKbdTranslation(sunKbdPriv.fd, FALSE);
 	    continue;
 	}
@@ -485,7 +485,7 @@ OsVendorInit(void)
 #ifndef i386
 	struct rlimit rl;
 
-	/* 
+	/*
 	 * one per client, one per screen, one per listen endpoint,
 	 * keyboard, mouse, and stderr
 	 */
@@ -599,7 +599,7 @@ InitOutput(ScreenInfo *pScreenInfo, int argc, char **argv)
     }
     for (scr = 0; scr < MAXSCREENS; scr++)
 	if (sunFbs[scr].fd != -1)
-	    (void) AddScreen (sunFbData[sunFbs[scr].info.fb_type].init, 
+	    (void) AddScreen (sunFbData[sunFbs[scr].info.fb_type].init,
 			      argc, argv);
     (void) OsSignal(SIGWINCH, SIG_IGN);
 }
@@ -642,14 +642,14 @@ InitInput(int argc, char **argv)
 #define WANT_SIGNALS(fd) fcntl(fd, F_SETOWN, getpid())
 #endif
     if (sunKbdPriv.fd >= 0) {
-	if (SET_FLOW(sunKbdPriv.fd) == -1 || WANT_SIGNALS(sunKbdPriv.fd) == -1) {	
+	if (SET_FLOW(sunKbdPriv.fd) == -1 || WANT_SIGNALS(sunKbdPriv.fd) == -1) {
 	    (void) close (sunKbdPriv.fd);
 	    sunKbdPriv.fd = -1;
 	    FatalError("Async kbd I/O failed in InitInput");
 	}
     }
     if (sunPtrPriv.fd >= 0) {
-	if (SET_FLOW(sunPtrPriv.fd) == -1 || WANT_SIGNALS(sunPtrPriv.fd) == -1) {	
+	if (SET_FLOW(sunPtrPriv.fd) == -1 || WANT_SIGNALS(sunPtrPriv.fd) == -1) {
 	    (void) close (sunPtrPriv.fd);
 	    sunPtrPriv.fd = -1;
 	    FatalError("Async mouse I/O failed in InitInput");

@@ -36,11 +36,11 @@ fee is hereby granted, provided that the above copyright no-
 tice  appear  in all copies and that both that copyright no-
 tice and this permission notice appear in  supporting  docu-
 mentation,  and  that the names of Sun or The Open Group
-not be used in advertising or publicity pertaining to 
-distribution  of  the software  without specific prior 
-written permission. Sun and The Open Group make no 
-representations about the suitability of this software for 
-any purpose. It is provided "as is" without any express or 
+not be used in advertising or publicity pertaining to
+distribution  of  the software  without specific prior
+written permission. Sun and The Open Group make no
+representations about the suitability of this software for
+any purpose. It is provided "as is" without any express or
 implied warranty.
 
 SUN DISCLAIMS ALL WARRANTIES WITH REGARD TO  THIS  SOFTWARE,
@@ -91,7 +91,7 @@ sunMemoryMap(size_t len, off_t off, int fd)
 
 #ifdef SVR4
     pagemask = sysconf(_SC_PAGESIZE) - 1;
-#else 
+#else
     pagemask = getpagesize() - 1;
 #endif
     mapsize = ((int) len + pagemask) & ~pagemask;
@@ -106,7 +106,7 @@ sunMemoryMap(size_t len, off_t off, int fd)
 #endif
 
 #if !defined(__NetBSD__) && !defined(__OpenBSD__)
-    /* 
+    /*
      * try and make it private first, that way once we get it, an
      * interloper, e.g. another server, can't get this frame buffer,
      * and if another server already has it, this one won't.
@@ -211,8 +211,8 @@ sunInitCommon(
     if (!sunScreenAllocate (pScrn))
 	return FALSE;
     if (!fb) {
-	if ((fb = sunMemoryMap ((size_t) sunFbs[scrn].info.fb_size, 
-			     offset, 
+	if ((fb = sunMemoryMap ((size_t) sunFbs[scrn].info.fb_size,
+			     offset,
 			     sunFbs[scrn].fd)) == NULL)
 	    return FALSE;
 	sunFbs[scrn].fb = fb;

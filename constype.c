@@ -70,7 +70,7 @@ struct vis_identifier {
 #  else
 #   include <machine/fbio.h>
 #  endif
-# endif 
+# endif
 #endif
 
 static int wu_fbid(char *devname, char **fbname, int *fbtype);

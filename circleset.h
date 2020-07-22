@@ -65,7 +65,7 @@ B(0x0080),B(0x07f0),B(0x1ffc),B(0x3ffe),B(0x3ffe),B(0x7fff),B(0x7fff),B(0x7fff),
 B(0xffff),B(0x7fff),B(0x7fff),B(0x7fff),B(0x3ffe),B(0x3ffe),B(0x1ffc),B(0x07f0),
 },
 };
-#endif /* DO_FILLED_ARCS */ 
+#endif /* DO_FILLED_ARCS */
 #ifdef DO_OUTLINE_ARCS
 static unsigned short outline0_arcs[16][16] = {
 {	/* 1 */

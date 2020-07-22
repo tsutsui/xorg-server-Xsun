@@ -15,7 +15,7 @@
 
 /* $XFree86: xc/programs/Xserver/hw/sun/sun.h,v 3.13 2003/11/17 22:20:36 dawes Exp $ */
 
-#ifndef _SUN_H_ 
+#ifndef _SUN_H_
 #define _SUN_H_
 
 /* X headers */
@@ -70,10 +70,10 @@ extern char *getenv();
 #include <signal.h>
 
 
-/* 
+/*
  * Sun specific headers Sun moved in Solaris, and are different for NetBSD.
  *
- * Even if only needed by one source file, I have put them here 
+ * Even if only needed by one source file, I have put them here
  * to simplify finding them...
  */
 #ifdef SVR4
@@ -125,7 +125,7 @@ extern int getpagesize();
  */
 #ifndef SVR4
 /* On SunOS 4.1.x the TCX pretends to be a CG3 */
-#define XFBTYPE_LASTPLUSONE	FBTYPE_LASTPLUSONE	
+#define XFBTYPE_LASTPLUSONE	FBTYPE_LASTPLUSONE
 #else
 #define XFBTYPE_TCX		21
 #define XFBTYPE_LASTPLUSONE	22
@@ -133,7 +133,7 @@ extern int getpagesize();
 
 #include <sys/time.h>
 
-/* 
+/*
  * Server specific headers
  */
 #include "misc.h"
@@ -155,8 +155,8 @@ extern int getpagesize();
 #include "windowstr.h"
 #include "mipointer.h"
 
-/* 
- * ddx specific headers 
+/*
+ * ddx specific headers
  */
 #ifndef PSZ
 #define PSZ 8

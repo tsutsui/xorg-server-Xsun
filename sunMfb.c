@@ -37,11 +37,11 @@ fee is hereby granted, provided that the above copyright no-
 tice  appear  in all copies and that both that copyright no-
 tice and this permission notice appear in  supporting  docu-
 mentation,  and  that the names of Sun or The Open Group
-not be used in advertising or publicity pertaining to 
-distribution  of  the software  without specific prior 
-written permission. Sun and The Open Group make no 
-representations about the suitability of this software for 
-any purpose. It is provided "as is" without any express or 
+not be used in advertising or publicity pertaining to
+distribution  of  the software  without specific prior
+written permission. Sun and The Open Group make no
+representations about the suitability of this software for
+any purpose. It is provided "as is" without any express or
 implied warranty.
 
 SUN DISCLAIMS ALL WARRANTIES WITH REGARD TO  THIS  SOFTWARE,
@@ -72,15 +72,15 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 /* Modified from  sunCG4C.c for X11R3 by Tom Jarmolowski	*/
 /****************************************************************/
 
-/* 
+/*
  * Copyright 1991, 1992, 1993 Kaleb S. Keithley
  *
  * Permission to use, copy, modify, and distribute this
  * software and its documentation for any purpose and without
  * fee is hereby granted, provided that the above copyright
- * notice appear in all copies.  Kaleb S. Keithley makes no 
- * representations about the suitability of this software for 
- * any purpose.  It is provided "as is" without express or 
+ * notice appear in all copies.  Kaleb S. Keithley makes no
+ * representations about the suitability of this software for
+ * any purpose.  It is provided "as is" without express or
  * implied warranty.
  */
 

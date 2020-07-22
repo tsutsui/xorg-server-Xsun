@@ -22,11 +22,11 @@ fee is hereby granted, provided that the above copyright no-
 tice  appear  in all copies and that both that copyright no-
 tice and this permission notice appear in  supporting  docu-
 mentation,  and  that the names of Sun or The Open Group
-not be used in advertising or publicity pertaining to 
-distribution  of  the software  without specific prior 
-written permission. Sun and The Open Group make no 
-representations about the suitability of this software for 
-any purpose. It is provided "as is" without any express or 
+not be used in advertising or publicity pertaining to
+distribution  of  the software  without specific prior
+written permission. Sun and The Open Group make no
+representations about the suitability of this software for
+any purpose. It is provided "as is" without any express or
 implied warranty.
 
 SUN DISCLAIMS ALL WARRANTIES WITH REGARD TO  THIS  SOFTWARE,
@@ -54,7 +54,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define SUN_LED_MASK	0x0f
 #define MIN_KEYCODE	7	/* necessary to avoid the mouse buttons */
 #define MAX_KEYCODE	255	/* limited by the protocol */
-#ifndef KB_SUN4 
+#ifndef KB_SUN4
 #define KB_SUN4		4
 #endif
 
@@ -78,7 +78,7 @@ static void SwapLKeys(KeySymsRec *);
 static void SetLights(KeybdCtrl *, int);
 static KeyCode LookupKeyCode(KeySym, XkbDescPtr, KeySymsPtr);
 static void pseudoKey(DeviceIntPtr, Bool, KeyCode);
-static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr); 
+static void DoLEDs(DeviceIntPtr, KeybdCtrl *, sunKbdPrivPtr);
 
 DeviceIntPtr	sunKeyboardDevice = NULL;
 
@@ -196,7 +196,7 @@ sunBell(int percent, DeviceIntPtr device, pointer ctrl, int unused)
 {
     KeybdCtrl*      kctrl = (KeybdCtrl*) ctrl;
     sunKbdPrivPtr   pPriv = (sunKbdPrivPtr) device->public.devicePrivate;
- 
+
     if (percent == 0 || kctrl->bell == 0)
  	return;
 
@@ -275,7 +275,7 @@ static void
 DoLEDs(
     DeviceIntPtr    device,	    /* Keyboard to alter */
     KeybdCtrl* ctrl,
-    sunKbdPrivPtr pPriv 
+    sunKbdPrivPtr pPriv
 )
 {
     XkbDescPtr xkb;
@@ -365,7 +365,7 @@ sunKbdCtrl(DeviceIntPtr device, KeybdCtrl* ctrl)
  * Results:
  *	None.
  *
- * Comments: 
+ * Comments:
  *     This function needs considerable work, in conjunctions with
  *     the need to add geometry descriptions of Sun Keyboards.
  *     It would also be nice to have #defines for all the keyboard
@@ -409,7 +409,7 @@ sunInitKbdNames(XkbRMLVOSet *rmlvo, sunKbdPrivPtr pKbd)
 	break;
     case KB_SUN4:
 	/* First, catch "fully known" models */
-	switch (pKbd->layout) {	
+	switch (pKbd->layout) {
 	case 11:		/* type4, Sweden */
 	    (void) strcat (names->geometry, "sun(type4_se)");
 	    (void) strcat (names->keycodes,
@@ -475,46 +475,46 @@ sunInitKbdNames(XkbRMLVOSet *rmlvo, sunKbdPrivPtr pKbd)
 
     if (pKbd->type == KB_SUN4) {
 	switch (pKbd->layout) {
-	case  4: case 36: case 83: 
-	case  5: case 37: case 84: 
-	case  6: case 38: case 85: 
-	case  8: case 40: case 87: 
-	case  9: case 41: case 88: 
-	case 10: case 42: case 89: 
+	case  4: case 36: case 83:
+	case  5: case 37: case 84:
+	case  6: case 38: case 85:
+	case  8: case 40: case 87:
+	case  9: case 41: case 88:
+	case 10: case 42: case 89:
 /*	case 11: case 43: case 90: */ /* handled earlier */
-	case 12: case 44: case 91: 
-	case 13: case 45: case 92: 
-	case 14: case 46: case 93: 
+	case 12: case 44: case 91:
+	case 13: case 45: case 92:
+	case 14: case 46: case 93:
 	    (void) strcat (names->symbols, "+iso9995-3(basic)"); break;
 	}
     }
 
     if (pKbd->type == KB_SUN4) {
 	switch (pKbd->layout) {
-	case  0: case  1: case 33: case 34: case 80: case 81: 
+	case  0: case  1: case 33: case 34: case 80: case 81:
 	    break;
 	case  3:
 	    (void) strcat (names->symbols, "+ca"); break;
-	case  4: case 36: case 83: 
+	case  4: case 36: case 83:
 	    (void) strcat (names->symbols, "+dk"); break;
-	case  5: case 37: case 84: 
+	case  5: case 37: case 84:
 	    (void) strcat (names->symbols, "+de"); break;
-	case  6: case 38: case 85: 
+	case  6: case 38: case 85:
 	    (void) strcat (names->symbols, "+it"); break;
-	case  8: case 40: case 87: 
+	case  8: case 40: case 87:
 	    (void) strcat (names->symbols, "+no"); break;
-	case  9: case 41: case 88: 
+	case  9: case 41: case 88:
 	    (void) strcat (names->symbols, "+pt"); break;
-	case 10: case 42: case 89: 
+	case 10: case 42: case 89:
 	    (void) strcat (names->symbols, "+es"); break;
 	    /* case 11: case 43: */ /* handled earlier */
-	case 90: 
-	    (void) strcat (names->symbols, "+se"); break; 
-	case 12: case 44: case 91: 
+	case 90:
+	    (void) strcat (names->symbols, "+se"); break;
+	case 12: case 44: case 91:
 	    (void) strcat (names->symbols, "+fr_CH"); break;
-	case 13: case 45: case 92: 
+	case 13: case 45: case 92:
 	    (void) strcat (names->symbols, "+de_CH"); break;
-	case 14: case 46: case 93: 
+	case 14: case 46: case 93:
 	    (void) strcat (names->symbols, "+gb"); break; /* s/b en_UK */
 	case 52:
 	    (void) strcat (names->symbols, "+pl"); break;
@@ -526,24 +526,24 @@ sunInitKbdNames(XkbRMLVOSet *rmlvo, sunKbdPrivPtr pKbd)
 	/* don't have symbols defined for these yet, let them default */
 	case  2:
 	    (void) strcat (names->symbols, "+fr_BE"); break;
-	case  7: case 39: case 86: 
+	case  7: case 39: case 86:
 	    (void) strcat (names->symbols, "+nl"); break;
 	case 50: case 97:
 	    (void) strcat (names->symbols, "+fr_CA"); break;
-	case 16: case 47: case 94: 
+	case 16: case 47: case 94:
 	    (void) strcat (names->symbols, "+ko"); break;
-	case 17: case 48: case 95: 
+	case 17: case 48: case 95:
 	    (void) strcat (names->symbols, "+tw"); break;
-	case 32: case 49: case 96: 
+	case 32: case 49: case 96:
 	    (void) strcat (names->symbols, "+jp"); break;
 	case 51:
 	    (void) strcat (names->symbols, "+hu"); break;
 #endif
-	/* 
+	/*
 	 * by setting the symbols to NULL XKB will use the symbols in
 	 * the "default" keymap.
 	 */
-	default: 
+	default:
 	    names->symbols = NULL; return; break;
 	}
     }
@@ -585,7 +585,7 @@ sunKbdProc(DeviceIntPtr device, int what)
 	    ErrorF ("Cannot open non-system keyboard\n");
 	    return (!Success);
 	}
-	    
+
 	if (!workingKeySyms) {
 	    workingKeySyms = &sunKeySyms[sunKbdPriv.type];
 
@@ -604,7 +604,7 @@ sunKbdProc(DeviceIntPtr device, int what)
 	    workingModMap=(CARD8 *)xalloc(MAP_LENGTH);
 	    (void) memset(workingModMap, 0, MAP_LENGTH);
 	    for(i=0; sunModMaps[sunKbdPriv.type][i].key != 0; i++)
-		workingModMap[sunModMaps[sunKbdPriv.type][i].key + MIN_KEYCODE] = 
+		workingModMap[sunModMaps[sunKbdPriv.type][i].key + MIN_KEYCODE] =
 		sunModMaps[sunKbdPriv.type][i].modifiers;
 	}
 
@@ -729,7 +729,7 @@ sunKbdEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
 /*-
  *-----------------------------------------------------------------------
  * sunChangeKbdTranslation
- *	Makes operating system calls to set keyboard translation 
+ *	Makes operating system calls to set keyboard translation
  *	and direction on or off.
  *
  * Results:
@@ -742,7 +742,7 @@ sunKbdEnqueueEvent(DeviceIntPtr device, Firm_event *fe)
  */
 int
 sunChangeKbdTranslation(int fd, Bool makeTranslated)
-{   
+{
     int 	tmp;
 #ifndef i386 /* { */
     sigset_t	hold_mask, old_mask;

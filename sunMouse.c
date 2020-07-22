@@ -22,11 +22,11 @@ fee is hereby granted, provided that the above copyright no-
 tice  appear  in all copies and that both that copyright no-
 tice and this permission notice appear in  supporting  docu-
 mentation,  and  that the names of Sun or The Open Group
-not be used in advertising or publicity pertaining to 
-distribution  of  the software  without specific prior 
-written permission. Sun and The Open Group make no 
-representations about the suitability of this software for 
-any purpose. It is provided "as is" without any express or 
+not be used in advertising or publicity pertaining to
+distribution  of  the software  without specific prior
+written permission. Sun and The Open Group make no
+representations about the suitability of this software for
+any purpose. It is provided "as is" without any express or
 implied warranty.
 
 SUN DISCLAIMS ALL WARRANTIES WITH REGARD TO  THIS  SOFTWARE,
@@ -45,9 +45,9 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
  * Permission to use, copy, modify, and distribute this
  * software and its documentation for any purpose and without
  * fee is hereby granted, provided that the above copyright
- * notice appear in all copies.  Kaleb S. Keithley makes no 
- * representations about the suitability of this software for 
- * any purpose.  It is provided "as is" without express or 
+ * notice appear in all copies.  Kaleb S. Keithley makes no
+ * representations about the suitability of this software for
+ * any purpose.  It is provided "as is" without express or
  * implied warranty.
  */
 /* $XFree86: xc/programs/Xserver/hw/sun/sunMouse.c,v 1.4 2003/11/17 22:20:36 dawes Exp $ */
@@ -129,7 +129,7 @@ sunMouseProc(DeviceIntPtr device, int what)
     switch (what) {
 	case DEVICE_INIT:
 	    if (pMouse != (DevicePtr)sunPointerDevice) {
-		ErrorF ("Cannot open non-system mouse");	
+		ErrorF ("Cannot open non-system mouse");
 		return !Success;
 	    }
 	    if (sunPtrPriv.fd == -1)
@@ -178,7 +178,7 @@ sunMouseProc(DeviceIntPtr device, int what)
     }
     return Success;
 }
-    
+
 /*-
  *-----------------------------------------------------------------------
  * sunMouseGetEvents --

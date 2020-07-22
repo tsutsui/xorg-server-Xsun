@@ -119,7 +119,7 @@ sunLoadCursor(ScreenPtr pScreen, CursorPtr pCursor, int x, int y)
     long                widthBytesLine, length;
     long                widthBytesLineProto, lengthProto;
     int			linesDone;
-#endif  
+#endif
 
 
     fbcursor.set = FB_CUR_SETALL;
@@ -197,7 +197,7 @@ sunLoadCursor(ScreenPtr pScreen, CursorPtr pCursor, int x, int y)
              sprotoPtr += widthBytesLineProto,
              mbufPtr += widthBytesLine,
              mprotoPtr += widthBytesLineProto,
-             i++) {       
+             i++) {
 	    if (sprotoPtr != sbufPtr)
             	memmove(sprotoPtr, sbufPtr, widthBytesLineProto);
 	    if (mprotoPtr != mbufPtr)
