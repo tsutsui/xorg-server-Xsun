@@ -10,11 +10,11 @@ fee is hereby granted, provided that the above copyright no-
 tice  appear  in all copies and that both that copyright no-
 tice and this permission notice appear in  supporting  docu-
 mentation,  and  that the names of Sun or The Open Group
-not be used in advertising or publicity pertaining to 
-distribution  of  the software  without specific prior 
-written permission. Sun and The Open Group make no 
-representations about the suitability of this software for 
-any purpose. It is provided "as is" without any express or 
+not be used in advertising or publicity pertaining to
+distribution  of  the software  without specific prior
+written permission. Sun and The Open Group make no
+representations about the suitability of this software for
+any purpose. It is provided "as is" without any express or
 implied warranty.
 
 SUN DISCLAIMS ALL WARRANTIES WITH REGARD TO  THIS  SOFTWARE,
@@ -34,7 +34,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include	<X11/keysym.h>
 #include	<X11/Sunkeysym.h>
 
-/* 
+/*
   By default all keyboards are hardcoded on the theory that people
   might remove /usr/openwin making it impossible to parse the files
  in /usr/openwin/share/etc/keytables.
@@ -60,7 +60,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define PORT4
 #define PORT5
 #define SPAIN5
-#define SPAINLATAM4 
+#define SPAINLATAM4
 #define SWED5
 #define SWEDFIN4
 #define SWFR4
@@ -5665,12 +5665,12 @@ KeySym *sunType4KeyMaps[] = {
 	NULL,			/* 78 */
 	NULL,			/* 79 */
 /*
- * We're punting on SPARC Voyager support for now. The OpenLook server 
- * apparently adds special semantics to Num_Lock, which requires indexing 
- * into column 5 of the keymap, which isn't handled by the core protocol 
- * at all, (it is in XKB.) We could do some tricky remapping, sort of 
+ * We're punting on SPARC Voyager support for now. The OpenLook server
+ * apparently adds special semantics to Num_Lock, which requires indexing
+ * into column 5 of the keymap, which isn't handled by the core protocol
+ * at all, (it is in XKB.) We could do some tricky remapping, sort of
  * like what the PC ddxen need to do to deal with funky PC keyboards; but
- * for now we'll just pretend that Voyager (Hobo) keyboards are the same 
+ * for now we'll just pretend that Voyager (Hobo) keyboards are the same
  * as the equivalent Sun5 keyboard.
  */
 	US5Keymap, 		/* 80 */

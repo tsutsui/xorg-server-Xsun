@@ -28,9 +28,9 @@ this Software without prior written authorization from The Open Group.
 /* $XFree86: xc/programs/Xserver/hw/sun/sunCfb24.c,v 1.3 2001/12/14 19:59:42 dawes Exp $ */
 
 /*
- * The CG8 is similar to the CG4 in that it has a mono plane, an enable 
+ * The CG8 is similar to the CG4 in that it has a mono plane, an enable
  * plane, and a color plane. While the CG4 only has an 8-bit color
- * plane the CG8 has a 24-bit color plane. 
+ * plane the CG8 has a 24-bit color plane.
  *
  * If you have a CG4 you know that you can switch between the mono and
  * the color screens merely by dragging the pointer off the edge of the

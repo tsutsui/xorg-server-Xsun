@@ -94,7 +94,7 @@ typedef struct _sunGX {
 	Uint	junk0[1];
 	VUint	mode;
 	VUint	clip;
-	Uint	junk1[1];	    
+	Uint	junk1[1];
 	VUint	s;
 	VUint	draw;
 	VUint	blit;

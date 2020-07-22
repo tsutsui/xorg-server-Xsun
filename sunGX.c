@@ -133,7 +133,7 @@ in this Software without prior written authorization from The Open Group.
 			GX_ROP_00_0(O))
 
 /* fg = fgPixel	    bg = don't care */
- 
+
 #define ROP_STIP(O,I)   (ROP_STANDARD |\
 			GX_ROP_11_1(I) |\
 			GX_ROP_11_0(GX_ROP_NOOP) |\
@@ -145,7 +145,7 @@ in this Software without prior written authorization from The Open Group.
 			GX_ROP_00_0(GX_ROP_NOOP))
 
 /* fg = fgPixel	    bg = bgPixel */
-			    
+
 #define ROP_OSTP(O,I)   (ROP_STANDARD |\
 			GX_ROP_11_1(I) |\
 			GX_ROP_11_0(I) |\
@@ -308,10 +308,10 @@ sunGXDoBitblt(DrawablePtr pSrc, DrawablePtr pDst, int alu, RegionPtr prgnDst, DD
 	    /* reverse order of bands and rects in each band */
 	    pboxTmp=pbox+nbox;
 	    pptTmp=pptSrc+nbox;
-	    
+
 	    while (nbox--){
 		pboxTmp--;
-		pptTmp--;	
+		pptTmp--;
 		gx->x0=pptTmp->x;
 		gx->y0=pptTmp->y;
 		gx->x1=pptTmp->x+(pboxTmp->x2-pboxTmp->x1)-1;
@@ -334,10 +334,10 @@ sunGXDoBitblt(DrawablePtr pSrc, DrawablePtr pDst, int alu, RegionPtr prgnDst, DD
 		while ((pboxNext >= pbox) &&
 		       (pboxBase->y1 == pboxNext->y1))
 		    pboxNext--;
-		
+
 		pboxTmp = pboxNext+1;			/* first box in band */
 		pptTmp = pptSrc + (pboxTmp - pbox);	/* first point in band */
-		
+
 		while (pboxTmp <= pboxBase){ /* for each box in band */
 		    gx->x0=pptTmp->x;
 		    gx->y0=pptTmp->y;
@@ -348,7 +348,7 @@ sunGXDoBitblt(DrawablePtr pSrc, DrawablePtr pDst, int alu, RegionPtr prgnDst, DD
 		    gx->x3=pboxTmp->x2-1;
 		    gx->y3=pboxTmp->y2-1;
 		    ++pboxTmp;
-		    ++pptTmp;	
+		    ++pptTmp;
 		    GXBlitDone(gx,r);
 		}
 		pboxBase = pboxNext;
@@ -358,7 +358,7 @@ sunGXDoBitblt(DrawablePtr pSrc, DrawablePtr pDst, int alu, RegionPtr prgnDst, DD
     else{
 
 	if( (pptSrc->x < pbox->x1) && (nbox > 1) ){
-	
+
 	    /* reverse order of rects in each band */
 	    pboxBase = pboxNext = pbox;
 
@@ -368,13 +368,13 @@ sunGXDoBitblt(DrawablePtr pSrc, DrawablePtr pDst, int alu, RegionPtr prgnDst, DD
 		while ((pboxNext < pbox+nbox) &&
 		       (pboxNext->y1 == pboxBase->y1))
 		    pboxNext++;
-		
+
 		pboxTmp = pboxNext;			/* last box in band */
 		pptTmp = pptSrc + (pboxTmp - pbox);	/* last point in band */
-		
+
 		while (pboxTmp != pboxBase){ /* for each box in band */
 		    --pboxTmp;
-		    --pptTmp;	
+		    --pptTmp;
 		    gx->x0=pptTmp->x;
 		    gx->y0=pptTmp->y;
 		    gx->x1=pptTmp->x+(pboxTmp->x2-pboxTmp->x1)-1;
@@ -393,7 +393,7 @@ sunGXDoBitblt(DrawablePtr pSrc, DrawablePtr pDst, int alu, RegionPtr prgnDst, DD
 	    /* dont need to change order of anything */
 	    pptTmp=pptSrc;
 	    pboxTmp=pbox;
-	    
+
 	    while(nbox--){
 		gx->x0=pptTmp->x;
 		gx->y0=pptTmp->y;
@@ -440,7 +440,7 @@ sunGXCopyPlane1to8(DrawablePtr pSrcDrawable, DrawablePtr pDstDrawable, int rop, 
     BoxPtr		pbox;
     register long	r;
 
-    GXDrawInit (gx, copyPlaneFG, 
+    GXDrawInit (gx, copyPlaneFG,
 		gx_opaque_stipple_rop_table[rop]|GX_PATTERN_ONES,
  		planemask);
     gx->bg = copyPlaneBG;
@@ -486,7 +486,7 @@ sunGXCopyPlane1to8(DrawablePtr pSrcDrawable, DrawablePtr pDstDrawable, int rop, 
 	    	nl = nlMiddle;
 	    	while (nl--)
 		    gx->font = *psrc++;
-	    	if (widthLast) 
+	    	if (widthLast)
 	    	{
 		    gx->x1 = dstLastx;
 #if BITMAP_SCANLINE_UNIT == 64
@@ -515,7 +515,7 @@ sunGXCopyPlane1to8(DrawablePtr pSrcDrawable, DrawablePtr pDstDrawable, int rop, 
 		    tmp |= BitRight(bits, rightShift);
 		    gx->font = tmp;
 	    	}
-	    	if (widthLast) 
+	    	if (widthLast)
 	    	{
 		    tmp = BitLeft(bits, leftShift);
 		    bits = *psrc++;
@@ -674,7 +674,7 @@ sunGXPolyFillRect(
 	pboxClippedBase = stackRects;
 
     pboxClipped = pboxClippedBase;
-	
+
     if (REGION_NUM_RECTS(prgnClip) == 1)
     {
 	int x1, y1, x2, y2, bx2, by2;
@@ -688,15 +688,15 @@ sunGXPolyFillRect(
     	{
 	    if ((pboxClipped->x1 = prect->x) < x1)
 		pboxClipped->x1 = x1;
-    
+
 	    if ((pboxClipped->y1 = prect->y) < y1)
 		pboxClipped->y1 = y1;
-    
+
 	    bx2 = (int) prect->x + (int) prect->width;
 	    if (bx2 > x2)
 		bx2 = x2;
 	    pboxClipped->x2 = bx2;
-    
+
 	    by2 = (int) prect->y + (int) prect->height;
 	    if (by2 > y2)
 		by2 = y2;
@@ -722,31 +722,31 @@ sunGXPolyFillRect(
     	while (nrectFill--)
     	{
 	    BoxRec box;
-    
+
 	    if ((box.x1 = prect->x) < x1)
 		box.x1 = x1;
-    
+
 	    if ((box.y1 = prect->y) < y1)
 		box.y1 = y1;
-    
+
 	    bx2 = (int) prect->x + (int) prect->width;
 	    if (bx2 > x2)
 		bx2 = x2;
 	    box.x2 = bx2;
-    
+
 	    by2 = (int) prect->y + (int) prect->height;
 	    if (by2 > y2)
 		by2 = y2;
 	    box.y2 = by2;
-    
+
 	    prect++;
-    
+
 	    if ((box.x1 >= box.x2) || (box.y1 >= box.y2))
 	    	continue;
-    
+
 	    n = REGION_NUM_RECTS (prgnClip);
 	    pbox = REGION_RECTS(prgnClip);
-    
+
 	    /* clip the rectangle to each box in the clip region
 	       this is logically equivalent to calling Intersect()
 	    */
@@ -759,7 +759,7 @@ sunGXPolyFillRect(
 		pbox++;
 
 		/* see if clipping left anything */
-		if(pboxClipped->x1 < pboxClipped->x2 && 
+		if(pboxClipped->x1 < pboxClipped->x2 &&
 		   pboxClipped->y1 < pboxClipped->y2)
 		{
 		    pboxClipped++;
@@ -832,7 +832,7 @@ sunGXFillSpans(
 	}
     }
     GXWait(gx,r);
-    if (devPriv->oneRect) 
+    if (devPriv->oneRect)
     {
 	GXResetClip (gx, pDrawable->pScreen);
     }
@@ -859,7 +859,7 @@ sunGXPolyPoint(DrawablePtr pDrawable, GCPtr pGC, int mode, int npt, xPoint *pptI
     int		    r;
     int		    off;
 
-    devPriv = (cfbPrivGC *)(pGC->devPrivates[cfbGCPrivateIndex].ptr); 
+    devPriv = (cfbPrivGC *)(pGC->devPrivates[cfbGCPrivateIndex].ptr);
     if (devPriv->rop == GXnoop)
 	return;
     cclip = pGC->pCompositeClip;
@@ -1041,7 +1041,7 @@ sunGXPolyFillArc(DrawablePtr pDraw, GCPtr pGC, int narcs, xArc *parcs)
     GXDrawInit(gx,pGC->fgPixel,gx_solid_rop_table[pGC->alu]|POLY_O,pGC->planemask);
     if (gxPriv->stipple)
 	GXStippleInit(gx,gxPriv->stipple);
-    devPriv = (cfbPrivGC *)(pGC->devPrivates[cfbGCPrivateIndex].ptr); 
+    devPriv = (cfbPrivGC *)(pGC->devPrivates[cfbGCPrivateIndex].ptr);
     cclip = pGC->pCompositeClip;
     GXSetOff(gx,pDraw->x,pDraw->y)
     if (devPriv->oneRect) {
@@ -1279,7 +1279,7 @@ sunGXPolySeg1Rect(DrawablePtr pDrawable, GCPtr pGC, int nseg, xSegment *pSeg)
     if (gxPriv->stipple)
 	GXStippleInit(gx,gxPriv->stipple);
     GXSetOff (gx, pDrawable->x, pDrawable->y);
-    
+
     extents = &pGC->pCompositeClip->extents;
     GXSetClip (gx, extents);
     if (pGC->capStyle == CapNotLast)
@@ -1346,7 +1346,7 @@ sunGXPolylines1Rect(DrawablePtr pDrawable, GCPtr pGC, int mode, int npt, DDXPoin
     extents = &pGC->pCompositeClip->extents;
     GXSetOff (gx, pDrawable->x, pDrawable->y);
     GXSetClip (gx, extents);
-    if (careful) 
+    if (careful)
     {
 	int	x, y;
 	sunGXGetAddrRange (pDrawable, extents, baseAddr, loAddr, hiAddr);
@@ -1414,7 +1414,7 @@ sunGXPolylines1Rect(DrawablePtr pDrawable, GCPtr pGC, int mode, int npt, DDXPoin
 		GXDrawDone(gx,r);
 	    }
 	}
-	if (capNotLast) 
+	if (capNotLast)
 	{
 	    sunGXGetAddrRange (pDrawable, extents, baseAddr, loAddr, hiAddr);
 	    x += ppt->x;
@@ -1509,12 +1509,12 @@ sunGXPolyGlyphBlt(
     	box.x2 = w;
     	box.y1 = -FONTMAXBOUNDS(pGC->font,ascent);
     	box.y2 = FONTMAXBOUNDS(pGC->font,descent);
-    
+
     	box.x1 += pDrawable->x + x;
     	box.x2 += pDrawable->x + x;
     	box.y1 += pDrawable->y + y;
     	box.y2 += pDrawable->y + y;
-    
+
     	switch (RECT_IN_REGION(pGC->pScreen, clip, &box))
 	{
 	case rgnPART:
@@ -1524,7 +1524,7 @@ sunGXPolyGlyphBlt(
 	}
     }
 
-    GXDrawInit (gx, pGC->fgPixel, 
+    GXDrawInit (gx, pGC->fgPixel,
 		gx_stipple_rop_table[pGC->alu]|GX_PATTERN_ONES|POLY_N,
  		pGC->planemask);
     gx->mode = GX_BLIT_NOSRC | GX_MODE_COLOR1;
@@ -1588,7 +1588,7 @@ sunGXTEGlyphBlt(
     	bbox.x2 = bbox.x1 + (widthGlyph * nglyph);
     	bbox.y1 = y + pDrawable->y - FONTASCENT(pfont);
     	bbox.y2 = bbox.y1 + h;
-    
+
     	switch (RECT_IN_REGION(pGC->pScreen, clip, &bbox))
     	{
 	case rgnPART:
@@ -2102,7 +2102,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
     /*
      * if the client clip is different or moved OR the subwindowMode has
      * changed OR the window's clip has changed since the last validation
-     * we need to recompute the composite clip 
+     * we need to recompute the composite clip
      */
 
     if ((changes & (GCClipXOrigin|GCClipYOrigin|GCClipMask|GCSubwindowMode)) ||
@@ -2130,7 +2130,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
 	 * changing one 16 bit tile for another) we might not really need
 	 * a change, but the code is being paranoid. this sort of batching
 	 * wins if, for example, the alu and the font have been changed,
-	 * or any other pair of items that both change the same thing. 
+	 * or any other pair of items that both change the same thing.
 	 */
 	switch (index) {
 	case GCFunction:
@@ -2203,7 +2203,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
 
     /*
      * If the drawable has changed,  check its depth & ensure suitable
-     * entries are in the proc vector. 
+     * entries are in the proc vector.
      */
     if (pDrawable->serialNumber != (pGC->serialNumber & (DRAWABLE_SERIAL_BITS))) {
 	new_fillspans = TRUE;	/* deal with FillSpans later */
@@ -2223,7 +2223,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
 	    	if (!pGC->tileIsPixel)
 	    	{
 		    int width = pGC->tile.pixmap->drawable.width * PSZ;
-    
+
 		    if ((width <= 32) && !(width & (width - 1)))
 		    {
 		    	cfbCopyRotatePixmap(pGC->tile.pixmap,
@@ -2237,7 +2237,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
 	    case FillOpaqueStippled:
 	    	{
 		    int width = pGC->stipple->drawable.width;
-    
+
 		    if ((width <= 32) && !(width & (width - 1)))
 		    {
 		    	mfbCopyRotatePixmap(pGC->stipple,
@@ -2389,7 +2389,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
         }
         else
         {
-	    if (pGC->fillStyle == FillSolid) 
+	    if (pGC->fillStyle == FillSolid)
 	    {
 		if (TERMINALFONT (pGC->font))
 		    pGC->ops->PolyGlyphBlt = sunGXPolyTEGlyphBlt;
@@ -2404,7 +2404,7 @@ sunGXValidateGC(GCPtr pGC, Mask changes, DrawablePtr pDrawable)
             else
                 pGC->ops->ImageGlyphBlt = miImageGlyphBlt;
         }
-    }    
+    }
 
 
     if (new_fillspans) {
@@ -2545,7 +2545,7 @@ sunGXChangeWindowAttributes(WindowPtr pWin, Mask mask)
 		}
 		/* Rotate border to match parent origin */
 		if (pWin->backgroundState == ParentRelative &&
-		    pPrivWin->pRotatedBorder) 
+		    pPrivWin->pRotatedBorder)
 		{
 		    for (pBgWin = pWin->parent;
 			 pBgWin->backgroundState == ParentRelative;
@@ -2555,7 +2555,7 @@ sunGXChangeWindowAttributes(WindowPtr pWin, Mask mask)
 		    cfbYRotatePixmap(pPrivWin->pRotatedBorder,
 				  pBgWin->drawable.y - pPrivWin->oldRotate.y);
 		}
-		
+
 		break;
 	    }
 	    if (!stipple)
@@ -2579,7 +2579,7 @@ sunGXChangeWindowAttributes(WindowPtr pWin, Mask mask)
 	    {
 		xfree (stipple);
 		sunGXSetWindowPrivate(pWin,0);
-	    }	    
+	    }
  	    if (((width = (pWin->background.pixmap->drawable.width * PSZ)) <= BITMAP_SCANLINE_UNIT) &&
 		       !(width & (width - 1)))
 	    {
@@ -2730,7 +2730,7 @@ sunGXPaintWindow(WindowPtr pWin, RegionPtr pRegion, int what)
     }
 }
 
-void 
+void
 sunGXCopyWindow(WindowPtr pWin, DDXPointRec ptOldOrg, RegionPtr prgnSrc)
 {
     DDXPointPtr pptSrc;
@@ -2793,7 +2793,7 @@ sunGXInit(ScreenPtr pScreen, fbFd *fb)
     mode = gx->mode;
     GXWait(gx,r);
     mode &= ~(	GX_BLIT_ALL |
-		GX_MODE_ALL | 
+		GX_MODE_ALL |
 		GX_DRAW_ALL |
  		GX_BWRITE0_ALL |
 		GX_BWRITE1_ALL |
