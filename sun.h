@@ -306,10 +306,8 @@ extern Bool		sunNoGX;
 
 /* sunKeyMap.c */
 extern KeySymsRec	sunKeySyms[];
-extern const SunModmapRec *sunModMaps[];
 extern const int	sunMaxLayout;
 extern KeySym		*sunType4KeyMaps[];
-extern const SunModmapRec *sunType4ModMaps[];
 
 /* sunKbd.c */
 extern long		sunAutoRepeatInitiate;
