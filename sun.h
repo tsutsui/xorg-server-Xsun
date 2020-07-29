@@ -361,8 +361,6 @@ extern Firm_event* sunKbdGetEvents(int, Bool, int *, Bool *);
 extern void sunKbdEnqueueEvent(DeviceIntPtr, Firm_event *);
 extern int sunKbdProc(DeviceIntPtr, int);
 extern void sunKbdWait(void);
-void sunBlockHandler(int, pointer, pointer, pointer);
-void sunWakeupHandler(int, pointer, unsigned long, pointer);
 
 /* sunMouse.c */
 extern Firm_event* sunMouseGetEvents(int, Bool, int *, Bool *);
