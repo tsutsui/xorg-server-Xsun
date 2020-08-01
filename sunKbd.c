@@ -710,7 +710,7 @@ sunInitModMap(
 {
     KeySym *k;
     int i, min, max, width;
-    
+
     for (i = 0; i < MAP_LENGTH; i++)
         ModMap[i] = NoSymbol;
 
