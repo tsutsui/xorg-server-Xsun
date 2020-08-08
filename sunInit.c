@@ -51,6 +51,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include    "mi.h"
 #include    "fb.h"
 #include    "extinit.h"
+#include    "glx_extinit.h"
 
 /* default log file paths */
 #ifndef DEFAULT_LOGDIR
@@ -556,13 +557,6 @@ OsVendorFatalError(const char *f, va_list arg)
 {
 }
 
-#ifdef GLXEXT
-void
-GlxExtensionInit(void)
-{
-}
-#endif
-
 /*-
  *-----------------------------------------------------------------------
  * InitOutput --
@@ -641,6 +635,8 @@ InitOutput(ScreenInfo *pScreenInfo, int argc, char **argv)
 	    (void) AddScreen (sunFbData[sunFbs[scr].info.fb_type].init,
 			      argc, argv);
     (void) OsSignal(SIGWINCH, SIG_IGN);
+
+    xorgGlxCreateVendor();
 }
 
 /*-
