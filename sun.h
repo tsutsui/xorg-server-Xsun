@@ -298,6 +298,8 @@ extern EventList	*sunEvents;
 extern sunFbDataRec	sunFbData[];
 extern fbFd		sunFbs[];
 extern Bool		sunSwapLkeys;
+extern Bool		sunForceMono;
+extern Bool		sunDebug;
 extern Bool		sunFlipPixels;
 extern Bool		sunFbInfo;
 extern Bool		sunCG4Frob;
