@@ -295,7 +295,6 @@ typedef struct {
 
 /* sunInit.c */
 extern EventList	*sunEvents;
-extern Bool		sunAutoRepeatHandlersInstalled;
 extern sunFbDataRec	sunFbData[];
 extern fbFd		sunFbs[];
 extern Bool		sunSwapLkeys;

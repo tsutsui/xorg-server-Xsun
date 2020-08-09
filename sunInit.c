@@ -130,7 +130,6 @@ static Bool	sunDevsInited = FALSE;
 
 EventList *sunEvents = NULL;
 
-Bool sunAutoRepeatHandlersInstalled;	/* FALSE each time InitOutput called */
 Bool sunSwapLkeys = FALSE;
 Bool sunFlipPixels = FALSE;
 Bool sunFbInfo = FALSE;
